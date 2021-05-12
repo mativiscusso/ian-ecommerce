@@ -1,0 +1,23 @@
+{
+    "name": "app-ecommerce",
+    "version": "5.0.0",
+    "private": true,
+    "dependencies": {
+        "@emotion/cache": "latest",
+        "@emotion/react": "latest",
+        "@emotion/server": "latest",
+        "@emotion/styled": "latest",
+        "@material-ui/core": "next",
+        "clsx": "latest",
+        "next": "latest",
+        "prop-types": "latest",
+        "react": "latest",
+        "react-dom": "latest"
+    },
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "start": "next start",
+        "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "api-ecommerce",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "run:server": "node ./src/index.js",
+        "run:worker": "node ./src/index-worker.js",
+        "start": "concurrently yarn:run:*",
+        "migration:generate": "node migration generate",
+        "migration:run": "node migration run",
+        "migration:revert": "node migration revert"
+    },
+    "resolutions": {
+        "tslib": "1.11.2"
+    },
+    "dependencies": {
+        "@vendure/admin-ui-plugin": "1.0.0-beta.11",
+        "@vendure/asset-server-plugin": "1.0.0-beta.11",
+        "@vendure/core": "1.0.0-beta.11",
+        "@vendure/email-plugin": "1.0.0-beta.11",
+        "mysql": "2.18.1"
+    },
+    "devDependencies": {
+        "concurrently": "6.0.2"
+    }
+}
