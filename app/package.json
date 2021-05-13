@@ -9,6 +9,7 @@
         "@emotion/styled": "latest",
         "@material-ui/core": "next",
         "@material-ui/icons": "^4.11.2",
+        "@material-ui/lab": "^4.0.0-alpha.58",
         "clsx": "latest",
         "next": "latest",
         "prop-types": "latest",

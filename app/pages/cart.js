@@ -1,3 +1,8 @@
-export default function Cart () {
-  return <>Cart</>
+import Cart from "components/Cart";
+export default function CartPage() {
+    return (
+        <>
+            <Cart />
+        </>
+    );
 }

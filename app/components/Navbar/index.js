@@ -3,16 +3,14 @@ import {
     Toolbar,
     Typography,
     makeStyles,
-    Button,
     IconButton,
     Drawer,
-    Link as NavItem,
-    MenuItem,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect } from "react";
 import Link from "components/Link";
 import NextLink from "next/link";
+import ProductSearch from "components/ProductSearch";
 
 const headersData = [
     {
@@ -39,9 +37,7 @@ const headersData = [
 
 const useStyles = makeStyles((theme) => ({
     header: {
-        backgroundColor: "#400CCC",
-        paddingRight: "79px",
-        paddingLeft: "118px",
+        backgroundColor: theme.palette.primary,
         "@media (max-width: 900px)": {
             paddingLeft: 0,
         },
@@ -54,9 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
     menuButton: {
         fontFamily: "Open Sans, sans-serif",
-        fontWeight: 700,
         textTransform: "uppercase",
-        size: "18px",
         marginLeft: "38px",
         [theme.breakpoints.down("md")]: {
             marginLeft: 0,
@@ -103,6 +97,8 @@ export default function Navbar() {
         return (
             <Toolbar className={toolbar}>
                 {femmecubatorLogo}
+                <ProductSearch />
+
                 <div>{getMenuButtons()}</div>
             </Toolbar>
         );
@@ -128,6 +124,8 @@ export default function Navbar() {
                     <MenuIcon />
                 </IconButton>
 
+                <div>{femmecubatorLogo}</div>
+                <ProductSearch />
                 <Drawer
                     {...{
                         anchor: "left",
@@ -138,7 +136,6 @@ export default function Navbar() {
                     <div className={drawerContainer}>{getDrawerChoices()}</div>
                 </Drawer>
 
-                <div>{femmecubatorLogo}</div>
             </Toolbar>
         );
     };

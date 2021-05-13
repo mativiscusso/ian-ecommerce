@@ -1,11 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Header from "components/Header";
 import MainFeatured from "components/MainFeatured";
-import Footer from "components/Footer";
+import ListProducts from "components/ListProducts";
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
@@ -13,12 +12,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 const mainFeaturedPost = {
-    title: "Title of a longer featured blog post",
+    title: "SUPER OFERTAS",
     description:
-        "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
-    image: "https://source.unsplash.com/random",
+        "Tienda online base para poder implementar facilmente un storefront de vendure.",
+    image: "https://www.areacocotrosario.com.ar/imagenes/carrousel/20183793855d827cc08ff9f-1.png",
     imgText: "main image description",
-    linkText: "Continue reading…",
+    linkText: "Seguir leyendo",
 };
 const sections = [
     { title: "Technology", url: "#" },
@@ -38,14 +37,11 @@ export default function Blog() {
 
     return (
         <>
-            <Container>
+            <Container maxWidth={false} disableGutters={true}>
                 <Header title="E-Commerce" sections={sections} />
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
-
-                    <Grid container spacing={5} className={classes.mainGrid}>
-                        Sidebar
-                    </Grid>
+                    <ListProducts />
                 </main>
             </Container>
         </>
