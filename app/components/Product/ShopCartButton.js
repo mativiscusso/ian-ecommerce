@@ -1,42 +1,41 @@
-import React, { useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import Button from "@material-ui/core/Button";
+import React, { useContext } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import Button from '@material-ui/core/Button'
 // import { CartContext } from "theme/components/utils/context";
 
 const useStyles = makeStyles({
-    btnCenter: {
-        width: "100%",
-        margin: "auto",
-    },
-});
+  btnCenter: {
+    width: '100%',
+    margin: 'auto'
+  }
+})
 
-export default function ShopCartButton(props) {
-    const classes = useStyles();
-    const { variantsSelected, listVariants, resetVariantsSelected, enabled } =
-        props;
+export default function ShopCartButton (props) {
+  const classes = useStyles()
+  const { variantsSelected, listVariants, resetVariantsSelected, enabled } =
+        props
 
-    const prod = {
-        ...props,
-        quantity: 1,
-        variantsSelected,
-        listVariants: listVariants || [],
-    };
+  const prod = {
+    ...props,
+    quantity: 1,
+    variantsSelected,
+    listVariants: listVariants || []
+  }
 
-    // const { addToCart } = useContext(CartContext);
+  // const { addToCart } = useContext(CartContext);
 
-    return (
-        <React.Fragment>
-            <Button
-                className={classes.btnCenter}
-                variant="contained"
-                color="primary"
-                disabled={enabled}
-                startIcon={<ShoppingCartIcon />}
-                // onClick={() => resetVariantsSelected(addToCart(prod))}
-            >
-                Agregar al carrito
-            </Button>
-        </React.Fragment>
-    );
+  return (
+    <>
+      <Button
+        className={classes.btnCenter}
+        variant='contained'
+        color='primary'
+        disabled={enabled}
+        startIcon={<ShoppingCartIcon />}
+      >
+        Agregar al carrito
+      </Button>
+    </>
+  )
 }

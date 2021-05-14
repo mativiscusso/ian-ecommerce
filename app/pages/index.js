@@ -1,16 +1,9 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Header from "components/Header";
 import MainFeatured from "components/MainFeatured";
 import ListProducts from "components/ListProducts";
 
-const useStyles = makeStyles((theme) => ({
-    mainGrid: {
-        marginTop: theme.spacing(3),
-    },
-}));
 const mainFeaturedPost = {
     title: "SUPER OFERTAS",
     description:
@@ -33,11 +26,9 @@ const sections = [
 ];
 
 export default function Blog() {
-    const classes = useStyles();
-
     return (
         <>
-            <Container maxWidth={false} disableGutters={true}>
+            <Container maxWidth={false} disableGutters>
                 <Header title="E-Commerce" sections={sections} />
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
