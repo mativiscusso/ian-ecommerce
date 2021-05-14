@@ -35,7 +35,7 @@ export default function ShopCartButton(props) {
                 startIcon={<ShoppingCartIcon />}
                 // onClick={() => resetVariantsSelected(addToCart(prod))}
             >
-                ADD TO CART
+                Agregar al carrito
             </Button>
         </React.Fragment>
     );

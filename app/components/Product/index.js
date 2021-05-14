@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from "../ProductQuickView/QuickView";
+import Link from "next/link";
 
 export default function Product(props) {
     const theme = useTheme();
@@ -63,52 +64,56 @@ export default function Product(props) {
 
     return (
         <Card className={classes.root} key={props.id} elevation={0}>
-            <CardActionArea href={`/products/${props.id}`}>
-                {props.images ? (
-                    <CardMedia
-                        className={classes.media}
-                        image={`${process.env.REACT_APP_API_URL}/files/${props.images[0]}?width=800`}
-                        title="Producto"
-                    />
-                ) : (
-                    <CardMedia
-                        className={classes.media}
-                        image="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
-                        title="Producto"
-                    />
-                )}
-                <CardContent>
-                    <Typography
-                        gutterBottom
-                        variant="body2"
-                        color="textSecondary"
-                        className={classes.productName}
-                    >
-                        {props.name}
-                    </Typography>
+            <Link href={`/products/${props.id}`}>
+                <a>
+                    <CardActionArea>
+                        {props.images ? (
+                            <CardMedia
+                                className={classes.media}
+                                image={`${process.env.REACT_APP_API_URL}/files/${props.images[0]}?width=800`}
+                                title="Producto"
+                            />
+                        ) : (
+                            <CardMedia
+                                className={classes.media}
+                                image="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
+                                title="Producto"
+                            />
+                        )}
+                        <CardContent>
+                            <Typography
+                                gutterBottom
+                                variant="body2"
+                                color="textSecondary"
+                                className={classes.productName}
+                            >
+                                {props.name}
+                            </Typography>
 
-                    <Typography
-                        gutterBottom
-                        variant="h6"
-                        color="textPrimary"
-                        className={classes.productPrice}
-                    >
-                        ${props.price}
-                    </Typography>
+                            <Typography
+                                gutterBottom
+                                variant="h6"
+                                color="textPrimary"
+                                className={classes.productPrice}
+                            >
+                                ${props.price}
+                            </Typography>
 
-                    {/* {props.isFeatured && <RbNew className={classes.ribbonNew} />} */}
-                </CardContent>
-            </CardActionArea>
+                            {/* {props.isFeatured && <RbNew className={classes.ribbonNew} />} */}
+                        </CardContent>
+                    </CardActionArea>
+                </a>
+            </Link>
             <CardActions className={classes.buttonsActions}>
                 {/* //TODO -- Implementar componente Link de Next para mejorar la navegabilidad en el sitio */}
                 <QuickView {...props} />
-                <Button
-                    variant="contained"
-                    href={`/products/${props.id}`}
-                    size="small"
-                >
-                    COMPRAR
-                </Button>
+                <Link href={`/products/${props.id}`}>
+                    <a>
+                        <Button variant="contained" size="small">
+                            COMPRAR
+                        </Button>
+                    </a>
+                </Link>
             </CardActions>
         </Card>
     );

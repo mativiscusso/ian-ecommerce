@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         position: "relative",
         backgroundColor: theme.palette.grey[800],
         color: theme.palette.common.white,
-        marginBottom: theme.spacing(4),
+        marginBottom: theme.spacing(6),
         backgroundImage:
             "url(https://www.areacocotrosario.com.ar/imagenes/carrousel/20183793855d827cc08ff9f-1.png)",
         backgroundSize: "cover",
@@ -31,6 +31,12 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up("md")]: {
             padding: theme.spacing(8),
             paddingRight: 0,
+        },
+        [theme.breakpoints.up("lg")]: {
+            padding: theme.spacing(12),
+        },
+        [theme.breakpoints.up("xl")]: {
+            padding: theme.spacing(22),
         },
     },
 }));
