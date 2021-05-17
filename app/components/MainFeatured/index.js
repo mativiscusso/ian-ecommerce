@@ -10,8 +10,9 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    marginBottom: theme.spacing(6),
+    backgroundImage:
+            'url(https://www.areacocotrosario.com.ar/imagenes/carrousel/20183793855d827cc08ff9f-1.png)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
@@ -28,8 +29,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     padding: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
-      padding: theme.spacing(6),
+      padding: theme.spacing(8),
       paddingRight: 0
+    },
+    [theme.breakpoints.up('lg')]: {
+      padding: theme.spacing(12)
+    },
+    [theme.breakpoints.up('xl')]: {
+      padding: theme.spacing(22)
     }
   }
 }))
@@ -43,7 +50,6 @@ export default function MainFeaturedPost (props) {
       className={classes.mainFeaturedPost}
       style={{ backgroundImage: `url(${post.image})` }}
     >
-      {/* Increase the priority of the hero background image */}
       <img
         style={{ display: 'none' }}
         src={post.image}
@@ -64,7 +70,12 @@ export default function MainFeaturedPost (props) {
             <Typography variant='h5' color='inherit' paragraph>
               {post.description}
             </Typography>
-            <Link variant='subtitle1' href='#'>
+            <Link
+              variant='contained'
+              color='primary'
+              href='#'
+              component='button'
+            >
               {post.linkText}
             </Link>
           </div>

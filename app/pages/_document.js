@@ -4,7 +4,7 @@ import createCache from '@emotion/cache'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/styles'
 import createEmotionServer from '@emotion/server/create-instance'
-import theme from '../src/theme'
+import theme from '../utils/theme'
 
 const getCache = () => {
   const cache = createCache({ key: 'css', prepend: true })
@@ -18,8 +18,10 @@ export default class MyDocument extends Document {
     return (
       <Html lang='en'>
         <Head>
-          {/* PWA primary color */}
-          <meta name='theme-color' content={theme.palette.primary.main} />
+          <meta
+            name='theme-color'
+            content={theme.palette.primary.main}
+          />
           <link
             rel='stylesheet'
             href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
@@ -70,11 +72,12 @@ MyDocument.getInitialProps = async (ctx) => {
     originalRenderPage({
       enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
       // Take precedence over the CacheProvider in our custom _app.js
-      enhanceComponent: (Component) => (props) => (
-        <CacheProvider value={cache}>
-          <Component {...props} />
-        </CacheProvider>
-      )
+      enhanceComponent: (Component) => (props) =>
+        (
+          <CacheProvider value={cache}>
+            <Component {...props} />
+          </CacheProvider>
+        )
     })
 
   const initialProps = await Document.getInitialProps(ctx)
@@ -83,7 +86,7 @@ MyDocument.getInitialProps = async (ctx) => {
     <style
       data-emotion={`${style.key} ${style.ids.join(' ')}`}
       key={style.key}
-      // eslint-disable-next-line react/no-danger
+            // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: style.css }}
     />
   ))

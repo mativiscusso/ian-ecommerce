@@ -51,8 +51,6 @@ NextLinkComposed.propTypes = {
   to: PropTypes.oneOfType([PropTypes.object, PropTypes.string]).isRequired
 }
 
-// A styled version of the Next.js Link component:
-// https://nextjs.org/docs/#with-link
 const Link = React.forwardRef(function Link (props, ref) {
   const {
     activeClassName = 'active',

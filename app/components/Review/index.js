@@ -89,13 +89,13 @@ export default function Review () {
               <React.Fragment key={payment.name}>
                 <Grid item xs={6}>
                   <Typography gutterBottom>
-                      {payment.name}
-                    </Typography>
+                    {payment.name}
+                  </Typography>
                 </Grid>
                 <Grid item xs={6}>
                   <Typography gutterBottom>
-                      {payment.detail}
-                    </Typography>
+                    {payment.detail}
+                  </Typography>
                 </Grid>
               </React.Fragment>
             ))}
