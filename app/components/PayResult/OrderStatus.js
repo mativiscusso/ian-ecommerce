@@ -3,7 +3,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import { useLocation } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import { updateStatusOrder } from '../../graphql/query'
+import { updateStatusOrder } from '../../graphql/queries'
 
 export default function OrderStatus ({ orderId }) {
   const location = useLocation()
@@ -24,7 +24,9 @@ export default function OrderStatus ({ orderId }) {
     const orderId = localStorage.getItem('orderId').replace(/['"]+/g, '')
     const status = ['pending', 'success', 'failure']
     const state = matchStatus(status)
-    patchOrder({ variables: { id: orderId, data: { statusPayment: state } } })
+    patchOrder({
+      variables: { id: orderId, data: { statusPayment: state } }
+    })
   }, [])
 
   return (

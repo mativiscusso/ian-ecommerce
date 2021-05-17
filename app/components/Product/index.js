@@ -1,5 +1,5 @@
 import React from 'react'
-import { useTheme, makeStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
@@ -12,74 +12,61 @@ import Button from '@material-ui/core/Button'
 import QuickView from '../ProductQuickView/QuickView'
 import Link from 'next/link'
 
-export default function Product (props) {
-  const theme = useTheme()
-  const useStyles = makeStyles({
-    root: {
-      textAlign: 'left',
-      transition: 'all 0.1s',
-      height: '100%',
-      [theme.breakpoints.up(768)]: {
-        height: '80%'
-      },
-      '&:hover': {
-        transform: 'scale(1.05) translateY(-20px)',
-        zIndex: 1000,
-        height: '100%'
-      }
+const useStyles = makeStyles((theme) => ({
+  root: {
+    textAlign: 'left',
+    transition: 'all 0.1s',
+    height: '100%',
+    [theme.breakpoints.up(768)]: {
+      height: '80%'
     },
-    media: {
-      backgroundSize: 'contain',
-      height: 200
-    },
-    productName: {
-      height: 55,
-      textTransform: 'uppercase',
-      fontWeight: 'bolder',
-      marginBottom: 5
-    },
-    productPrice: {
-      position: 'relative',
-      top: 20,
-      fontWeight: 'bold'
-    },
-    ribbonNew: {
-      position: 'absolute',
-      top: -10,
-      right: -5,
-      width: 70
-    },
-    buttonsActions: {
-      display: 'flex',
-      justifyContent: 'space-between'
+    '&:hover': {
+      transform: 'scale(1.05) translateY(-20px)',
+      zIndex: 1000,
+      height: '100%'
     }
-  })
+  },
+  media: {
+    backgroundSize: 'contain',
+    height: 200
+  },
+  productName: {
+    height: 55,
+    textTransform: 'uppercase',
+    fontWeight: 'bolder',
+    marginBottom: 5
+  },
+  productPrice: {
+    position: 'relative',
+    top: 20,
+    fontWeight: 'bold'
+  },
+  ribbonNew: {
+    position: 'absolute',
+    top: -10,
+    right: -5,
+    width: 70
+  },
+  buttonsActions: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+}))
+
+export default function Product (props) {
   const classes = useStyles()
-
-  // const priceDefault = props.prices.find(price => {
-  //     if (price.list !== null) {
-  //         return price.list.isDefaultOnSite === true
-  //     }
-  // })
-
+  console.log(props.assets[0])
   return (
     <Card className={classes.root} key={props.id} elevation={0}>
       <Link href={`/products/${props.id}`}>
         <a>
           <CardActionArea>
-            {props.images ? (
-              <CardMedia
-                className={classes.media}
-                image={`${process.env.REACT_APP_API_URL}/files/${props.images[0]}?width=800`}
-                title='Producto'
-              />
-            ) : (
-              <CardMedia
-                className={classes.media}
-                image='https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg'
-                title='Producto'
-              />
-            )}
+            <CardMedia
+              className={classes.media}
+              image='https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg'
+              title='Producto'
+            />
+
             <CardContent>
               <Typography
                 gutterBottom
@@ -96,7 +83,7 @@ export default function Product (props) {
                 color='textPrimary'
                 className={classes.productPrice}
               >
-                ${props.price}
+                ${props.variants[0].price}
               </Typography>
 
               {/* {props.isFeatured && <RbNew className={classes.ribbonNew} />} */}
@@ -105,7 +92,6 @@ export default function Product (props) {
         </a>
       </Link>
       <CardActions className={classes.buttonsActions}>
-        {/* //TODO -- Implementar componente Link de Next para mejorar la navegabilidad en el sitio */}
         <QuickView {...props} />
         <Link href={`/products/${props.id}`}>
           <a>
