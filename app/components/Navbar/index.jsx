@@ -4,13 +4,15 @@ import {
   Typography,
   makeStyles,
   IconButton,
-  Drawer
+  Drawer,
+  Grid
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import React, { useState, useEffect } from 'react'
 import Link from 'components/Link'
 import NextLink from 'next/link'
 import ProductSearch from 'components/ProductSearch'
+import IconCart from 'components/Cart/IconCart'
 
 const headersData = [
   {
@@ -43,15 +45,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   logo: {
-    fontFamily: 'Work Sans, sans-serif',
     fontWeight: 600,
     color: '#FFFEFE',
     textAlign: 'left'
   },
   menuButton: {
-    fontFamily: 'Open Sans, sans-serif',
     textTransform: 'uppercase',
-    marginLeft: '38px',
     [theme.breakpoints.down('md')]: {
       marginLeft: 0,
       padding: '0 1rem 2rem 1rem'
@@ -65,12 +64,17 @@ const useStyles = makeStyles((theme) => ({
     padding: '20px 30px',
     display: 'flex',
     flexDirection: 'column'
+  },
+  menuItems: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center'
   }
 }))
 
 export default function Navbar () {
-  const { header, logo, menuButton, toolbar, drawerContainer } = useStyles()
-
+  const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
+        useStyles()
   const [state, setState] = useState({
     mobileView: false,
     drawerOpen: false
@@ -96,10 +100,22 @@ export default function Navbar () {
   const displayDesktop = () => {
     return (
       <Toolbar className={toolbar}>
-        {femmecubatorLogo}
-        <ProductSearch />
-
-        <div>{getMenuButtons()}</div>
+        <Grid
+          container
+          alignContent='space-between'
+          alignItems='center'
+        >
+          <Grid item lg={2}>
+            {Logo}
+          </Grid>
+          <Grid item lg={4}>
+            <ProductSearch />
+          </Grid>
+          <Grid item className={menuItems} lg={6}>
+            {getMenuButtons()}
+            <IconCart />
+          </Grid>
+        </Grid>
       </Toolbar>
     )
   }
@@ -124,7 +140,7 @@ export default function Navbar () {
           <MenuIcon />
         </IconButton>
 
-        <div>{femmecubatorLogo}</div>
+        <div>{Logo}</div>
         <ProductSearch />
         <Drawer
           {...{
@@ -140,16 +156,21 @@ export default function Navbar () {
   }
 
   const getDrawerChoices = () => {
-    return headersData.map(({ label, href }) => {
+    return headersData.map(({ label, href }, i) => {
       return (
-        <Link href={href} color='inherit' className={menuButton}>
+        <Link
+          href={href}
+          color='inherit'
+          className={menuButton}
+          key={i + 'menu-link'}
+        >
           {label}
         </Link>
       )
     })
   }
 
-  const femmecubatorLogo = (
+  const Logo = (
     <NextLink href='/'>
       <a>
         <Typography variant='h6' component='h1' className={logo}>
@@ -160,10 +181,15 @@ export default function Navbar () {
   )
 
   const getMenuButtons = () => {
-    return headersData.map(({ label, href }) => {
+    return headersData.map(({ label, href }, i) => {
       return (
         <>
-          <Link href={href} color='inherit' className={menuButton}>
+          <Link
+            href={href}
+            color='inherit'
+            className={menuButton}
+            key={i + 'menu-btn'}
+          >
             {label}
           </Link>
         </>

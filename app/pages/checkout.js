@@ -97,23 +97,23 @@ export default function Checkout () {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                      <Button
-                          onClick={handleBack}
-                          className={classes.button}
-                        >
-                                  Back
-                        </Button>
-                    )}
-                  <Button
-                      variant='contained'
-                      color='primary'
-                      onClick={handleNext}
+                    <Button
+                      onClick={handleBack}
                       className={classes.button}
                     >
-                      {activeStep === steps.length - 1
-                          ? 'Place order'
-                          : 'Next'}
+                      Back
                     </Button>
+                  )}
+                  <Button
+                    variant='contained'
+                    color='primary'
+                    onClick={handleNext}
+                    className={classes.button}
+                  >
+                    {activeStep === steps.length - 1
+                      ? 'Place order'
+                      : 'Next'}
+                  </Button>
                 </div>
               </>
             )}

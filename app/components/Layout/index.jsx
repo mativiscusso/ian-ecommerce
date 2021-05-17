@@ -12,12 +12,17 @@ const globalStyles = css.global`
     a {
         color: inherit;
         text-decoration: none;
+        transition: filter 0.1s ease-in;
+    }
+    a:hover {
+        font-weight: bolder;
+        text-decoration: none !important;
     }
 `
 export default function Layout ({ children }) {
   const { mainGrid } = useStyles()
   return (
-    <div>
+    <main>
       <Navbar />
       <main className={mainGrid}>{children}</main>
       <Footer
@@ -27,6 +32,6 @@ export default function Layout ({ children }) {
       <style jsx global>
         {globalStyles}
       </style>
-    </div>
+    </main>
   )
 }

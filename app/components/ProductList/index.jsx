@@ -5,7 +5,6 @@ import { ALL_PRODUCTS } from 'graphql/queries'
 import Grid from '@material-ui/core/Grid'
 import Skeleton from '@material-ui/lab/Skeleton'
 import Box from '@material-ui/core/Box'
-import { products } from 'utils/products'
 import { Container } from '@material-ui/core'
 
 const ProductsList = () => {

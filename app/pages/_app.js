@@ -10,6 +10,7 @@ import Layout from 'components/Layout'
 
 import { ApolloProvider } from '@apollo/client'
 import client from 'graphql/client'
+import { CartProvider } from 'utils/cartContext'
 
 export const cache = createCache({ key: 'css', prepend: true })
 
@@ -34,11 +35,13 @@ export default function MyApp (props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout>
-          <ApolloProvider client={client}>
-            <Component {...pageProps} />
-          </ApolloProvider>
-        </Layout>
+        <ApolloProvider client={client}>
+          <CartProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CartProvider>
+        </ApolloProvider>
       </ThemeProvider>
     </CacheProvider>
   )
