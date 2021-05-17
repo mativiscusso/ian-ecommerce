@@ -3,6 +3,7 @@
     "version": "5.0.0",
     "private": true,
     "dependencies": {
+        "@apollo/client": "^3.3.18",
         "@emotion/cache": "latest",
         "@emotion/react": "latest",
         "@emotion/server": "latest",
@@ -11,6 +12,7 @@
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.58",
         "clsx": "latest",
+        "graphql": "^15.5.0",
         "next": "latest",
         "prop-types": "latest",
         "react": "latest",
