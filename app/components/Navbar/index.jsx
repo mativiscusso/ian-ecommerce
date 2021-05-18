@@ -13,6 +13,7 @@ import Link from "components/Link";
 import NextLink from "next/link";
 import ProductSearch from "components/ProductSearch";
 import IconCart from "components/Cart/IconCart";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 
 const headersData = [
     {
@@ -72,14 +73,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Navbar() {
+export default function Navbar({ user }) {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles();
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
     });
-
+    console.log(user.me);
     const { mobileView, drawerOpen } = state;
 
     useEffect(() => {
@@ -114,6 +115,12 @@ export default function Navbar() {
                     <Grid item className={menuItems} lg={6} xl={5}>
                         {getMenuButtons()}
                         <IconCart />
+                        {user.me && (
+                            <>
+                                <AccountCircleIcon />
+                                <span>{user.me.identifier}</span>
+                            </>
+                        )}
                     </Grid>
                 </Grid>
             </Toolbar>

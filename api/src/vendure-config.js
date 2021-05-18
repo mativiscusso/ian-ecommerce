@@ -65,10 +65,10 @@ const config = {
             globalTemplateVars: {
                 // The following variables will change depending on your storefront implementation
                 fromAddress: '"example" <noreply@example.com>',
-                verifyEmailAddressUrl: "http://localhost:8080/verify",
-                passwordResetUrl: "http://localhost:8080/password-reset",
+                verifyEmailAddressUrl: "http://localhost:3000/users/verify",
+                passwordResetUrl: "http://localhost:3000/users/password-reset",
                 changeEmailAddressUrl:
-                    "http://localhost:8080/verify-email-address-change",
+                    "http://localhost:3000/users/verify-email-address-change",
             },
         }),
         AdminUiPlugin.init({

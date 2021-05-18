@@ -58,3 +58,17 @@ export const ONE_PRODUCT = gql`
         }
     }
 `;
+
+export const USER_ACTIVE = gql`
+    {
+        me {
+            id
+            identifier
+            channels {
+                id
+                token
+                code
+            }
+        }
+    }
+`;
