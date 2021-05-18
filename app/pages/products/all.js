@@ -1,5 +1,5 @@
 import { Container, Grid } from '@material-ui/core'
-import ProductsList from 'components/ListProducts'
+import ProductsList from 'components/ProductList'
 import ProductFilters from 'components/ProductsFilter'
 import { makeStyles } from '@material-ui/styles'
 
@@ -14,10 +14,10 @@ export default function AllProducts () {
   return (
     <Container maxWidth='xl' className={mainProducts}>
       <Grid container>
-        <Grid xs={12} lg={3} xl={2}>
+        <Grid item xs={12} lg={3} xl={2}>
           <ProductFilters />
         </Grid>
-        <Grid xs={12} lg={8} xl={10}>
+        <Grid item xs={12} lg={8} xl={10}>
           <ProductsList />
         </Grid>
       </Grid>
