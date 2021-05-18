@@ -58,7 +58,7 @@ const ProductSearch = () => {
           fullWidth
           margin='none'
         />
-        <IconButton aria-label='serach' type='submit'>
+        <IconButton aria-label='serach' type='submit' color='inherit'>
           <SearchIcon />
         </IconButton>
       </form>
