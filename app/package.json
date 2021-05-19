@@ -22,6 +22,17 @@
         "dev": "next",
         "build": "next build",
         "start": "next start",
+        "lint": "eslint . --fix",
         "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
+    },
+    "devDependencies": {
+        "eslint": "^7.26.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-config-standard": "^16.0.2",
+        "eslint-plugin-import": "^2.23.2",
+        "eslint-plugin-node": "^11.1.0",
+        "eslint-plugin-promise": "^5.1.0",
+        "eslint-plugin-react": "^7.23.2",
+        "prettier": "^2.3.0"
     }
 }

@@ -1,24 +1,24 @@
-import { useEffect } from "react";
-import { USER_ACCOUNT_VERIFY } from "graphql/mutations";
-import { useMutation } from "@apollo/client";
-import { useRouter } from "next/router";
+import { useEffect } from 'react'
+import { USER_ACCOUNT_VERIFY } from 'graphql/mutations'
+import { useMutation } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 export default function verifyUserPage() {
-    const router = useRouter();
-    const { token } = router.query;
-    const [verifyUser] = useMutation(USER_ACCOUNT_VERIFY);
+    const router = useRouter()
+    const { token } = router.query
+    const [verifyUser] = useMutation(USER_ACCOUNT_VERIFY)
 
     useEffect(() => {
         if (token) {
             verifyUser({ variables: { token: token } })
                 .then((result) => {
-                    console.log(result);
+                    console.log(result)
                 })
                 .catch((err) => {
-                    console.log(err);
-                });
+                    console.log(err)
+                })
         }
-    }, [token]);
+    }, [token])
 
-    return <p>Usuario verificado</p>;
+    return <p>Usuario verificado</p>
 }

@@ -6,82 +6,82 @@ import {
     IconButton,
     Drawer,
     Grid,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import React, { useState, useEffect } from "react";
-import Link from "components/Link";
-import NextLink from "next/link";
-import ProductSearch from "components/ProductSearch";
-import IconCart from "components/Cart/IconCart";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
+import React, { useState, useEffect } from 'react'
+import Link from 'components/Link'
+import NextLink from 'next/link'
+import ProductSearch from 'components/ProductSearch'
+import IconCart from 'components/Cart/IconCart'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 const headersData = [
     {
-        label: "Home",
-        href: "/",
+        label: 'Home',
+        href: '/',
     },
     {
-        label: "Shop",
-        href: "/products/all",
+        label: 'Shop',
+        href: '/products/all',
     },
     {
-        label: "Cart",
-        href: "/cart",
+        label: 'Cart',
+        href: '/cart',
     },
     {
-        label: "Checkout",
-        href: "/checkout",
+        label: 'Checkout',
+        href: '/checkout',
     },
     {
-        label: "SignIn",
-        href: "/login",
+        label: 'SignIn',
+        href: '/login',
     },
-];
+]
 
 const useStyles = makeStyles((theme) => ({
     header: {
         backgroundColor: theme.palette.primary,
-        "@media (max-width: 900px)": {
+        '@media (max-width: 900px)': {
             paddingLeft: 0,
         },
     },
     logo: {
         fontWeight: 600,
-        color: "#FFFEFE",
-        textAlign: "left",
+        color: '#FFFEFE',
+        textAlign: 'left',
     },
     menuButton: {
-        textTransform: "uppercase",
-        [theme.breakpoints.down("md")]: {
+        textTransform: 'uppercase',
+        [theme.breakpoints.down('md')]: {
             marginLeft: 0,
-            padding: "0 1rem 2rem 1rem",
+            padding: '0 1rem 2rem 1rem',
         },
     },
     toolbar: {
-        display: "flex",
-        justifyContent: "space-between",
+        display: 'flex',
+        justifyContent: 'space-between',
     },
     drawerContainer: {
-        padding: "20px 30px",
-        display: "flex",
-        flexDirection: "column",
+        padding: '20px 30px',
+        display: 'flex',
+        flexDirection: 'column',
     },
     menuItems: {
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
-}));
+}))
 
 export default function Navbar({ user }) {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
-        useStyles();
+        useStyles()
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
-    });
-    console.log(user.me);
-    const { mobileView, drawerOpen } = state;
+    })
+    console.log(user.me)
+    const { mobileView, drawerOpen } = state
 
     useEffect(() => {
         const setResponsiveness = () => {
@@ -90,13 +90,13 @@ export default function Navbar({ user }) {
                 : setState((prevState) => ({
                       ...prevState,
                       mobileView: false,
-                  }));
-        };
+                  }))
+        }
 
-        setResponsiveness();
+        setResponsiveness()
 
-        window.addEventListener("resize", () => setResponsiveness());
-    }, []);
+        window.addEventListener('resize', () => setResponsiveness())
+    }, [])
 
     const displayDesktop = () => {
         return (
@@ -124,23 +124,23 @@ export default function Navbar({ user }) {
                     </Grid>
                 </Grid>
             </Toolbar>
-        );
-    };
+        )
+    }
 
     const displayMobile = () => {
         const handleDrawerOpen = () =>
-            setState((prevState) => ({ ...prevState, drawerOpen: true }));
+            setState((prevState) => ({ ...prevState, drawerOpen: true }))
         const handleDrawerClose = () =>
-            setState((prevState) => ({ ...prevState, drawerOpen: false }));
+            setState((prevState) => ({ ...prevState, drawerOpen: false }))
 
         return (
             <Toolbar>
                 <IconButton
                     {...{
-                        edge: "start",
-                        color: "inherit",
-                        "aria-label": "menu",
-                        "aria-haspopup": "true",
+                        edge: 'start',
+                        color: 'inherit',
+                        'aria-label': 'menu',
+                        'aria-haspopup': 'true',
                         onClick: handleDrawerOpen,
                     }}
                 >
@@ -151,7 +151,7 @@ export default function Navbar({ user }) {
                 <ProductSearch />
                 <Drawer
                     {...{
-                        anchor: "left",
+                        anchor: 'left',
                         open: drawerOpen,
                         onClose: handleDrawerClose,
                     }}
@@ -159,8 +159,8 @@ export default function Navbar({ user }) {
                     <div className={drawerContainer}>{getDrawerChoices()}</div>
                 </Drawer>
             </Toolbar>
-        );
-    };
+        )
+    }
 
     const getDrawerChoices = () => {
         return headersData.map(({ label, href }, i) => {
@@ -169,13 +169,13 @@ export default function Navbar({ user }) {
                     href={href}
                     color="inherit"
                     className={menuButton}
-                    key={i + "menu-link"}
+                    key={i + 'menu-link'}
                 >
                     {label}
                 </Link>
-            );
-        });
-    };
+            )
+        })
+    }
 
     const Logo = (
         <NextLink href="/">
@@ -185,7 +185,7 @@ export default function Navbar({ user }) {
                 </Typography>
             </a>
         </NextLink>
-    );
+    )
 
     const getMenuButtons = () => {
         return headersData.map(({ label, href }, i) => {
@@ -195,14 +195,14 @@ export default function Navbar({ user }) {
                         href={href}
                         color="inherit"
                         className={menuButton}
-                        key={i + "menu-btn"}
+                        key={i + 'menu-btn'}
                     >
                         {label}
                     </Link>
                 </>
-            );
-        });
-    };
+            )
+        })
+    }
 
     return (
         <nav>
@@ -210,5 +210,5 @@ export default function Navbar({ user }) {
                 {mobileView ? displayMobile() : displayDesktop()}
             </AppBar>
         </nav>
-    );
+    )
 }

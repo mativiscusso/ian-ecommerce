@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const USER_REGISTER = gql`
     mutation Register($data: RegisterCustomerInput!) {
@@ -6,7 +6,7 @@ export const USER_REGISTER = gql`
             __typename
         }
     }
-`;
+`
 
 export const USER_LOGIN = gql`
     mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
@@ -14,7 +14,7 @@ export const USER_LOGIN = gql`
             __typename
         }
     }
-`;
+`
 
 export const USER_ACCOUNT_VERIFY = gql`
     mutation verifyCustomerAccount($token: String!, $password: String) {
@@ -22,4 +22,19 @@ export const USER_ACCOUNT_VERIFY = gql`
             __typename
         }
     }
-`;
+`
+
+export const USER_LOGIN_FETCH = `
+    mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
+        login(username: $user, password: $password, rememberMe: $rememberMe) {
+            __typename
+        }
+    }
+`
+export const USER_REGISTER_FETCH = `
+    mutation Register($data: RegisterCustomerInput!) {
+        registerCustomerAccount(input: $data) {
+            __typename
+        }
+    }
+`

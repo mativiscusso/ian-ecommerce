@@ -1,65 +1,65 @@
-import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 // import { ReactComponent as RbNew } from "../utils/svg/rb-new.svg";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
-import Tooltip from "@material-ui/core/Tooltip";
-import ShopCartButton from "../Product/ShopCartButton";
-import CancelIcon from "@material-ui/icons/Cancel";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import Link from "@material-ui/core/Link";
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Chip from '@material-ui/core/Chip'
+import Tooltip from '@material-ui/core/Tooltip'
+import ShopCartButton from '../Product/ShopCartButton'
+import CancelIcon from '@material-ui/icons/Cancel'
+import Button from '@material-ui/core/Button'
+import Divider from '@material-ui/core/Divider'
+import Breadcrumbs from '@material-ui/core/Breadcrumbs'
+import Link from '@material-ui/core/Link'
 
 const useStyles = makeStyles({
     detailProduct: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     imgFluid: {
-        position: "relative",
-        width: "100%",
+        position: 'relative',
+        width: '100%',
     },
     marginTags: {
-        marginRight: "0.3rem",
+        marginRight: '0.3rem',
     },
     ribbonNew: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         right: 0,
         width: 70,
     },
     lineHeight: {
-        padding: ".5rem 0",
+        padding: '.5rem 0',
     },
     variantsRow: {
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "row",
+        display: 'flex',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
-});
+})
 
 const QuickViewContent = (props) => {
-    const [state, setState] = useState({});
-    const classes = useStyles();
-    const [variantsSelected, setVariantsSelected] = useState([]);
-    const [productState, setProductState] = useState([]);
-    const [propertyKeys, setPropertyKeys] = useState([]);
-    const [isDisabled, setIsDisabled] = useState({});
-    const [enabledTooltip, setEnabledTooltip] = useState(false);
-    const [limitVariants, setLimitVariants] = useState(false);
-    const [shopCartButtonEnabled, setShopCartButtonEnabled] = useState(false);
+    const [state, setState] = useState({})
+    const classes = useStyles()
+    const [variantsSelected, setVariantsSelected] = useState([])
+    const [productState, setProductState] = useState([])
+    const [propertyKeys, setPropertyKeys] = useState([])
+    const [isDisabled, setIsDisabled] = useState({})
+    const [enabledTooltip, setEnabledTooltip] = useState(false)
+    const [limitVariants, setLimitVariants] = useState(false)
+    const [shopCartButtonEnabled, setShopCartButtonEnabled] = useState(false)
 
     const handleChange = (event) => {
-        const name = event.target.name;
+        const name = event.target.name
         setState({
             ...state,
             [name]: event.target.value,
-        });
-    };
+        })
+    }
 
     return (
         <Container>
@@ -98,7 +98,7 @@ const QuickViewContent = (props) => {
                 </Grid>
             </Grid>
         </Container>
-    );
-};
+    )
+}
 
-export default QuickViewContent;
+export default QuickViewContent
