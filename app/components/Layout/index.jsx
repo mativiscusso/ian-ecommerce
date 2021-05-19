@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
 import css from 'styled-jsx/css'
 import Footer from 'components/Footer'
 import Navbar from 'components/Navbar'
 import { makeStyles } from '@material-ui/core/styles'
-import { USER_ACTIVE } from 'graphql/queries'
-import { useQuery } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
@@ -24,11 +21,9 @@ const globalStyles = css.global`
 `
 export default function Layout({ children }) {
     const { mainGrid } = useStyles()
-
-    const { data } = useQuery(USER_ACTIVE)
     return (
         <main>
-            <Navbar user={data} />
+            <Navbar />
             <main className={mainGrid}>{children}</main>
             <Footer
                 title="Footer"

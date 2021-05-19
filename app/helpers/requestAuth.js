@@ -1,4 +1,4 @@
-export const requestAuth = async (query, variables, router) => {
+export const requestAuth = async (mutation, variables) => {
     fetch('http://localhost:4000/shop-api', {
         method: 'POST',
         mode: 'cors',
@@ -7,7 +7,7 @@ export const requestAuth = async (query, variables, router) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query, variables }),
+        body: JSON.stringify({ mutation, variables }),
     })
         .then((result) => {
             localStorage.setItem(
@@ -17,8 +17,8 @@ export const requestAuth = async (query, variables, router) => {
             return result.json()
         })
         .then(({ data }) => {
-            if (data.login.__typename === 'CurrentUser') {
-                router.push('/')
+            if (data) {
+                return data
             }
         })
         .catch((err) => {

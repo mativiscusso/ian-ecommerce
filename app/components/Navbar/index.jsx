@@ -1,3 +1,6 @@
+import { useState, useEffect, useContext } from 'react'
+import NextLink from 'next/link'
+
 import {
     AppBar,
     Toolbar,
@@ -6,37 +9,17 @@ import {
     IconButton,
     Drawer,
     Grid,
+    Button,
+    CircularProgress,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import React, { useState, useEffect } from 'react'
+
 import Link from 'components/Link'
-import NextLink from 'next/link'
 import ProductSearch from 'components/ProductSearch'
 import IconCart from 'components/Cart/IconCart'
-import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import UserItem from './UserItem'
 
-const headersData = [
-    {
-        label: 'Home',
-        href: '/',
-    },
-    {
-        label: 'Shop',
-        href: '/products/all',
-    },
-    {
-        label: 'Cart',
-        href: '/cart',
-    },
-    {
-        label: 'Checkout',
-        href: '/checkout',
-    },
-    {
-        label: 'SignIn',
-        href: '/login',
-    },
-]
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -73,15 +56,15 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Navbar({ user }) {
+export default function Navbar() {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles()
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
     })
-    console.log(user.me)
     const { mobileView, drawerOpen } = state
+    const { user, userLoading } = useContext(UserContext)
 
     useEffect(() => {
         const setResponsiveness = () => {
@@ -115,12 +98,10 @@ export default function Navbar({ user }) {
                     <Grid item className={menuItems} lg={6} xl={5}>
                         {getMenuButtons()}
                         <IconCart />
-                        {user.me && (
-                            <>
-                                <AccountCircleIcon />
-                                <span>{user.me.identifier}</span>
-                            </>
+                        {userLoading && (
+                            <CircularProgress color="inherit" size={20} />
                         )}
+                        {user && <UserItem user={user} />}
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -149,6 +130,8 @@ export default function Navbar({ user }) {
 
                 <div>{Logo}</div>
                 <ProductSearch />
+                <IconCart />
+                {user && <UserItem user={user} />}
                 <Drawer
                     {...{
                         anchor: 'left',
@@ -163,18 +146,37 @@ export default function Navbar({ user }) {
     }
 
     const getDrawerChoices = () => {
-        return headersData.map(({ label, href }, i) => {
-            return (
+        return (
+            <>
+                <Link href={'/'} color="inherit" className={menuButton}>
+                    home
+                </Link>
                 <Link
-                    href={href}
+                    href={'/products/all'}
                     color="inherit"
                     className={menuButton}
-                    key={i + 'menu-link'}
                 >
-                    {label}
+                    shop
                 </Link>
-            )
-        })
+                <Link href={'/checkout'} color="inherit" className={menuButton}>
+                    checkout
+                </Link>
+                <Link href={'/cart'} color="inherit" className={menuButton}>
+                    cart
+                </Link>
+                {!user && (
+                    <Link
+                        href={'/login'}
+                        color="inherit"
+                        className={menuButton}
+                    >
+                        <Button color="inherit" variant="outlined">
+                            signup
+                        </Button>
+                    </Link>
+                )}
+            </>
+        )
     }
 
     const Logo = (
@@ -188,20 +190,37 @@ export default function Navbar({ user }) {
     )
 
     const getMenuButtons = () => {
-        return headersData.map(({ label, href }, i) => {
-            return (
-                <>
+        return (
+            <>
+                <Link href={'/'} color="inherit" className={menuButton}>
+                    home
+                </Link>
+                <Link
+                    href={'/products/all'}
+                    color="inherit"
+                    className={menuButton}
+                >
+                    shop
+                </Link>
+                <Link href={'/checkout'} color="inherit" className={menuButton}>
+                    checkout
+                </Link>
+                <Link href={'/cart'} color="inherit" className={menuButton}>
+                    cart
+                </Link>
+                {!user && (
                     <Link
-                        href={href}
+                        href={'/login'}
                         color="inherit"
                         className={menuButton}
-                        key={i + 'menu-btn'}
                     >
-                        {label}
+                        <Button color="inherit" variant="outlined">
+                            signup
+                        </Button>
                     </Link>
-                </>
-            )
-        })
+                )}
+            </>
+        )
     }
 
     return (

@@ -9,10 +9,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { USER_LOGIN } from 'graphql/mutations'
-import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -40,8 +40,7 @@ export default function Login() {
     const [password, setPassword] = useState(null)
     const [rememberMe, setRememberMe] = useState(false)
 
-    const [userAuth] = useMutation(USER_LOGIN)
-
+    const { login } = useContext(UserContext)
     const router = useRouter()
 
     const handleEmail = (e) => {
@@ -61,43 +60,8 @@ export default function Login() {
             password: password,
             rememberMe: rememberMe,
         }
-
-        async function requestAuth() {
-            const query = `
-            mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
-                login(username: $user, password: $password, rememberMe: $rememberMe) {
-                    __typename
-                }
-            }
-        `
-            fetch('http://localhost:4000/shop-api', {
-                method: 'POST',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query, variables: { ...user } }),
-            })
-                .then((result) => {
-                    localStorage.setItem(
-                        'vendure-auth-token',
-                        result.headers.get('vendure-auth-token')
-                    )
-                    return result.json()
-                })
-                .then(({ data }) => {
-                    if (data.login.__typename === 'CurrentUser') {
-                        router.push('/')
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
-
-        await requestAuth()
+        await login(USER_LOGIN, user)
+        await router.push('/')
     }
     return (
         <Container component="main" maxWidth="xs">

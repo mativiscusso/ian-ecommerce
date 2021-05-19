@@ -1,24 +1,33 @@
-import { useEffect } from 'react'
+import { useEffect, useContext, useState } from 'react'
 import { USER_ACCOUNT_VERIFY } from 'graphql/mutations'
-import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { UserContext } from 'utils/userContext'
+import { CircularProgress, Grid } from '@material-ui/core'
 
 export default function verifyUserPage() {
+    const [resultVerify] = useState(true)
     const router = useRouter()
     const { token } = router.query
-    const [verifyUser] = useMutation(USER_ACCOUNT_VERIFY)
+
+    const { verifyUser } = useContext(UserContext)
 
     useEffect(() => {
         if (token) {
-            verifyUser({ variables: { token: token } })
-                .then((result) => {
-                    console.log(result)
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
+            verifyUser(USER_ACCOUNT_VERIFY, token)
+            setTimeout(() => {
+                router.push('/')
+            }, 1000)
         }
     }, [token])
 
-    return <p>Usuario verificado</p>
+    return (
+        <Grid
+            container
+            alignItems="center"
+            style={{ height: '50vh' }}
+            alignContent="center"
+        >
+            {resultVerify && <CircularProgress />}
+        </Grid>
+    )
 }

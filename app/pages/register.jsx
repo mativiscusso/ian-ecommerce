@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -9,9 +9,9 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { USER_REGISTER } from 'graphql/mutations'
-import { useMutation } from '@apollo/client'
 import Alert from 'components/Alert'
 import { useRouter } from 'next/router'
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,7 +42,7 @@ export default function Register() {
     const [password, setPassword] = useState(null)
 
     const router = useRouter()
-    const [userRegister] = useMutation(USER_REGISTER)
+    const { register } = useContext(UserContext)
 
     const handleFirstName = (e) => {
         setFirstName(e.target.value)
@@ -64,49 +64,12 @@ export default function Register() {
             lastName: lastName,
             password: password,
         }
-        async function requestAuth() {
-            const query = `
-            mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
-                login(username: $user, password: $password, rememberMe: $rememberMe) {
-                    __typename
-                }
-            }
-        `
-            fetch('http://localhost:4000/shop-api', {
-                method: 'POST',
-                mode: 'cors',
-                cache: 'no-cache',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ query, variables: { ...user } }),
-            })
-                .then((result) => {
-                    localStorage.setItem(
-                        'vendure-auth-token',
-                        result.headers.get('vendure-auth-token')
-                    )
-                    return result.json()
-                })
-                .then(({ data }) => {
-                    if (data.login.__typename === 'CurrentUser') {
-                        router.push('/')
-                    }
-                })
-                .catch((err) => {
-                    console.log(err)
-                })
-        }
 
-        await requestAuth()
-        const result = await userRegister({ variables: { data: user } })
-        if (result) {
-            setAlertOpen(true)
-            setTimeout(() => {
-                router.push('/')
-            }, 3000)
-        }
+        await register(USER_REGISTER, user)
+        setAlertOpen(true)
+        setTimeout(() => {
+            router.push('/')
+        }, 3000)
     }
     return (
         <Container component="main" maxWidth="xs">

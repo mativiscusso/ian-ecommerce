@@ -27,7 +27,7 @@ export const CartProvider = ({ children }) => {
         const id = e.currentTarget.id
         const newQty = e.target.value
 
-        if (limitStock != undefined) {
+        if (limitStock !== undefined) {
             if (newQty <= limitStock) {
                 const cartModified = cart.map((item) => {
                     if (item.id === id) {
