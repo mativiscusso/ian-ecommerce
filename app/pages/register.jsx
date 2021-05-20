@@ -1,16 +1,20 @@
-import { useState, useContext } from 'react'
+import { useState, useContext, useEffect } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
-import Link from 'next/link'
 import Grid from '@material-ui/core/Grid'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { USER_REGISTER } from 'graphql/mutations'
+
 import Alert from 'components/Alert'
-import { useRouter } from 'next/router'
+
+import { USER_REGISTER } from 'graphql/mutations'
+
 import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,9 +44,18 @@ export default function Register() {
     const [lastName, setLastName] = useState(null)
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
+    const [statusLogin, setStatusLogin] = useState(false)
+
+    const { register, statusRequest } = useContext(UserContext)
+
+    useEffect(() => {
+        if (statusRequest) {
+            console.log(statusRequest)
+            setStatusLogin(statusRequest)
+        }
+    }, [statusRequest])
 
     const router = useRouter()
-    const { register } = useContext(UserContext)
 
     const handleFirstName = (e) => {
         setFirstName(e.target.value)
@@ -64,12 +77,25 @@ export default function Register() {
             lastName: lastName,
             password: password,
         }
-
-        await register(USER_REGISTER, user)
-        setAlertOpen(true)
-        setTimeout(() => {
-            router.push('/')
-        }, 3000)
+        if (
+            user.emailAddress &&
+            user.firstName &&
+            user.lastName &&
+            user.password
+        ) {
+            await register(USER_REGISTER, user)
+            if (statusLogin.status) {
+                setAlertOpen(true)
+                setTimeout(() => {
+                    router.push('/')
+                }, 2500)
+            }
+        } else {
+            setStatusLogin({
+                status: false,
+                msg: 'Todos los campos son requeridos',
+            })
+        }
     }
     return (
         <Container component="main" maxWidth="xs">
@@ -161,11 +187,21 @@ export default function Register() {
                                     </Link>
                                 </Grid>
                             </Grid>
+                            <Grid item xs={12}>
+                                {statusLogin.status === false && (
+                                    <Alert
+                                        isOpen={true}
+                                        text={statusLogin.msg}
+                                        severity="error"
+                                    />
+                                )}
+                            </Grid>
                         </>
                     ) : (
                         <Alert
                             isOpen={alertOpen}
                             text="Registro exitoso. Hemos enviado un email para confirmacion."
+                            severity="success"
                         />
                     )}
                 </form>

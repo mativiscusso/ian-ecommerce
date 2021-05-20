@@ -6,8 +6,9 @@ import { USER_ACTIVE } from 'graphql/queries'
 export const UserContext = createContext(getDefaultValues)
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(undefined)
     let userLoading = false
+    const [user, setUser] = useState(undefined)
+    const [statusRequest, setStatusRequest] = useState(undefined)
     const [currentUser, { data, loading }] = useLazyQuery(USER_ACTIVE)
 
     useEffect(() => {
@@ -72,11 +73,18 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
-                if (res) {
+                if (res.data.login.__typename === 'CurrentUser') {
                     currentUser()
                     if (data) {
                         setUser(data)
+                        setStatusRequest({ status: true, msg: 'Ok' })
                     }
+                }
+                if (res.data.login.__typename === 'InvalidCredentialsError') {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Credenciales Invalidas',
+                    })
                 }
             })
             .catch((err) => {
@@ -105,11 +113,13 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
-                if (res) {
-                    currentUser()
-                    if (data) {
-                        setUser(data)
-                    }
+                if (res.data.registerCustomerAccount.__typename === 'Success') {
+                    setStatusRequest({ status: true, msg: 'Ok' })
+                } else {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Verifique los campos email y password',
+                    })
                 }
             })
             .catch((err) => {
@@ -165,6 +175,7 @@ export const UserProvider = ({ children }) => {
                 register,
                 login,
                 logout,
+                statusRequest,
             }}
         >
             {children}

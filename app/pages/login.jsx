@@ -1,3 +1,6 @@
+import { useState, useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -9,9 +12,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { useState, useContext } from 'react'
+
+import Alert from 'components/Alert'
+
 import { USER_LOGIN } from 'graphql/mutations'
-import { useRouter } from 'next/router'
+
 import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,9 +44,16 @@ export default function Login() {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const [rememberMe, setRememberMe] = useState(false)
+    const [statusLogin, setStatusLogin] = useState(false)
 
-    const { login } = useContext(UserContext)
+    const { login, statusRequest } = useContext(UserContext)
     const router = useRouter()
+
+    useEffect(() => {
+        if (statusRequest) {
+            setStatusLogin(statusRequest)
+        }
+    }, [statusRequest])
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -53,15 +65,25 @@ export default function Login() {
         setRememberMe(e.target.checked)
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         const user = {
             user: email,
             password: password,
             rememberMe: rememberMe,
         }
-        await login(USER_LOGIN, user)
-        await router.push('/')
+        if (user.user && user.password) {
+            login(USER_LOGIN, user)
+
+            if (statusLogin.status) {
+                router.push('/')
+            }
+        } else {
+            setStatusLogin({
+                status: false,
+                msg: 'Los campos USUARIO y CONTRASEÑA son requeridos',
+            })
+        }
     }
     return (
         <Container component="main" maxWidth="xs">
@@ -125,6 +147,15 @@ export default function Login() {
                             <Link href="/register">
                                 <a>¿No tiene una cuenta? Registrese acá</a>
                             </Link>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {statusLogin && (
+                                <Alert
+                                    isOpen={true}
+                                    text={statusLogin.msg}
+                                    severity="error"
+                                />
+                            )}
                         </Grid>
                     </Grid>
                 </form>
