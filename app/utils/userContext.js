@@ -6,8 +6,9 @@ import { USER_ACTIVE } from 'graphql/queries'
 export const UserContext = createContext(getDefaultValues)
 
 export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState(undefined)
     let userLoading = false
+    const [user, setUser] = useState(undefined)
+    const [statusRequest, setStatusRequest] = useState(undefined)
     const [currentUser, { data, loading }] = useLazyQuery(USER_ACTIVE)
 
     useEffect(() => {
@@ -72,11 +73,18 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
-                if (res) {
+                if (res.data.login.__typename === 'CurrentUser') {
                     currentUser()
                     if (data) {
                         setUser(data)
+                        setStatusRequest({ status: true, msg: 'Ok' })
                     }
+                }
+                if (res.data.login.__typename === 'InvalidCredentialsError') {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Credenciales Invalidas',
+                    })
                 }
             })
             .catch((err) => {
@@ -105,11 +113,13 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
-                if (res) {
-                    currentUser()
-                    if (data) {
-                        setUser(data)
-                    }
+                if (res.data.registerCustomerAccount.__typename === 'Success') {
+                    setStatusRequest({ status: true, msg: 'Ok' })
+                } else {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Verifique los campos email y password',
+                    })
                 }
             })
             .catch((err) => {
@@ -118,7 +128,6 @@ export const UserProvider = ({ children }) => {
     }
 
     const verifyUser = (mutation, token) => {
-        let result
         fetch('http://localhost:4000/shop-api', {
             method: 'POST',
             mode: 'cors',
@@ -154,7 +163,46 @@ export const UserProvider = ({ children }) => {
             .catch((err) => {
                 console.log(err)
             })
-        return result
+    }
+
+    const resetPassword = (mutation, token, password) => {
+        fetch('http://localhost:4000/shop-api', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: mutation,
+                variables: { token: token, password: password },
+            }),
+        })
+            .then((result) => {
+                localStorage.setItem(
+                    'vendure-auth-token',
+                    result.headers.get('vendure-auth-token')
+                )
+                return result.json()
+            })
+            .then((res) => {
+                if (res.data.resetPassword.__typename === 'CurrentUser') {
+                    currentUser()
+                    if (data) {
+                        setUser(data)
+                        setStatusRequest({ status: true, msg: 'Ok' })
+                    }
+                } else {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Token invalido o expirado',
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
     return (
         <UserContext.Provider
@@ -165,6 +213,8 @@ export const UserProvider = ({ children }) => {
                 register,
                 login,
                 logout,
+                resetPassword,
+                statusRequest,
             }}
         >
             {children}

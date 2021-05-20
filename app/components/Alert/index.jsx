@@ -7,19 +7,18 @@ import CloseIcon from '@material-ui/icons/Close'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        position: 'fixed',
-        bottom: 20,
-        right: 10,
-        width: 340,
+        width: '100%',
+        marginTop: theme.spacing(2),
         '& > * + *': {
-            marginTop: theme.spacing(6),
+            marginTop: theme.spacing(2),
         },
     },
 }))
 
-export default function TransitionAlerts({ isOpen, text }) {
+export default function TransitionAlerts({ isOpen, text, severity }) {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
+
     useEffect(() => {
         setOpen(isOpen)
     }, [isOpen])
@@ -40,6 +39,7 @@ export default function TransitionAlerts({ isOpen, text }) {
                             <CloseIcon fontSize="inherit" />
                         </IconButton>
                     }
+                    severity={severity}
                 >
                     {text}
                 </Alert>

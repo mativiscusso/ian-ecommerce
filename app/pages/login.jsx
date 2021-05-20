@@ -1,3 +1,6 @@
+import { useState, useContext, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -9,9 +12,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { useState, useContext } from 'react'
-import { USER_LOGIN } from 'graphql/mutations'
-import { useRouter } from 'next/router'
+
+import Alert from 'components/Alert'
+
+import { USER_LOGIN, USER_REQUEST_RESET_PASSWORD } from 'graphql/mutations'
+import { useMutation } from '@apollo/client'
+
 import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,9 +45,18 @@ export default function Login() {
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const [rememberMe, setRememberMe] = useState(false)
+    const [statusLogin, setStatusLogin] = useState(false)
 
-    const { login } = useContext(UserContext)
+    const { login, statusRequest } = useContext(UserContext)
     const router = useRouter()
+
+    const [forgotPassword] = useMutation(USER_REQUEST_RESET_PASSWORD)
+
+    useEffect(() => {
+        if (statusRequest) {
+            setStatusLogin(statusRequest)
+        }
+    }, [statusRequest])
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -52,17 +67,46 @@ export default function Login() {
     const handleRememberMe = (e) => {
         setRememberMe(e.target.checked)
     }
+    const handleForgotPassword = async () => {
+        if (email) {
+            const result = await forgotPassword({ variables: { email: email } })
+            if (result) {
+                setStatusLogin({
+                    status: true,
+                    msg: 'Hemos enviado un link a su correo para restablecer la contraseña.',
+                    several: 'success',
+                })
+            }
+        } else {
+            setStatusLogin({
+                status: true,
+                msg: 'El campo email debe estar completo',
+                several: 'error',
+            })
+        }
+    }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         const user = {
             user: email,
             password: password,
             rememberMe: rememberMe,
         }
-        await login(USER_LOGIN, user)
-        await router.push('/')
+        if (user.user && user.password) {
+            login(USER_LOGIN, user)
+
+            if (statusLogin.status) {
+                router.push('/')
+            }
+        } else {
+            setStatusLogin({
+                status: false,
+                msg: 'Los campos USUARIO y CONTRASEÑA son requeridos',
+            })
+        }
     }
+    console.log(statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -117,14 +161,26 @@ export default function Login() {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Button
+                                onClick={handleForgotPassword}
+                                color="inherit"
+                            >
                                 ¿Olvidó su contraseña?
-                            </Link>
+                            </Button>
                         </Grid>
                         <Grid item>
                             <Link href="/register">
                                 <a>¿No tiene una cuenta? Registrese acá</a>
                             </Link>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {statusLogin.status && (
+                                <Alert
+                                    isOpen={true}
+                                    text={statusLogin.msg}
+                                    severity={statusLogin.several || 'error'}
+                                />
+                            )}
                         </Grid>
                     </Grid>
                 </form>
