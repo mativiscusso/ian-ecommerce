@@ -128,7 +128,6 @@ export const UserProvider = ({ children }) => {
     }
 
     const verifyUser = (mutation, token) => {
-        let result
         fetch('http://localhost:4000/shop-api', {
             method: 'POST',
             mode: 'cors',
@@ -164,7 +163,46 @@ export const UserProvider = ({ children }) => {
             .catch((err) => {
                 console.log(err)
             })
-        return result
+    }
+
+    const resetPassword = (mutation, token, password) => {
+        fetch('http://localhost:4000/shop-api', {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                query: mutation,
+                variables: { token: token, password: password },
+            }),
+        })
+            .then((result) => {
+                localStorage.setItem(
+                    'vendure-auth-token',
+                    result.headers.get('vendure-auth-token')
+                )
+                return result.json()
+            })
+            .then((res) => {
+                if (res.data.resetPassword.__typename === 'CurrentUser') {
+                    currentUser()
+                    if (data) {
+                        setUser(data)
+                        setStatusRequest({ status: true, msg: 'Ok' })
+                    }
+                } else {
+                    setStatusRequest({
+                        status: false,
+                        msg: 'Token invalido o expirado',
+                    })
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
     return (
         <UserContext.Provider
@@ -175,6 +213,7 @@ export const UserProvider = ({ children }) => {
                 register,
                 login,
                 logout,
+                resetPassword,
                 statusRequest,
             }}
         >

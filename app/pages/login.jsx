@@ -15,7 +15,8 @@ import Container from '@material-ui/core/Container'
 
 import Alert from 'components/Alert'
 
-import { USER_LOGIN } from 'graphql/mutations'
+import { USER_LOGIN, USER_REQUEST_RESET_PASSWORD } from 'graphql/mutations'
+import { useMutation } from '@apollo/client'
 
 import { UserContext } from 'utils/userContext'
 
@@ -49,6 +50,8 @@ export default function Login() {
     const { login, statusRequest } = useContext(UserContext)
     const router = useRouter()
 
+    const [forgotPassword] = useMutation(USER_REQUEST_RESET_PASSWORD)
+
     useEffect(() => {
         if (statusRequest) {
             setStatusLogin(statusRequest)
@@ -63,6 +66,24 @@ export default function Login() {
     }
     const handleRememberMe = (e) => {
         setRememberMe(e.target.checked)
+    }
+    const handleForgotPassword = async () => {
+        if (email) {
+            const result = await forgotPassword({ variables: { email: email } })
+            if (result) {
+                setStatusLogin({
+                    status: true,
+                    msg: 'Hemos enviado un link a su correo para restablecer la contraseña.',
+                    several: 'success',
+                })
+            }
+        } else {
+            setStatusLogin({
+                status: true,
+                msg: 'El campo email debe estar completo',
+                several: 'error',
+            })
+        }
     }
 
     const handleSubmit = (e) => {
@@ -85,6 +106,7 @@ export default function Login() {
             })
         }
     }
+    console.log(statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -139,9 +161,12 @@ export default function Login() {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link href="#" variant="body2">
+                            <Button
+                                onClick={handleForgotPassword}
+                                color="inherit"
+                            >
                                 ¿Olvidó su contraseña?
-                            </Link>
+                            </Button>
                         </Grid>
                         <Grid item>
                             <Link href="/register">
@@ -149,11 +174,11 @@ export default function Login() {
                             </Link>
                         </Grid>
                         <Grid item xs={12}>
-                            {statusLogin && (
+                            {statusLogin.status && (
                                 <Alert
                                     isOpen={true}
                                     text={statusLogin.msg}
-                                    severity="error"
+                                    severity={statusLogin.several || 'error'}
                                 />
                             )}
                         </Grid>

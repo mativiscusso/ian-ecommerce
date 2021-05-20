@@ -8,9 +8,9 @@ import CloseIcon from '@material-ui/icons/Close'
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(2),
         '& > * + *': {
-            marginTop: theme.spacing(10),
+            marginTop: theme.spacing(2),
         },
     },
 }))
