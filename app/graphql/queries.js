@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -29,7 +29,7 @@ export const ALL_PRODUCTS = gql`
             }
         }
     }
-`;
+`
 export const ONE_PRODUCT = gql`
     query oneProduct($id: ID) {
         product(id: $id) {
@@ -57,4 +57,18 @@ export const ONE_PRODUCT = gql`
             }
         }
     }
-`;
+`
+
+export const USER_ACTIVE = gql`
+    {
+        me {
+            id
+            identifier
+            channels {
+                id
+                token
+                code
+            }
+        }
+    }
+`

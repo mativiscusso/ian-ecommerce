@@ -1,56 +1,56 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 // import { ReactComponent as RbNew } from "../../utils/svg/rb-new.svg";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
-import Select from "@material-ui/core/Select";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import ShopCartButton from "components/Product/ShopCartButton";
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Chip from '@material-ui/core/Chip'
+import Select from '@material-ui/core/Select'
+import Divider from '@material-ui/core/Divider'
+import FormControl from '@material-ui/core/FormControl'
+import InputLabel from '@material-ui/core/InputLabel'
+import ShopCartButton from 'components/Product/ShopCartButton'
 
 const dataProducts = [
     {
-        id: "1",
-        name: "Cafetera Moulinex Dolce Gusto Edited",
+        id: '1',
+        name: 'Cafetera Moulinex Dolce Gusto Edited',
         priceBase: 100,
-        tags: ["tag1", "tag2", "tag3"],
+        tags: ['tag1', 'tag2', 'tag3'],
         description:
-            "Cafetera Dolce Gusto Lumio. La cafetera Dolce Gusto Lumio es de variedad automática que ha llegado con un diseño radical al que nos tenía acostumbrados Dolce Gusto.En este post te contamos todo lo que necesitas saber sobre ella, desde sus características técnicas hasta la calidad de las cápsulas o priceBase.",
+            'Cafetera Dolce Gusto Lumio. La cafetera Dolce Gusto Lumio es de variedad automática que ha llegado con un diseño radical al que nos tenía acostumbrados Dolce Gusto.En este post te contamos todo lo que necesitas saber sobre ella, desde sus características técnicas hasta la calidad de las cápsulas o priceBase.',
         images: [
-            "https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg",
+            'https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg',
         ],
         isFeatured: true,
         isPublished: true,
     },
-];
+]
 
 const useStyles = makeStyles({
     detailProduct: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     imgFluid: {
-        position: "relative",
-        width: "100%",
+        position: 'relative',
+        width: '100%',
     },
     marginTags: {
-        marginRight: "0.5rem",
+        marginRight: '0.5rem',
     },
     ribbonNew: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         right: 0,
         width: 70,
     },
-});
+})
 
 const ProductDetail = ({ data }) => {
-    const classes = useStyles();
-    const { product } = data;
+    const classes = useStyles()
+    const { product } = data
     return (
         <Container>
             <Grid container spacing={3}>
@@ -80,7 +80,7 @@ const ProductDetail = ({ data }) => {
                 </Grid>
             </Grid>
         </Container>
-    );
-};
+    )
+}
 
-export default ProductDetail;
+export default ProductDetail

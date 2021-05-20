@@ -12,6 +12,7 @@ Mira **Deployment** para conocer como desplegar el proyecto.
 
 _Para correr el proyecto necesitaras tener instalado_
 
+-   VS Code + extensiones -> Prettier y ESLint
 -   Node v12 (minimo)
 -   XAMPP / Laragon
 
