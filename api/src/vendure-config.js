@@ -38,7 +38,7 @@ const config = {
         type: "mysql",
         synchronize: true, // turn this off for production
         logging: false,
-        database: "vendure_example",
+        database: "ian_ecommerce",
         host: "localhost",
         port: 3306,
         username: "root",
