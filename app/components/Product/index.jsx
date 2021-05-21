@@ -17,28 +17,26 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'left',
         transition: 'all 0.1s',
         height: '100%',
-        [theme.breakpoints.up(768)]: {
-            height: '80%',
-        },
         '&:hover': {
             transform: 'scale(1.05) translateY(-20px)',
             zIndex: 1000,
-            height: '100%',
         },
+
+        marginBottom: '1rem',
     },
     media: {
         backgroundSize: 'contain',
         height: 200,
     },
     productName: {
-        height: 55,
+        height: 35,
         textTransform: 'uppercase',
         fontWeight: 'bolder',
         marginBottom: 5,
     },
     productPrice: {
         position: 'relative',
-        top: 20,
+        top: 10,
         fontWeight: 'bold',
     },
     ribbonNew: {
@@ -55,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
+
+    const image = props.assets[0].source.replace(/[\\]+/g, '/')
+    console.log(props)
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
@@ -62,8 +63,8 @@ export default function Product(props) {
                     <CardActionArea>
                         <CardMedia
                             className={classes.media}
-                            image="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
-                            title="Producto"
+                            image={image}
+                            title={props.name}
                         />
 
                         <CardContent>
