@@ -16,7 +16,8 @@
         "next": "latest",
         "prop-types": "latest",
         "react": "latest",
-        "react-dom": "latest"
+        "react-dom": "latest",
+        "react-material-ui-carousel": "^2.2.6"
     },
     "scripts": {
         "dev": "next",
