@@ -8,38 +8,33 @@ import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
 import { CartContext } from 'utils/cartContext'
 
-export default function ButtonCartHome() {
-    const useStyles = makeStyles((theme) => ({
-        float: {
-            position: 'fixed',
-            bottom: 20,
-            right: 20,
-            zIndex: 1000,
-        },
-        drawer: {
-            width: 330,
+const useStyles = makeStyles((theme) => ({
+    float: {
+        position: 'fixed',
+        bottom: 20,
+        right: 20,
+        zIndex: 1000,
+    },
+    drawer: {
+        width: 330,
+        padding: '1rem',
+        [theme.breakpoints.up(750)]: {
+            width: 380,
             padding: '1rem',
-            [theme.breakpoints.up(750)]: {
-                width: 380,
-                padding: '1rem',
-            },
         },
-        btnComprar: {
-            position: 'absolute',
-            bottom: 50,
-            left: 0,
-            right: 0,
-            margin: '1rem',
-        },
-    }))
+    },
+    btnComprar: {
+        position: 'absolute',
+        bottom: 50,
+        left: 0,
+        right: 0,
+        margin: '1rem',
+    },
+}))
 
+export default function ButtonCartHome() {
     const classes = useStyles()
-
-    const { cart } = useContext(CartContext)
-    const { totalQtyCalculator } = useContext(CartContext)
-
-    const qtyCart = totalQtyCalculator(cart)
-
+    const { cartLenght } = useContext(CartContext)
     const [show, setShow] = useState({
         right: false,
     })
@@ -55,7 +50,7 @@ export default function ButtonCartHome() {
     }
 
     const cartHome = (anchor) => {
-        const isEmpty = cart.length === 0
+        const isEmpty = cartLenght === 0
 
         return (
             <div
@@ -87,7 +82,7 @@ export default function ButtonCartHome() {
                 onClick={toggleDrawer('right', true)}
                 color="inherit"
             >
-                <Badge badgeContent={qtyCart} color="secondary">
+                <Badge badgeContent={cartLenght} color="secondary">
                     <ShoppingCartIcon />
                 </Badge>
             </IconButton>

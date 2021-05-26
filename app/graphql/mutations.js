@@ -44,3 +44,11 @@ mutation resetPassword($token:String!, $password: String!) {
      __typename
     }
   }`
+
+export const ADD_ITEM_CART = gql`
+    mutation addItem($productId: ID!, $quantity: Int!) {
+        addItemToOrder(productVariantId: $productId, quantity: $quantity) {
+            __typename
+        }
+    }
+`

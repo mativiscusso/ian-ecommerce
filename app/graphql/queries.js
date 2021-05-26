@@ -72,3 +72,24 @@ export const USER_ACTIVE = gql`
         }
     }
 `
+export const ORDER_ACTIVE = gql`
+    {
+        activeOrder {
+            id
+            state
+            code
+            active
+            lines {
+                id
+                productVariant {
+                    productId
+                    name
+                    price
+                }
+                quantity
+            }
+            totalQuantity
+            subTotal
+        }
+    }
+`
