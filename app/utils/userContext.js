@@ -10,7 +10,7 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(undefined)
     const [statusRequest, setStatusRequest] = useState(undefined)
     const [currentUser, { data, loading }] = useLazyQuery(USER_ACTIVE)
-    const { client } = useApolloClient()
+    const client = useApolloClient()
 
     useEffect(() => {
         currentUser()
@@ -36,16 +36,14 @@ export const UserProvider = ({ children }) => {
             body: JSON.stringify(mutation),
         })
             .then((result) => {
-                localStorage.setItem(
-                    'vendure-auth-token',
-                    result.headers.get('vendure-auth-token')
-                )
+                client.clearStore()
+                localStorage.clear()
                 return result.json()
             })
             .then(({ data }) => {
                 if (data.logout) {
                     setUser(undefined)
-                    client.resetStore()
+                    setStatusRequest(undefined)
                     return true
                 }
             })
@@ -76,11 +74,8 @@ export const UserProvider = ({ children }) => {
             })
             .then((res) => {
                 if (res.data.login.__typename === 'CurrentUser') {
+                    setStatusRequest({ status: true, msg: 'Ok' })
                     currentUser()
-                    if (data) {
-                        setUser(data)
-                        setStatusRequest({ status: true, msg: 'Ok' })
-                    }
                 }
                 if (res.data.login.__typename === 'InvalidCredentialsError') {
                     setStatusRequest({
@@ -206,6 +201,7 @@ export const UserProvider = ({ children }) => {
                 console.log(err)
             })
     }
+    console.log(statusRequest)
     return (
         <UserContext.Provider
             value={{
@@ -217,6 +213,7 @@ export const UserProvider = ({ children }) => {
                 logout,
                 resetPassword,
                 statusRequest,
+                setStatusRequest,
             }}
         >
             {children}

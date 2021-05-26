@@ -55,6 +55,9 @@ export default function Login() {
     useEffect(() => {
         if (statusRequest) {
             setStatusLogin(statusRequest)
+            if (statusRequest.status) {
+                router.push('/')
+            }
         }
     }, [statusRequest])
 
@@ -95,10 +98,6 @@ export default function Login() {
         }
         if (user.user && user.password) {
             login(USER_LOGIN, user)
-
-            if (statusLogin.status) {
-                router.push('/')
-            }
         } else {
             setStatusLogin({
                 status: false,
@@ -106,7 +105,6 @@ export default function Login() {
             })
         }
     }
-    console.log(statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -174,7 +172,7 @@ export default function Login() {
                             </Link>
                         </Grid>
                         <Grid item xs={12}>
-                            {statusLogin.status && (
+                            {statusLogin.status === false && (
                                 <Alert
                                     isOpen={true}
                                     text={statusLogin.msg}
