@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { getDefaultValues } from '@apollo/client/utilities'
-import { useLazyQuery } from '@apollo/client'
+import { useLazyQuery, useApolloClient } from '@apollo/client'
 import { USER_ACTIVE } from 'graphql/queries'
 
 export const UserContext = createContext(getDefaultValues)
@@ -10,6 +10,7 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(undefined)
     const [statusRequest, setStatusRequest] = useState(undefined)
     const [currentUser, { data, loading }] = useLazyQuery(USER_ACTIVE)
+    const { client } = useApolloClient()
 
     useEffect(() => {
         currentUser()
@@ -44,6 +45,7 @@ export const UserProvider = ({ children }) => {
             .then(({ data }) => {
                 if (data.logout) {
                     setUser(undefined)
+                    client.resetStore()
                     return true
                 }
             })
