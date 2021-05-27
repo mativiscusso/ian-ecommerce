@@ -1,6 +1,8 @@
-import React, { useContext } from 'react'
+import { useState } from 'react'
+
 import { makeStyles } from '@material-ui/core/styles'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 import Button from '@material-ui/core/Button'
 
 import { useMutation } from '@apollo/client'
@@ -15,26 +17,42 @@ const useStyles = makeStyles({
 
 export default function ShopCartButton({ productId, quantity }) {
     const classes = useStyles()
-    console.log({ productId, quantity })
+    const [open, setOpen] = useState(false)
     const [addItem] = useMutation(ADD_ITEM_CART, {
         refetchQueries: [{ query: ORDER_ACTIVE }],
     })
 
     const handleClick = () => {
+        setOpen(true)
         addItem({ variables: { productId: productId, quantity: quantity } })
+        setTimeout(() => {
+            setOpen(false)
+        }, 1500)
     }
     return (
         <>
-            <Button
-                className={classes.btnCenter}
-                variant="contained"
-                color="primary"
-                disabled={quantity === 0}
-                startIcon={<ShoppingCartIcon />}
-                onClick={handleClick}
-            >
-                Agregar al carrito
-            </Button>
+            {open ? (
+                <Button
+                    className={classes.btnCenter}
+                    variant="outlined"
+                    color="primary"
+                    disabled={quantity === 0}
+                    startIcon={<AddShoppingCartIcon />}
+                >
+                    Producto agregado
+                </Button>
+            ) : (
+                <Button
+                    className={classes.btnCenter}
+                    variant="contained"
+                    color="primary"
+                    disabled={quantity === 0}
+                    startIcon={<ShoppingCartIcon />}
+                    onClick={handleClick}
+                >
+                    Agregar al carrito
+                </Button>
+            )}
         </>
     )
 }

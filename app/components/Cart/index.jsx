@@ -1,28 +1,36 @@
-import React, { useContext, useState } from 'react'
+import { useContext, useState } from 'react'
+
 import { makeStyles } from '@material-ui/core/styles'
-// import { CartContext } from "theme/components/utils/context";
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import HighlightOffIcon from '@material-ui/icons/DeleteOutline'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Container } from '@material-ui/core'
 
+import { CartContext } from 'utils/cartContext'
+import { formatURLImage } from 'helpers'
+import { gql, useMutation } from '@apollo/client'
+
+import { CHANGE_QTY_ITEM_CART, ORDER_ACTIVE } from 'graphql/mutations'
+
 const useStyles = makeStyles((theme) => ({
     table: {
         maxWidth: '100%',
-        marginTop: theme.spacing(10),
     },
     cellImgProduct: {
-        width: '10%',
+        width: '15%',
+        padding: 5,
+        borderRadius: '50%',
     },
     IconDelete: {
         minWidth: '20px!important',
+        maxWidth: 20,
         padding: 0,
     },
     imgProduct: {
@@ -34,82 +42,63 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const cart = [
-    { id: 0, name: 'Product 1', quantity: 2 },
-    { id: 1, name: 'Product 2', quantity: 2 },
-    { id: 2, name: 'Product 3', quantity: 2 },
-]
 export default function Cart() {
     const classes = useStyles()
-    // const { cart, emptyCart, updateQtyItem, deleteItemCart, totalCalculator } = useContext(
-    //     CartContext
-    // );
     const [state, setState] = useState({})
 
-    // const totalCart = totalCalculator(cart);
-    const totalCart = 1000
+    const { cart } = useContext(CartContext)
+    const [modifyQuantity] = useMutation(CHANGE_QTY_ITEM_CART, {
+        refetchQueries: [
+            {
+                query: gql`
+                    {
+                        activeOrder {
+                            id
+                            state
+                            code
+                            active
+                            lines {
+                                id
+                                featuredAsset {
+                                    source
+                                    preview
+                                }
+                                productVariant {
+                                    productId
+                                    name
+                                    price
+                                }
+                                quantity
+                                linePrice
+                            }
+                            totalQuantity
+                            subTotal
+                            total
+                        }
+                    }
+                `,
+            },
+        ],
+    })
+    console.log(cart)
 
-    const propertyKeys = []
-    for (let i = 0; i < 1; i++) {
-        if (cart[i].listVariants) {
-            for (let j = 0; j < cart[i].listVariants.length; j++) {
-                const keys = Object.keys(cart[i].listVariants[j])
-                propertyKeys.push(keys)
-            }
-        }
-    }
+    const handleChange = async (event) => {
+        const id = event.currentTarget.id
 
-    const handleChange = (event) => {
-        const name = event.currentTarget.id
         setState({
             ...state,
-            [name]: event.target.value,
+            [id]: event.target.value,
+        })
+        await modifyQuantity({
+            variables: {
+                orderLineId: id,
+                quantity: Number(event.target.value),
+            },
         })
     }
 
-    function objectEquals(obj1, obj2) {
-        for (const i in obj1) {
-            if (obj1.hasOwnProperty(i)) {
-                if (!obj2.hasOwnProperty(i)) {
-                    return false
-                }
-                if (obj1[i] != obj2[i]) {
-                    return false
-                }
-            }
-        }
-        for (const i in obj2) {
-            if (obj2.hasOwnProperty(i)) {
-                if (!obj1.hasOwnProperty(i)) {
-                    return false
-                }
-                if (obj1[i] != obj2[i]) {
-                    return false
-                }
-            }
-        }
-        return true
-    }
-    const stockCalculator = (
-        variantsSelected = [{}, {}],
-        variantsProduct = [{ propertyValues: '', stock: '' }]
-    ) => {
-        const objectVariantsSelected = Object.assign(
-            {},
-            variantsSelected[0],
-            variantsSelected[1]
-        )
-        for (let i = 0; i < variantsProduct.length; i++) {
-            const propertyValues = JSON.parse(variantsProduct[i].propertyValues)
-            const result = objectEquals(objectVariantsSelected, propertyValues)
-            if (result) {
-                return variantsProduct[i].stock
-            }
-        }
-    }
-
     return (
-        <Container maxWidth="md">
+        <Container maxWidth="md" disableGutters>
             <TableContainer>
                 <Table className={classes.table} aria-label="cart" size="small">
                     <TableHead>
@@ -118,121 +107,104 @@ export default function Cart() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {cart.map((row) => {
-                            return (
-                                <TableRow key={row.id}>
-                                    <TableCell
-                                        padding="none"
-                                        align="left"
-                                        size="small"
-                                    >
-                                        <Button
-                                            value={row.id}
-                                            id={row.id}
-                                            // onClick={deleteItemCart}
-                                            className={classes.IconDelete}
+                        {cart.lines &&
+                            cart.lines.map((line) => {
+                                return (
+                                    <TableRow key={line.id}>
+                                        <TableCell
+                                            padding="none"
+                                            align="left"
+                                            size="small"
                                         >
-                                            <HighlightOffIcon
+                                            <Button
+                                                value={line.id}
+                                                id={line.id}
+                                                // onClick={deleteItemCart}
                                                 className={classes.IconDelete}
-                                            />
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell
-                                        colSpan={2}
-                                        padding="none"
-                                        className={classes.cellImgProduct}
-                                    >
-                                        {row.images ? (
-                                            <img
-                                                src={`${process.env.REACT_APP_API_URL}/files/${row.images[0]}`}
-                                                className={classes.imgProduct}
-                                                alt="Foto producto"
-                                            />
-                                        ) : (
-                                            <img
-                                                src="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
-                                                className={classes.imgProduct}
-                                                alt="Foto producto"
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell
-                                        colSpan={3}
-                                        padding="none"
-                                        size="small"
-                                    >
-                                        {row.name}
-                                    </TableCell>
-                                    {/* <TableCell padding="none" size="small">
-                                    {propertyKeys &&
-                                        propertyKeys.map((variantProperty, i) => (
-                                            <div key={`${i}variant`}>
-                                                <Typography variant="caption" className={classes.titleVariant}>{variantProperty}</Typography>
-                                                <select>
-                                                    {Object.entries(
-                                                        row.listVariants[i][propertyKeys[i]]
-                                                    ).map(
-                                                        ([key, value], j) => (
-                                                            row.variantsSelected[i][propertyKeys[i]] != value
-                                                                ?
-                                                                <option
-                                                                    key={`${key}val${j}`}
-                                                                    value={state[`${value}`]}
-                                                                    id={`${value}`}
-                                                                    onChange={handleChange}
-                                                                >
-                                                                    {value}
-                                                                </option>
-                                                                :
-                                                                <option
-                                                                    key={`${key}val${j}`}
-                                                                    value={state[`${value}`]}
-                                                                    id={`${value}`}
-                                                                    onChange={handleChange}
-                                                                    selected
-                                                                >
-                                                                    {value}
-                                                                </option>
-
-                                                        )
-                                                        //
+                                                color="primary"
+                                            >
+                                                <HighlightOffIcon
+                                                    className={
+                                                        classes.IconDelete
+                                                    }
+                                                />
+                                            </Button>
+                                        </TableCell>
+                                        <TableCell
+                                            colSpan={2}
+                                            padding="none"
+                                            className={classes.cellImgProduct}
+                                        >
+                                            {line.featuredAsset ? (
+                                                <img
+                                                    src={formatURLImage(
+                                                        line.featuredAsset
+                                                            .source
                                                     )}
-                                                </select>
-                                            </div>
-                                        ))}
-                                </TableCell> */}
-                                    <TableCell colSpan={1}>
-                                        <TextField
-                                            id={row.id}
-                                            value={row.quantity}
-                                            label="Qty."
-                                            type="number"
-                                        />
-                                    </TableCell>
-                                    <TableCell
-                                        colSpan={1}
-                                        padding="none"
-                                        align="left"
-                                    >
-                                        ${row.quantity}
-                                    </TableCell>
-                                </TableRow>
-                            )
-                        })}
+                                                    className={
+                                                        classes.imgProduct
+                                                    }
+                                                    alt="Foto producto"
+                                                />
+                                            ) : (
+                                                <img
+                                                    src="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
+                                                    className={
+                                                        classes.imgProduct
+                                                    }
+                                                    alt="Foto producto"
+                                                />
+                                            )}
+                                        </TableCell>
+                                        <TableCell
+                                            colSpan={3}
+                                            padding="none"
+                                            size="small"
+                                        >
+                                            <Typography variant="caption">
+                                                {line.productVariant.name}
+                                            </Typography>
+                                        </TableCell>
 
+                                        <TableCell colSpan={1}>
+                                            <TextField
+                                                id={line.id}
+                                                value={line.quantity}
+                                                // value={state[line.id]}
+                                                label="Qty."
+                                                type="number"
+                                                size="small"
+                                                variant="outlined"
+                                                onChange={handleChange}
+                                            />
+                                        </TableCell>
+                                        <TableCell
+                                            colSpan={1}
+                                            padding="none"
+                                            align="left"
+                                        >
+                                            ${line.linePrice}
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
                         <TableRow>
                             <TableCell padding="none" colSpan={2}>
-                                <Typography variant="body1">
+                                <Typography variant="subtitle2">
                                     TOTAL CART
                                 </Typography>
                             </TableCell>
-                            <TableCell colSpan={4} align="center">
+                            <TableCell colSpan={5} align="center">
                                 <Typography variant="body1">
-                                    ${totalCart}
+                                    ${cart.total}
                                 </Typography>
                             </TableCell>
                             <TableCell colSpan={1} padding="none" align="right">
-                                <Button variant="outlined" color="secondary">
+                                <Button
+                                    variant="outlined"
+                                    color="secondary"
+                                    size="small"
+                                >
                                     VACIAR
                                 </Button>
                             </TableCell>

@@ -52,3 +52,10 @@ export const ADD_ITEM_CART = gql`
         }
     }
 `
+export const CHANGE_QTY_ITEM_CART = gql`
+    mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+        adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+            __typename
+        }
+    }
+`

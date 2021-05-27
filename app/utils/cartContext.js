@@ -8,13 +8,14 @@ export const CartContext = createContext(getDefaultValues)
 
 export const CartProvider = ({ children }) => {
     const [cartLenght, setCartLenght] = useState(null)
+    const [cart, setCart] = useState([])
     const [activeOrder, { data, error }] = useLazyQuery(ORDER_ACTIVE)
 
     useEffect(() => {
         activeOrder()
         if (data) {
             setCartLenght(totalQuantity(data.activeOrder.lines))
-            console.log(data)
+            setCart(data.activeOrder)
         }
         if (error) {
             console.log(error)
@@ -31,6 +32,7 @@ export const CartProvider = ({ children }) => {
     return (
         <CartContext.Provider
             value={{
+                cart,
                 cartLenght,
             }}
         >

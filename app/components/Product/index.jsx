@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from '../ProductQuickView/QuickView'
 import Link from 'next/link'
+import { formatURLImage } from 'helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,7 +54,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
-    const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
@@ -61,7 +61,7 @@ export default function Product(props) {
                     <CardActionArea>
                         <CardMedia
                             className={classes.media}
-                            image={image}
+                            image={formatURLImage(props.assets[0].source)}
                             title={props.name}
                         />
 

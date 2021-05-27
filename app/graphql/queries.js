@@ -81,15 +81,21 @@ export const ORDER_ACTIVE = gql`
             active
             lines {
                 id
+                featuredAsset {
+                    source
+                    preview
+                }
                 productVariant {
                     productId
                     name
                     price
                 }
                 quantity
+                linePrice
             }
             totalQuantity
             subTotal
+            total
         }
     }
 `
