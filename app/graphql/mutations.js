@@ -59,3 +59,18 @@ export const CHANGE_QTY_ITEM_CART = gql`
         }
     }
 `
+export const REMOVE_ITEM_CART = gql`
+    mutation removeOrderLine($orderLineId: ID!) {
+        removeOrderLine(orderLineId: $orderLineId) {
+            __typename
+        }
+    }
+`
+
+export const EMPTY_CART = gql`
+    mutation removeAllOrderLines {
+        removeAllOrderLines {
+            __typename
+        }
+    }
+`

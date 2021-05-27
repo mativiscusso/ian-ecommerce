@@ -11,13 +11,17 @@ import HighlightOffIcon from '@material-ui/icons/DeleteOutline'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Container } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 
 import { CartContext } from 'utils/cartContext'
 import { formatURLImage } from 'helpers'
 import { gql, useMutation } from '@apollo/client'
 
-import { CHANGE_QTY_ITEM_CART, ORDER_ACTIVE } from 'graphql/mutations'
+import {
+    CHANGE_QTY_ITEM_CART,
+    EMPTY_CART,
+    REMOVE_ITEM_CART,
+} from 'graphql/mutations'
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -42,12 +46,80 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Cart() {
+export default function Cart({ isEmpty }) {
     const classes = useStyles()
     const [state, setState] = useState({})
 
     const { cart } = useContext(CartContext)
     const [modifyQuantity] = useMutation(CHANGE_QTY_ITEM_CART, {
+        refetchQueries: [
+            {
+                query: gql`
+                    {
+                        activeOrder {
+                            id
+                            state
+                            code
+                            active
+                            lines {
+                                id
+                                featuredAsset {
+                                    source
+                                    preview
+                                }
+                                productVariant {
+                                    productId
+                                    name
+                                    price
+                                }
+                                quantity
+                                linePrice
+                            }
+                            totalQuantity
+                            subTotal
+                            total
+                        }
+                    }
+                `,
+            },
+        ],
+    })
+
+    const [removeLine] = useMutation(REMOVE_ITEM_CART, {
+        refetchQueries: [
+            {
+                query: gql`
+                    {
+                        activeOrder {
+                            id
+                            state
+                            code
+                            active
+                            lines {
+                                id
+                                featuredAsset {
+                                    source
+                                    preview
+                                }
+                                productVariant {
+                                    productId
+                                    name
+                                    price
+                                }
+                                quantity
+                                linePrice
+                            }
+                            totalQuantity
+                            subTotal
+                            total
+                        }
+                    }
+                `,
+            },
+        ],
+    })
+
+    const [removeAll] = useMutation(EMPTY_CART, {
         refetchQueries: [
             {
                 query: gql`
@@ -97,6 +169,14 @@ export default function Cart() {
         })
     }
 
+    const handleRemove = async (event) => {
+        await removeLine({ variables: { orderLineId: event.currentTarget.id } })
+    }
+
+    const handleRemoveAll = async () => {
+        await removeAll()
+    }
+
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>
@@ -119,7 +199,7 @@ export default function Cart() {
                                             <Button
                                                 value={line.id}
                                                 id={line.id}
-                                                // onClick={deleteItemCart}
+                                                onClick={handleRemove}
                                                 className={classes.IconDelete}
                                                 color="primary"
                                             >
@@ -188,27 +268,45 @@ export default function Cart() {
                                     </TableRow>
                                 )
                             })}
-                        <TableRow>
-                            <TableCell padding="none" colSpan={2}>
-                                <Typography variant="subtitle2">
-                                    TOTAL CART
-                                </Typography>
-                            </TableCell>
-                            <TableCell colSpan={5} align="center">
-                                <Typography variant="body1">
-                                    ${cart.total}
-                                </Typography>
-                            </TableCell>
-                            <TableCell colSpan={1} padding="none" align="right">
-                                <Button
-                                    variant="outlined"
-                                    color="secondary"
-                                    size="small"
+                        {!isEmpty ? (
+                            <TableRow>
+                                <TableCell padding="none" colSpan={2}>
+                                    <Typography variant="subtitle2">
+                                        TOTAL CART
+                                    </Typography>
+                                </TableCell>
+                                <TableCell colSpan={5} align="center">
+                                    <Typography variant="body1">
+                                        ${cart.total}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell
+                                    colSpan={1}
+                                    padding="none"
+                                    align="right"
                                 >
-                                    VACIAR
-                                </Button>
-                            </TableCell>
-                        </TableRow>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        size="small"
+                                        onClick={handleRemoveAll}
+                                    >
+                                        VACIAR
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ) : (
+                            <Grid
+                                container
+                                alignItems="center"
+                                justifyContent="center"
+                                style={{ height: '80vh' }}
+                            >
+                                <Typography variant="body1">
+                                    Su carrito esta vacio
+                                </Typography>
+                            </Grid>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>

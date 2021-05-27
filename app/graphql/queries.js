@@ -60,7 +60,7 @@ export const ONE_PRODUCT = gql`
 `
 
 export const USER_ACTIVE = gql`
-    {
+    query me {
         me {
             id
             identifier
@@ -73,7 +73,7 @@ export const USER_ACTIVE = gql`
     }
 `
 export const ORDER_ACTIVE = gql`
-    {
+    query orderActive {
         activeOrder {
             id
             state

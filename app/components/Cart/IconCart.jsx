@@ -56,7 +56,7 @@ export default function ButtonCartHome() {
                     onKeyDown={toggleDrawer(anchor, false)}
                     className={classes.drawer}
                 >
-                    <Cart />
+                    <Cart isEmpty={isEmpty} />
                     {!isEmpty ? (
                         <Link href="/cart">
                             <a>
