@@ -5,6 +5,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Grid from '@material-ui/core/Grid'
+import { Button } from '@material-ui/core'
 
 const products = [
     { name: 'Product 1', desc: 'A nice thing', price: '$9.99' },
@@ -39,9 +40,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Review() {
+export default function Review({ handleBack }) {
     const classes = useStyles()
 
+    const handleFinishOrder = () => {
+        console.log('finish')
+    }
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -100,6 +104,18 @@ export default function Review() {
                             </React.Fragment>
                         ))}
                     </Grid>
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                >
+                    <Button style={{ marginRight: 12 }} onClick={handleBack}>
+                        ANTERIOR
+                    </Button>
+                    <Button variant="contained" onClick={handleFinishOrder}>
+                        FINALIZAR
+                    </Button>
                 </Grid>
             </Grid>
         </>

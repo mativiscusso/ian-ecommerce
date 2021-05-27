@@ -58,17 +58,14 @@ export default function ButtonCartHome() {
                 >
                     <Cart isEmpty={isEmpty} />
                     {!isEmpty ? (
-                        <Link href="/cart">
-                            <a>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.btnComprar}
-                                >
-                                    COMPRAR
-                                </Button>
-                            </a>
-                        </Link>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.btnComprar}
+                            href="/cart"
+                        >
+                            COMPRAR
+                        </Button>
                     ) : (
                         ''
                     )}

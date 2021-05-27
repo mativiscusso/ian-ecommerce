@@ -72,6 +72,48 @@ export const USER_ACTIVE = gql`
         }
     }
 `
+
+export const CUSTOMER_ACTIVE = gql`
+    query customerActive {
+        activeCustomer {
+            id
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+            addresses {
+                fullName
+                company
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    name
+                }
+                defaultShippingAddress
+                defaultBillingAddress
+                customFields
+            }
+            orders {
+                items {
+                    state
+                    active
+                    total
+                    orderPlacedAt
+                }
+                totalItems
+            }
+            user {
+                id
+                verified
+                lastLogin
+                identifier
+            }
+        }
+    }
+`
 export const ORDER_ACTIVE = gql`
     query orderActive {
         activeOrder {

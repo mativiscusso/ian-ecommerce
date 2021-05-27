@@ -4,12 +4,17 @@ import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
+import { Button } from '@material-ui/core'
 
-export default function PaymentForm() {
+export default function PaymentForm({ handleNext, handleBack }) {
+    const handleClickNext = async () => {
+        await console.log('clickeo')
+        await handleNext()
+    }
     return (
         <>
             <Typography variant="h6" gutterBottom>
-                Payment method
+                Métodos de envío
             </Typography>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
@@ -60,6 +65,18 @@ export default function PaymentForm() {
                         }
                         label="Remember credit card details for next time"
                     />
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    style={{ display: 'flex', justifyContent: 'center' }}
+                >
+                    <Button style={{ marginRight: 12 }} onClick={handleBack}>
+                        ANTERIOR
+                    </Button>
+                    <Button variant="contained" onClick={handleClickNext}>
+                        SIGUIENTE
+                    </Button>
                 </Grid>
             </Grid>
         </>
