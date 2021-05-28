@@ -152,7 +152,6 @@ export default function Cart({ isEmpty }) {
             },
         ],
     })
-    console.log(cart)
 
     const handleChange = async (event) => {
         const id = event.currentTarget.id
@@ -176,7 +175,7 @@ export default function Cart({ isEmpty }) {
     const handleRemoveAll = async () => {
         await removeAll()
     }
-
+    console.log(isEmpty)
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>
@@ -187,7 +186,7 @@ export default function Cart({ isEmpty }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {cart.lines &&
+                        {cart?.lines &&
                             cart.lines.map((line) => {
                                 return (
                                     <TableRow key={line.id}>
@@ -250,7 +249,6 @@ export default function Cart({ isEmpty }) {
                                             <TextField
                                                 id={line.id}
                                                 value={line.quantity}
-                                                // value={state[line.id]}
                                                 label="Qty."
                                                 type="number"
                                                 size="small"
@@ -268,11 +266,22 @@ export default function Cart({ isEmpty }) {
                                     </TableRow>
                                 )
                             })}
-                        {!isEmpty ? (
+                        {isEmpty ? (
+                            <Grid
+                                container
+                                alignItems="center"
+                                justifyContent="center"
+                                style={{ height: '80vh' }}
+                            >
+                                <Typography variant="body1">
+                                    Su carrito esta vacio
+                                </Typography>
+                            </Grid>
+                        ) : (
                             <TableRow>
                                 <TableCell padding="none" colSpan={2}>
                                     <Typography variant="subtitle2">
-                                        TOTAL CART
+                                        TOTAL CARTe
                                     </Typography>
                                 </TableCell>
                                 <TableCell colSpan={5} align="center">
@@ -295,17 +304,6 @@ export default function Cart({ isEmpty }) {
                                     </Button>
                                 </TableCell>
                             </TableRow>
-                        ) : (
-                            <Grid
-                                container
-                                alignItems="center"
-                                justifyContent="center"
-                                style={{ height: '80vh' }}
-                            >
-                                <Typography variant="body1">
-                                    Su carrito esta vacio
-                                </Typography>
-                            </Grid>
                         )}
                     </TableBody>
                 </Table>
