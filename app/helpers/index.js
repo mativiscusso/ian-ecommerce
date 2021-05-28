@@ -25,3 +25,5 @@ export const requestAuth = async (mutation, variables) => {
             console.log(err)
         })
 }
+
+export const formatURLImage = (image) => image.replace(/[\\]+/g, '/')

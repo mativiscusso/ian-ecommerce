@@ -201,7 +201,6 @@ export const UserProvider = ({ children }) => {
                 console.log(err)
             })
     }
-    console.log(statusRequest)
     return (
         <UserContext.Provider
             value={{

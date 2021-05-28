@@ -44,3 +44,40 @@ mutation resetPassword($token:String!, $password: String!) {
      __typename
     }
   }`
+
+export const ADD_ITEM_CART = gql`
+    mutation addItem($productId: ID!, $quantity: Int!) {
+        addItemToOrder(productVariantId: $productId, quantity: $quantity) {
+            __typename
+        }
+    }
+`
+export const CHANGE_QTY_ITEM_CART = gql`
+    mutation adjustOrderLine($orderLineId: ID!, $quantity: Int!) {
+        adjustOrderLine(orderLineId: $orderLineId, quantity: $quantity) {
+            __typename
+        }
+    }
+`
+export const REMOVE_ITEM_CART = gql`
+    mutation removeOrderLine($orderLineId: ID!) {
+        removeOrderLine(orderLineId: $orderLineId) {
+            __typename
+        }
+    }
+`
+
+export const EMPTY_CART = gql`
+    mutation removeAllOrderLines {
+        removeAllOrderLines {
+            __typename
+        }
+    }
+`
+export const SET_ADDRESSES_ORDER = gql`
+    mutation setShipping($input: CreateAddressInput!) {
+        setOrderShippingAddress(input: $input) {
+            __typename
+        }
+    }
+`

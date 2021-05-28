@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-// import { ReactComponent as RbNew } from "../../utils/svg/rb-new.svg";
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import ShopCartButton from 'components/Product/ShopCartButton'
 import Carousel from 'components/Carousel'
+import { TextField } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,14 +68,27 @@ const ProductDetail = (props) => {
                     <Typography variant="body1" gutterBottom>
                         {props.description}
                     </Typography>
+                    <Grid item xs={12}>
+                        <TextField
+                            id="quantity"
+                            label="Cantidad"
+                            type="number"
+                            size="small"
+                            defaultValue={quantity}
+                            onChange={({ target }) => {
+                                const qty = Number(target.value)
+                                setQuantity(qty)
+                            }}
+                        />
 
-                    <ShopCartButton
-                        productId={props.variants[0].productId}
-                        quantity={quantity}
-                    />
+                        <ShopCartButton
+                            productId={props.variants[0].productId}
+                            quantity={quantity}
+                        />
+                    </Grid>
                 </Grid>
+                <Carousel />
             </Grid>
-            <Carousel />
         </Container>
     )
 }

@@ -60,7 +60,7 @@ export const ONE_PRODUCT = gql`
 `
 
 export const USER_ACTIVE = gql`
-    {
+    query me {
         me {
             id
             identifier
@@ -69,6 +69,75 @@ export const USER_ACTIVE = gql`
                 token
                 code
             }
+        }
+    }
+`
+
+export const CUSTOMER_ACTIVE = gql`
+    query customerActive {
+        activeCustomer {
+            id
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+            addresses {
+                fullName
+                company
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    name
+                }
+                defaultShippingAddress
+                defaultBillingAddress
+                customFields
+            }
+            orders {
+                items {
+                    state
+                    active
+                    total
+                    orderPlacedAt
+                }
+                totalItems
+            }
+            user {
+                id
+                verified
+                lastLogin
+                identifier
+            }
+        }
+    }
+`
+export const ORDER_ACTIVE = gql`
+    query orderActive {
+        activeOrder {
+            id
+            state
+            code
+            active
+            lines {
+                id
+                featuredAsset {
+                    source
+                    preview
+                }
+                productVariant {
+                    productId
+                    name
+                    price
+                }
+                quantity
+                linePrice
+            }
+            totalQuantity
+            subTotal
+            total
         }
     }
 `
