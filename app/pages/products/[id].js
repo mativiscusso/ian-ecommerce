@@ -14,10 +14,9 @@ export default function ProductDetailPage() {
     if (loading) return <span>Loading</span>
     if (error) return <span>{error}</span>
 
-    console.log(data)
     return (
         <Container>
-            <ProductDetail data={{ ...data }} />
+            <ProductDetail {...data.product} />
         </Container>
     )
 }

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 // import { ReactComponent as RbNew } from "../../utils/svg/rb-new.svg";
 import Container from '@material-ui/core/Container'
@@ -34,18 +34,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const ProductDetail = ({ data }) => {
+const ProductDetail = (props) => {
+    console.log(props)
     const classes = useStyles()
-    const { product } = data
+    const [quantity, setQuantity] = useState(1)
 
-    const image = product.assets[0].source.replace(/[\\]+/g, '/')
-    console.log(product.assets)
+    const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (
         <Container className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    {product.assets ? (
-                        <Carousel images={product.assets} />
+                    {props.assets ? (
+                        <Carousel images={props.assets} />
                     ) : (
                         <img
                             src={image}
@@ -60,16 +60,19 @@ const ProductDetail = ({ data }) => {
                     </Typography>
                     <Divider />
                     <Typography variant="h5" gutterBottom>
-                        {product.name}
+                        {props.name}
                     </Typography>
                     <Typography variant="h5" gutterBottom>
-                        ${product.variants[0].price}
+                        ${props.variants[0].price}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        {product.description}
+                        {props.description}
                     </Typography>
 
-                    <ShopCartButton />
+                    <ShopCartButton
+                        productId={props.variants[0].productId}
+                        quantity={quantity}
+                    />
                 </Grid>
             </Grid>
             <Carousel />
