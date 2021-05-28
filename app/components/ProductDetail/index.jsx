@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ProductDetail = (props) => {
-    console.log(props)
     const classes = useStyles()
     const [quantity, setQuantity] = useState(1)
 

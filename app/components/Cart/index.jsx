@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Container, Grid } from '@material-ui/core'
 
-import { CartContext } from 'utils/cartContext'
+import { UserContext } from 'utils/userContext'
 import { formatURLImage } from 'helpers'
 import { gql, useMutation } from '@apollo/client'
 
@@ -22,6 +22,7 @@ import {
     EMPTY_CART,
     REMOVE_ITEM_CART,
 } from 'graphql/mutations'
+import { ORDER_ACTIVE } from 'graphql/queries'
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -50,37 +51,11 @@ export default function Cart({ isEmpty }) {
     const classes = useStyles()
     const [state, setState] = useState({})
 
-    const { cart } = useContext(CartContext)
+    const { cart } = useContext(UserContext)
     const [modifyQuantity] = useMutation(CHANGE_QTY_ITEM_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -88,33 +63,7 @@ export default function Cart({ isEmpty }) {
     const [removeLine] = useMutation(REMOVE_ITEM_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -122,33 +71,7 @@ export default function Cart({ isEmpty }) {
     const [removeAll] = useMutation(EMPTY_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -175,7 +98,6 @@ export default function Cart({ isEmpty }) {
     const handleRemoveAll = async () => {
         await removeAll()
     }
-    console.log(isEmpty)
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>
@@ -281,7 +203,7 @@ export default function Cart({ isEmpty }) {
                             <TableRow>
                                 <TableCell padding="none" colSpan={2}>
                                     <Typography variant="subtitle2">
-                                        TOTAL CARTe
+                                        TOTAL CART
                                     </Typography>
                                 </TableCell>
                                 <TableCell colSpan={5} align="center">

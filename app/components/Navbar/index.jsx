@@ -158,12 +158,7 @@ export default function Navbar() {
                 >
                     shop
                 </Link>
-                <Link href={'/checkout'} color="inherit" className={menuButton}>
-                    checkout
-                </Link>
-                <Link href={'/cart'} color="inherit" className={menuButton}>
-                    cart
-                </Link>
+
                 {!user && (
                     <Link
                         href={'/login'}
@@ -202,12 +197,7 @@ export default function Navbar() {
                 >
                     shop
                 </Link>
-                <Link href={'/checkout'} color="inherit" className={menuButton}>
-                    checkout
-                </Link>
-                <Link href={'/cart'} color="inherit" className={menuButton}>
-                    cart
-                </Link>
+
                 {!user && (
                     <Link
                         href={'/login'}

@@ -40,8 +40,8 @@ const UserItem = ({ user }) => {
         return splittedName[0]
     }
 
-    const handleLogout = async () => {
-        await logout({ query: USER_LOGOUT })
+    const handleLogout = () => {
+        logout({ query: USER_LOGOUT })
     }
 
     return (

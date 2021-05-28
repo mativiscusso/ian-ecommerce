@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import { getDefaultValues } from '@apollo/client/utilities'
 import { useLazyQuery, useApolloClient } from '@apollo/client'
-import { USER_ACTIVE } from 'graphql/queries'
+import { USER_ACTIVE, ORDER_ACTIVE } from 'graphql/queries'
 
 export const UserContext = createContext(getDefaultValues)
 
@@ -9,19 +9,46 @@ export const UserProvider = ({ children }) => {
     let userLoading = false
     const [user, setUser] = useState(undefined)
     const [statusRequest, setStatusRequest] = useState(undefined)
-    const [currentUser, { data, loading }] = useLazyQuery(USER_ACTIVE)
+    const [cartLenght, setCartLenght] = useState(0)
+    const [cart, setCart] = useState([])
+
+    const [
+        activeOrder,
+        { data: dataOrder, loading: loadingOrder, error: errorOrder },
+    ] = useLazyQuery(ORDER_ACTIVE)
+    const [
+        currentUser,
+        { data: dataUser, loading: loadingUser, error: errorUser },
+    ] = useLazyQuery(USER_ACTIVE)
+
     const client = useApolloClient()
 
     useEffect(() => {
         currentUser()
-        if (data) {
-            setUser(data)
+        if (dataUser) {
+            setUser(dataUser)
+            activeOrder()
+            if (dataOrder && dataOrder.activeOrder) {
+                setCart(dataOrder.activeOrder)
+                setCartLenght(totalQuantity(dataOrder.activeOrder))
+            }
             userLoading = false
         }
-    }, [currentUser, data])
+    }, [currentUser, activeOrder, dataOrder, dataUser])
 
-    if (loading) {
+    if (loadingUser) {
         userLoading = true
+    }
+
+    const totalQuantity = (cart) => {
+        if (cart === null) {
+            return 0
+        } else {
+            const qty = cart.lines.reduce((acc, item) => {
+                return item.quantity + acc
+            }, 0)
+            return qty
+        }
     }
 
     const logout = (mutation) => {
@@ -44,6 +71,8 @@ export const UserProvider = ({ children }) => {
                 if (data.logout) {
                     setUser(undefined)
                     setStatusRequest(undefined)
+                    setCart([])
+                    setCartLenght(0)
                     return true
                 }
             })
@@ -51,7 +80,7 @@ export const UserProvider = ({ children }) => {
                 console.log(err)
             })
     }
-    const login = (mutation, user) => {
+    const login = async (mutation, user) => {
         fetch('http://localhost:4000/shop-api', {
             method: 'POST',
             mode: 'cors',
@@ -72,10 +101,10 @@ export const UserProvider = ({ children }) => {
                 )
                 return result.json()
             })
-            .then((res) => {
+            .then(async (res) => {
                 if (res.data.login.__typename === 'CurrentUser') {
                     setStatusRequest({ status: true, msg: 'Ok' })
-                    currentUser()
+                    await currentUser()
                 }
                 if (res.data.login.__typename === 'InvalidCredentialsError') {
                     setStatusRequest({
@@ -150,8 +179,8 @@ export const UserProvider = ({ children }) => {
                     res.data.verifyCustomerAccount.__typename === 'CurrentUser'
                 ) {
                     currentUser()
-                    if (data) {
-                        setUser(data)
+                    if (dataUser) {
+                        setUser(dataUser)
                     }
                 } else {
                     throw new Error('User not verified')
@@ -186,8 +215,8 @@ export const UserProvider = ({ children }) => {
             .then((res) => {
                 if (res.data.resetPassword.__typename === 'CurrentUser') {
                     currentUser()
-                    if (data) {
-                        setUser(data)
+                    if (dataUser) {
+                        setUser(dataUser)
                         setStatusRequest({ status: true, msg: 'Ok' })
                     }
                 } else {
@@ -213,6 +242,8 @@ export const UserProvider = ({ children }) => {
                 resetPassword,
                 statusRequest,
                 setStatusRequest,
+                cartLenght,
+                cart,
             }}
         >
             {children}

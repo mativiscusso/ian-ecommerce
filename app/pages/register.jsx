@@ -50,7 +50,6 @@ export default function Register() {
 
     useEffect(() => {
         if (statusRequest) {
-            console.log(statusRequest)
             setStatusLogin(statusRequest)
         }
     }, [statusRequest])

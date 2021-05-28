@@ -5,7 +5,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 import Button from '@material-ui/core/Button'
 
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { ADD_ITEM_CART } from 'graphql/mutations'
 import { ORDER_ACTIVE } from 'graphql/queries'
 
@@ -21,33 +21,7 @@ export default function ShopCartButton({ productId, quantity }) {
     const [addItem] = useMutation(ADD_ITEM_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
