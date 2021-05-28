@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
 import { UserContext } from 'utils/userContext'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     float: {
@@ -35,6 +35,7 @@ export default function ButtonCartHome() {
     const [show, setShow] = useState({
         right: false,
     })
+    const router = useRouter()
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (
@@ -49,6 +50,10 @@ export default function ButtonCartHome() {
     const cartHome = (anchor) => {
         const isEmpty = cartLenght === 0
 
+        const handleClick = async () => {
+            await router.push('/cart')
+            setShow({ right: false })
+        }
         return (
             <>
                 <div
@@ -62,7 +67,7 @@ export default function ButtonCartHome() {
                             variant="contained"
                             color="primary"
                             className={classes.btnComprar}
-                            href="/cart"
+                            onClick={handleClick}
                         >
                             COMPRAR
                         </Button>

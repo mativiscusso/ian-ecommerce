@@ -1,4 +1,5 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
+import { CART_FRAGMENT } from './fragments'
 
 export const USER_ACCOUNT_VERIFY = `
     mutation verifyCustomerAccount($token: String!, $password: String) {
@@ -46,9 +47,11 @@ mutation resetPassword($token:String!, $password: String!) {
   }`
 
 export const ADD_ITEM_CART = gql`
+    ${CART_FRAGMENT}
     mutation addItem($productId: ID!, $quantity: Int!) {
         addItemToOrder(productVariantId: $productId, quantity: $quantity) {
             __typename
+            ...Cart
         }
     }
 `

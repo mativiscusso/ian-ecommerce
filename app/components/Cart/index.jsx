@@ -22,6 +22,7 @@ import {
     EMPTY_CART,
     REMOVE_ITEM_CART,
 } from 'graphql/mutations'
+import { ORDER_ACTIVE } from 'graphql/queries'
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -54,33 +55,7 @@ export default function Cart({ isEmpty }) {
     const [modifyQuantity] = useMutation(CHANGE_QTY_ITEM_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -88,33 +63,7 @@ export default function Cart({ isEmpty }) {
     const [removeLine] = useMutation(REMOVE_ITEM_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -122,33 +71,7 @@ export default function Cart({ isEmpty }) {
     const [removeAll] = useMutation(EMPTY_CART, {
         refetchQueries: [
             {
-                query: gql`
-                    {
-                        activeOrder {
-                            id
-                            state
-                            code
-                            active
-                            lines {
-                                id
-                                featuredAsset {
-                                    source
-                                    preview
-                                }
-                                productVariant {
-                                    productId
-                                    name
-                                    price
-                                }
-                                quantity
-                                linePrice
-                            }
-                            totalQuantity
-                            subTotal
-                            total
-                        }
-                    }
-                `,
+                query: ORDER_ACTIVE,
             },
         ],
     })
@@ -280,7 +203,7 @@ export default function Cart({ isEmpty }) {
                             <TableRow>
                                 <TableCell padding="none" colSpan={2}>
                                     <Typography variant="subtitle2">
-                                        TOTAL CARTe
+                                        TOTAL CART
                                     </Typography>
                                 </TableCell>
                                 <TableCell colSpan={5} align="center">
