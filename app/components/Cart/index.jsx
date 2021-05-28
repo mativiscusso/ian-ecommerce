@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Container, Grid } from '@material-ui/core'
 
-import { CartContext } from 'utils/cartContext'
+import { UserContext } from 'utils/userContext'
 import { formatURLImage } from 'helpers'
 import { gql, useMutation } from '@apollo/client'
 
@@ -50,7 +50,7 @@ export default function Cart({ isEmpty }) {
     const classes = useStyles()
     const [state, setState] = useState({})
 
-    const { cart } = useContext(CartContext)
+    const { cart } = useContext(UserContext)
     const [modifyQuantity] = useMutation(CHANGE_QTY_ITEM_CART, {
         refetchQueries: [
             {
@@ -175,7 +175,6 @@ export default function Cart({ isEmpty }) {
     const handleRemoveAll = async () => {
         await removeAll()
     }
-    console.log(isEmpty)
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>

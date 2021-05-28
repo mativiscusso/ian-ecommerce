@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
-import { CartContext } from 'utils/cartContext'
+import { UserContext } from 'utils/userContext'
 import Link from 'next/link'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonCartHome() {
     const classes = useStyles()
-    const { cartLenght } = useContext(CartContext)
+    const { cartLenght } = useContext(UserContext)
     const [show, setShow] = useState({
         right: false,
     })
