@@ -36,7 +36,6 @@ export default function ShippingsForm({ handleNext, handleBack }) {
     const handleClickNext = async () => {
         await handleNext()
     }
-    console.log(paymentMethod)
     return (
         <>
             <Grid container spacing={3}>

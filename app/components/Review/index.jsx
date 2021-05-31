@@ -40,31 +40,38 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Review({ handleBack }) {
+export default function Review({ handleBack, customer, orderActive }) {
     const classes = useStyles()
 
     const handleFinishOrder = () => {
         console.log('finish')
     }
+
     return (
         <>
             <Typography variant="h6" gutterBottom>
-                Order summary
+                Resumen de tu orden
             </Typography>
             <List disablePadding>
-                {products.map((product) => (
-                    <ListItem className={classes.listItem} key={product.name}>
-                        <ListItemText
-                            primary={product.name}
-                            secondary={product.desc}
-                        />
-                        <Typography variant="body2">{product.price}</Typography>
-                    </ListItem>
-                ))}
+                {orderActive &&
+                    orderActive.lines.map((product) => (
+                        <ListItem
+                            className={classes.listItem}
+                            key={product.productVariant.name}
+                        >
+                            <ListItemText
+                                primary={product.productVariant.name}
+                                secondary={`$ ${product.productVariant.price} x ${product.quantity}`}
+                            />
+                            <Typography variant="body2">
+                                ${product.linePrice}
+                            </Typography>
+                        </ListItem>
+                    ))}
                 <ListItem className={classes.listItem}>
                     <ListItemText primary="Total" />
                     <Typography variant="subtitle1" className={classes.total}>
-                        $34.06
+                        {orderActive && orderActive.total}
                     </Typography>
                 </ListItem>
             </List>
@@ -75,10 +82,27 @@ export default function Review({ handleBack }) {
                         gutterBottom
                         className={classes.title}
                     >
-                        Shipping
+                        Datos de envío
                     </Typography>
-                    <Typography gutterBottom>John Smith</Typography>
-                    <Typography gutterBottom>{addresses.join(', ')}</Typography>
+                    <Typography gutterBottom>
+                        {customer &&
+                            `${customer.firstName} ${customer.lastName}`}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {orderActive && orderActive.shippingAddress.streetLine1}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {orderActive && orderActive.shippingAddress.city}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {orderActive && orderActive.shippingAddress.province}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {orderActive && orderActive.shippingAddress.phoneNumber}
+                    </Typography>
+                    <Typography gutterBottom>
+                        {orderActive && orderActive.shippingAddress.postalCode}
+                    </Typography>
                 </Grid>
                 <Grid item container direction="column" xs={12} sm={6}>
                     <Typography
@@ -86,7 +110,7 @@ export default function Review({ handleBack }) {
                         gutterBottom
                         className={classes.title}
                     >
-                        Payment details
+                        Detalles de pago
                     </Typography>
                     <Grid container>
                         {payments.map((payment) => (

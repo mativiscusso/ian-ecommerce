@@ -55,8 +55,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
         refetchQueries: [{ query: ORDER_ACTIVE }],
     })
 
-    console.log(orderActive, addresses)
-
     const handleClick = async () => {
         if (customer === undefined) {
             await setCustomerToOrder({ variables: { input: customerState } })
@@ -70,7 +68,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                 },
             },
         })
-        console.log(result)
         await handleNext()
     }
     const handleNames = (e) => {

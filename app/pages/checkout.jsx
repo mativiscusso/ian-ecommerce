@@ -95,7 +95,13 @@ export default function Checkout() {
                     />
                 )
             case 2:
-                return <Review handleBack={handleBack} />
+                return (
+                    <Review
+                        handleBack={handleBack}
+                        customer={customer}
+                        orderActive={orderActive}
+                    />
+                )
             default:
                 throw new Error('Unknown step')
         }
