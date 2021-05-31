@@ -13,6 +13,25 @@ export const CART_FRAGMENT = gql`
         currencyCode
         customer {
             id
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+            addresses {
+                fullName
+                company
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    name
+                }
+                defaultShippingAddress
+                defaultBillingAddress
+                customFields
+            }
         }
         lines {
             id

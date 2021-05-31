@@ -135,9 +135,57 @@ export const ORDER_ACTIVE = gql`
                 quantity
                 linePrice
             }
+            shippingAddress {
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                phoneNumber
+            }
             totalQuantity
             subTotal
             total
+            shipping
+            payments {
+                method
+                state
+                transactionId
+            }
+            shippingLines {
+                shippingMethod {
+                    code
+                    name
+                    description
+                    checker {
+                        code
+                    }
+                }
+            }
+        }
+    }
+`
+export const ORDER_SHIPPING_METHODS = gql`
+    {
+        eligibleShippingMethods {
+            id
+            price
+            code
+            name
+            description
+            metadata
+        }
+    }
+`
+export const ORDER_PAYMENT_METHODS = gql`
+    {
+        eligiblePaymentMethods {
+            id
+            code
+            name
+            description
+            isEligible
+            eligibilityMessage
         }
     }
 `

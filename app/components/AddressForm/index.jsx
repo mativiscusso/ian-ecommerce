@@ -1,30 +1,94 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
-import { Button } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import { useMutation } from '@apollo/client'
+import { SET_ADDRESSES_ORDER, SET_CUSTOMER_ORDER } from 'graphql/mutations'
+import { ORDER_ACTIVE } from 'graphql/queries'
 
-export default function AddressForm({ customer, handleNext }) {
-    /**  Objeto para pasarle como parametro a la mutacion setOrderShippingAddress
-     * const adresses = {
-     * streetLine1:,
-     * streetLine2:,
-     * city:,
-     * province:,
-     * postalCode:,
-     * countryCode:,
-     * phoneNumber:,
-     * defaultShippingAddress:,
-     * defaultBillingAddress:,
-     * customFields: JSON
-     * }
-     * */
-    console.log(customer)
+export default function AddressForm({ customer, orderActive, handleNext }) {
+    const [addresses, setAddresses] = useState({
+        streetLine1: '',
+        streetLine2: '',
+        city: '',
+        province: '',
+        postalCode: '',
+        countryCode: 'AR',
+        phoneNumber: '',
+        defaultShippingAddress: false,
+        defaultBillingAddress: false,
+    })
+    const [customerState, setCustomerState] = useState({
+        firstName: customer ? customer.firstName : '',
+        lastName: customer ? customer.lastName : '',
+        phoneNumber: customer ? customer.phoneNumber : '',
+        emailAddress: customer ? customer.emailAddress : '',
+    })
+    useEffect(() => {
+        if (customer) {
+            setCustomerState({
+                firstName: customer.firstName,
+                lastName: customer.lastName,
+                phoneNumber: customer.phoneNumber,
+                emailAddress: customer.emailAddress,
+            })
+        }
+        if (orderActive) {
+            setAddresses({
+                ...addresses,
+                streetLine1: orderActive.shippingAddress.streetLine1,
+                streetLine2: orderActive.shippingAddress.streetLine2,
+                city: orderActive.shippingAddress.city,
+                province: orderActive.shippingAddress.province,
+                postalCode: orderActive.shippingAddress.postalCode,
+                phoneNumber: orderActive.shippingAddress.phoneNumber,
+            })
+        }
+    }, [customer, orderActive])
+
+    const [setCustomerToOrder] = useMutation(SET_CUSTOMER_ORDER)
+    const [setAddressesToCustomer] = useMutation(SET_ADDRESSES_ORDER, {
+        refetchQueries: [{ query: ORDER_ACTIVE }],
+    })
+
+    console.log(orderActive, addresses)
 
     const handleClick = async () => {
-        await console.log('clickeo')
+        if (customer === undefined) {
+            await setCustomerToOrder({ variables: { input: customerState } })
+        }
+
+        const result = await setAddressesToCustomer({
+            variables: {
+                input: {
+                    ...addresses,
+                    fullName: `${customerState.firstName} ${customerState.lastName}`,
+                },
+            },
+        })
+        console.log(result)
         await handleNext()
     }
+    const handleNames = (e) => {
+        setCustomerState({
+            ...customerState,
+            [e.currentTarget.id]: e.target.value,
+        })
+    }
+    const handleChange = (e) => {
+        setAddresses({ ...addresses, [e.currentTarget.id]: e.target.value })
+    }
+    const handleCheck = (e) => {
+        setAddresses({
+            ...addresses,
+            [e.currentTarget.id]: e.target.checked,
+        })
+    }
+
     return (
         <>
             <Typography variant="h6" gutterBottom>
@@ -38,8 +102,9 @@ export default function AddressForm({ customer, handleNext }) {
                         name="firstName"
                         label="Nombre"
                         fullWidth
+                        onChange={handleNames}
                         autoComplete="given-name"
-                        value={customer ? customer.firstName : ''}
+                        value={customerState.firstName}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -49,27 +114,101 @@ export default function AddressForm({ customer, handleNext }) {
                         name="lastName"
                         label="Apellido"
                         fullWidth
+                        onChange={handleNames}
                         autoComplete="family-name"
-                        value={customer ? customer.lastName : ''}
+                        value={customerState.lastName}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         required
-                        id="address1"
+                        id="emailAddress"
+                        name="emailAddress"
+                        label="Dirección de email"
+                        fullWidth
+                        onChange={handleNames}
+                        autoComplete="email-name"
+                        value={customerState.emailAddress}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="streetLine1"
                         name="address1"
                         label="Direccion 1"
                         fullWidth
+                        onChange={handleChange}
                         autoComplete="shipping address-line1"
+                        value={addresses.streetLine1}
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                     <TextField
-                        id="address2"
+                        id="streetLine2"
                         name="address2"
                         label="Direccion 2"
                         fullWidth
+                        onChange={handleChange}
                         autoComplete="shipping address-line2"
+                        value={addresses.streetLine2}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <FormGroup>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={addresses.defaultShippingAddress}
+                                    onChange={handleCheck}
+                                    id="defaultShippingAddress"
+                                />
+                            }
+                            label="Quiero que sea mi direccion por defecto para entrega."
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={addresses.defaultBillingAddress}
+                                    onChange={handleCheck}
+                                    id="defaultBillingAddress"
+                                />
+                            }
+                            label="Quiero que sea mi direccion por defecto para facturación."
+                        />
+                    </FormGroup>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        required
+                        id="defaultShippingAddress"
+                        name="address1"
+                        label="Direccion de envío"
+                        fullWidth
+                        onChange={handleChange}
+                        autoComplete="shipping address-line1"
+                        disabled={addresses.defaultShippingAddress}
+                        value={
+                            addresses.defaultShippingAddress
+                                ? addresses.streetLine1
+                                : ''
+                        }
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        id="defaultBillingAddress"
+                        name="defaultBillingAddress"
+                        label="Direccion de facturación"
+                        fullWidth
+                        onChange={handleChange}
+                        autoComplete="shipping address-line2"
+                        disabled={addresses.defaultBillingAddress}
+                        value={
+                            addresses.defaultBillingAddress
+                                ? addresses.streetLine1
+                                : ''
+                        }
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -79,37 +218,47 @@ export default function AddressForm({ customer, handleNext }) {
                         name="city"
                         label="Ciudad"
                         fullWidth
+                        onChange={handleChange}
                         autoComplete="shipping address-level2"
+                        value={addresses.city}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        id="state"
+                        required
+                        id="province"
                         name="state"
                         label="Provincia"
                         fullWidth
+                        onChange={handleChange}
+                        value={addresses.province}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required
-                        id="zip"
+                        id="postalCode"
                         name="zip"
                         label="Código Postal"
                         fullWidth
+                        onChange={handleChange}
                         autoComplete="shipping postal-code"
+                        value={addresses.postalCode}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <TextField
                         required
-                        id="country"
-                        name="country"
-                        label="Pais"
+                        id="phoneNumber"
+                        name="phoneNumber"
+                        label="Telefono"
                         fullWidth
-                        autoComplete="shipping country"
+                        onChange={handleChange}
+                        autoComplete="shipping phoneNumber"
+                        value={addresses.phoneNumber}
                     />
                 </Grid>
+
                 <Grid
                     item
                     xs={12}

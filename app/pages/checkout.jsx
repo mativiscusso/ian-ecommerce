@@ -9,11 +9,11 @@ import Typography from '@material-ui/core/Typography'
 import { Container } from '@material-ui/core'
 
 import AddressForm from 'components/AddressForm'
-import PaymentForm from 'components/PaymentForm'
 import Review from 'components/Review'
+import ShippingsForm from 'components/ShippingForm'
 
 import { useQuery } from '@apollo/client'
-import { CUSTOMER_ACTIVE } from 'graphql/queries'
+import { CUSTOMER_ACTIVE, ORDER_ACTIVE } from 'graphql/queries'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -42,19 +42,34 @@ const useStyles = makeStyles((theme) => ({
 export default function Checkout() {
     const classes = useStyles()
     const [activeStep, setActiveStep] = useState(0)
-    const [customer, setCustomer] = useState({})
-    const { data, loading, error } = useQuery(CUSTOMER_ACTIVE)
+    const [customer, setCustomer] = useState(undefined)
+    const [orderActive, setOrderActive] = useState(undefined)
+    const {
+        data: dataCustomer,
+        loading: loadingCustomer,
+        error: errorCustomer,
+    } = useQuery(CUSTOMER_ACTIVE)
+    const {
+        data: dataOrder,
+        loading: loadingOrder,
+        error: errorOrder,
+    } = useQuery(ORDER_ACTIVE)
 
     useEffect(() => {
-        if (data && !error) {
-            setCustomer(data)
+        if (dataCustomer && !errorCustomer) {
+            setCustomer(dataCustomer.activeCustomer)
         }
-    }, [data, error])
+    }, [dataCustomer, errorCustomer])
 
-    if (loading) return 'loading'
-    if (error) return console.log(error)
+    useEffect(() => {
+        if (dataOrder && !errorOrder) {
+            setOrderActive(dataOrder.activeOrder)
+        }
+    }, [dataOrder, errorOrder])
 
-    console.log(customer)
+    if (errorCustomer) return console.log(errorCustomer)
+
+    console.log(customer, dataOrder)
 
     const steps = [
         'Direcciones de entrega',
@@ -67,13 +82,14 @@ export default function Checkout() {
             case 0:
                 return (
                     <AddressForm
-                        customer={customer.activeCustomer}
+                        customer={customer}
+                        orderActive={orderActive}
                         handleNext={handleNext}
                     />
                 )
             case 1:
                 return (
-                    <PaymentForm
+                    <ShippingsForm
                         handleNext={handleNext}
                         handleBack={handleBack}
                     />

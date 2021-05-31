@@ -77,10 +77,19 @@ export const EMPTY_CART = gql`
         }
     }
 `
+export const SET_CUSTOMER_ORDER = gql`
+    mutation setCustomerForOrder($input: CreateCustomerInput!) {
+        setCustomerForOrder(input: $input) {
+            __typename
+        }
+    }
+`
 export const SET_ADDRESSES_ORDER = gql`
+    ${CART_FRAGMENT}
     mutation setShipping($input: CreateAddressInput!) {
         setOrderShippingAddress(input: $input) {
             __typename
+            ...Cart
         }
     }
 `
