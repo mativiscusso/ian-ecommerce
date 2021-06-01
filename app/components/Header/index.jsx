@@ -1,78 +1,69 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { makeStyles } from '@material-ui/core/styles'
-import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import SearchIcon from '@material-ui/icons/Search'
-import Typography from '@material-ui/core/Typography'
-import Link from '@material-ui/core/Link'
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Toolbar from "@material-ui/core/Toolbar";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
+import { ALL_COLLECTIONS } from "graphql/queries";
+import { useQuery } from "@apollo/client";
 
 const useStyles = makeStyles((theme) => ({
-  toolbar: {
-    borderBottom: `1px solid ${theme.palette.divider}`
-  },
-  toolbarTitle: {
-    flex: 1
-  },
-  toolbarSecondary: {
-    justifyContent: 'space-between',
-    overflowX: 'auto'
-  },
-  toolbarLink: {
-    padding: theme.spacing(1),
-    flexShrink: 0
-  }
-}))
+    toolbar: {
+        borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    toolbarTitle: {
+        flex: 1,
+    },
+    toolbarSecondary: {
+        justifyContent: "space-between",
+        overflowX: "auto",
+    },
+    toolbarLink: {
+        padding: theme.spacing(1),
+        flexShrink: 0,
+    },
+}));
 
-export default function Header (props) {
-  const classes = useStyles()
-  const { sections, title } = props
+export default function Header(props) {
+    const classes = useStyles();
+    const [collections, setCollections] = useState(undefined);
+    const { data, loading, error } = useQuery(ALL_COLLECTIONS);
 
-  return (
-    <>
-      <Toolbar className={classes.toolbar}>
-        <Button size='small'>Subscribe</Button>
-        <Typography
-          component='h2'
-          variant='h5'
-          color='inherit'
-          align='center'
-          noWrap
-          className={classes.toolbarTitle}
-        >
-          {title}
-        </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <Button variant='outlined' size='small'>
-          Sign up
-        </Button>
-      </Toolbar>
-      <Toolbar
-        component='nav'
-        variant='dense'
-        className={classes.toolbarSecondary}
-      >
-        {sections.map((section) => (
-          <Link
-            color='inherit'
-            noWrap
-            key={section.title}
-            variant='body2'
-            href={section.url}
-            className={classes.toolbarLink}
-          >
-            {section.title}
-          </Link>
-        ))}
-      </Toolbar>
-    </>
-  )
+    useEffect(() => {
+        if (data && !error) {
+            setCollections(data.collections);
+        }
+    }, [data, error]);
+
+    console.log(collections);
+    return (
+        <>
+            <Toolbar
+                component="nav"
+                variant="dense"
+                className={classes.toolbarSecondary}
+            >
+                {collections &&
+                    collections.items.map((collection) => (
+                        <Link
+                            color="inherit"
+                            noWrap
+                            key={collection.name}
+                            variant="body2"
+                            className={classes.toolbarLink}
+                        >
+                            {collection.name}
+                        </Link>
+                    ))}
+            </Toolbar>
+        </>
+    );
 }
 
 Header.propTypes = {
-  sections: PropTypes.array,
-  title: PropTypes.string
-}
+    sections: PropTypes.array,
+    title: PropTypes.string,
+};
