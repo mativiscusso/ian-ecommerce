@@ -1,60 +1,59 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
 
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import Card from '@material-ui/core/Card'
+import CardActionArea from '@material-ui/core/CardActionArea'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
-import QuickView from "../ProductQuickView/QuickView";
-import Link from "next/link";
+import QuickView from '../ProductQuickView'
+import Link from 'next/link'
+import { formatURLImage } from 'helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        textAlign: "left",
-        transition: "all 0.1s",
-        height: "100%",
-        [theme.breakpoints.up(768)]: {
-            height: "80%",
-        },
-        "&:hover": {
-            transform: "scale(1.05) translateY(-20px)",
+        textAlign: 'left',
+        transition: 'all 0.1s',
+        height: '100%',
+        '&:hover': {
+            transform: 'scale(1.05) translateY(-20px)',
             zIndex: 1000,
-            height: "100%",
         },
+
+        marginBottom: '1rem',
     },
     media: {
-        backgroundSize: "contain",
+        backgroundSize: 'contain',
         height: 200,
     },
     productName: {
-        height: 55,
-        textTransform: "uppercase",
-        fontWeight: "bolder",
+        height: 35,
+        textTransform: 'uppercase',
+        fontWeight: 'bolder',
         marginBottom: 5,
     },
     productPrice: {
-        position: "relative",
-        top: 20,
-        fontWeight: "bold",
+        position: 'relative',
+        top: 10,
+        fontWeight: 'bold',
     },
     ribbonNew: {
-        position: "absolute",
+        position: 'absolute',
         top: -10,
         right: -5,
         width: 70,
     },
     buttonsActions: {
-        display: "flex",
-        justifyContent: "space-between",
+        display: 'flex',
+        justifyContent: 'space-between',
     },
-}));
+}))
 
 export default function Product(props) {
-    const classes = useStyles();
+    const classes = useStyles()
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
@@ -62,8 +61,8 @@ export default function Product(props) {
                     <CardActionArea>
                         <CardMedia
                             className={classes.media}
-                            image="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
-                            title="Producto"
+                            image={formatURLImage(props.assets[0].source)}
+                            title={props.name}
                         />
 
                         <CardContent>
@@ -99,5 +98,5 @@ export default function Product(props) {
                 </Link>
             </CardActions>
         </Card>
-    );
+    )
 }

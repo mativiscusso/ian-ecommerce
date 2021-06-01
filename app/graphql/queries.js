@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -29,7 +29,7 @@ export const ALL_PRODUCTS = gql`
             }
         }
     }
-`;
+`
 export const ONE_PRODUCT = gql`
     query oneProduct($id: ID) {
         product(id: $id) {
@@ -57,7 +57,7 @@ export const ONE_PRODUCT = gql`
             }
         }
     }
-`;
+`
 
 export const USER_ACTIVE = gql`
     query me {
@@ -71,7 +71,7 @@ export const USER_ACTIVE = gql`
             }
         }
     }
-`;
+`
 
 export const CUSTOMER_ACTIVE = gql`
     query customerActive {
@@ -113,7 +113,7 @@ export const CUSTOMER_ACTIVE = gql`
             }
         }
     }
-`;
+`
 export const ORDER_ACTIVE = gql`
     query orderActive {
         activeOrder {
@@ -140,7 +140,7 @@ export const ORDER_ACTIVE = gql`
             total
         }
     }
-`;
+`
 export const ALL_COLLECTIONS = gql`
     {
         collections {
@@ -174,4 +174,4 @@ export const ALL_COLLECTIONS = gql`
             totalItems
         }
     }
-`;
+`

@@ -4,9 +4,9 @@ import Navbar from 'components/Navbar'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
-  mainGrid: {
-    marginTop: theme.spacing(10)
-  }
+    mainGrid: {
+        marginTop: theme.spacing(10),
+    },
 }))
 const globalStyles = css.global`
     a {
@@ -19,19 +19,19 @@ const globalStyles = css.global`
         text-decoration: none !important;
     }
 `
-export default function Layout ({ children }) {
-  const { mainGrid } = useStyles()
-  return (
-    <main>
-      <Navbar />
-      <main className={mainGrid}>{children}</main>
-      <Footer
-        title='Footer'
-        description='IAN Ecommerce - Una plataforma de venta online'
-      />
-      <style jsx global>
-        {globalStyles}
-      </style>
-    </main>
-  )
+export default function Layout({ children }) {
+    const { mainGrid } = useStyles()
+    return (
+        <main>
+            <Navbar />
+            <main className={mainGrid}>{children}</main>
+            <Footer
+                title="Footer"
+                description="IAN Ecommerce - Una plataforma de venta online"
+            />
+            <style jsx global>
+                {globalStyles}
+            </style>
+        </main>
+    )
 }

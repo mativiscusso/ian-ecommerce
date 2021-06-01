@@ -1,65 +1,57 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-// import { ReactComponent as RbNew } from "../../utils/svg/rb-new.svg";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import Chip from "@material-ui/core/Chip";
-import Select from "@material-ui/core/Select";
-import Divider from "@material-ui/core/Divider";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import ShopCartButton from "components/Product/ShopCartButton";
+import { useState } from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import ShopCartButton from 'components/Product/ShopCartButton'
+import Carousel from 'components/Carousel'
+import { TextField } from '@material-ui/core'
 
-const dataProducts = [
-    {
-        id: "1",
-        name: "Cafetera Moulinex Dolce Gusto Edited",
-        priceBase: 100,
-        tags: ["tag1", "tag2", "tag3"],
-        description:
-            "Cafetera Dolce Gusto Lumio. La cafetera Dolce Gusto Lumio es de variedad automática que ha llegado con un diseño radical al que nos tenía acostumbrados Dolce Gusto.En este post te contamos todo lo que necesitas saber sobre ella, desde sus características técnicas hasta la calidad de las cápsulas o priceBase.",
-        images: [
-            "https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg",
-        ],
-        isFeatured: true,
-        isPublished: true,
+const useStyles = makeStyles((theme) => ({
+    root: {
+        [theme.breakpoints.up('lg')]: {
+            marginTop: 150,
+        },
     },
-];
-
-const useStyles = makeStyles({
     detailProduct: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     imgFluid: {
-        position: "relative",
-        width: "100%",
+        position: 'relative',
+        width: '100%',
     },
     marginTags: {
-        marginRight: "0.5rem",
+        marginRight: '0.5rem',
     },
     ribbonNew: {
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         right: 0,
         width: 70,
     },
-});
+}))
 
-const ProductDetail = ({ data }) => {
-    const classes = useStyles();
-    const { product } = data;
+const ProductDetail = (props) => {
+    const classes = useStyles()
+    const [quantity, setQuantity] = useState(1)
+
+    const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (
-        <Container>
+        <Container className={classes.root}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
-                    <img
-                        src="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
-                        alt="Product"
-                        className={classes.imgFluid}
-                    />
+                    {props.assets ? (
+                        <Carousel images={props.assets} />
+                    ) : (
+                        <img
+                            src={image}
+                            alt="Product"
+                            className={classes.imgFluid}
+                        />
+                    )}
                 </Grid>
                 <Grid item xs={12} md={6} className={classes.detailProduct}>
                     <Typography variant="body1" gutterBottom>
@@ -67,20 +59,37 @@ const ProductDetail = ({ data }) => {
                     </Typography>
                     <Divider />
                     <Typography variant="h5" gutterBottom>
-                        {product.name}
+                        {props.name}
                     </Typography>
                     <Typography variant="h5" gutterBottom>
-                        ${product.variants[0].price}
+                        ${props.variants[0].price}
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                        {product.description}
+                        {props.description}
                     </Typography>
+                    <Grid item xs={12}>
+                        <TextField
+                            id="quantity"
+                            label="Cantidad"
+                            type="number"
+                            size="small"
+                            defaultValue={quantity}
+                            onChange={({ target }) => {
+                                const qty = Number(target.value)
+                                setQuantity(qty)
+                            }}
+                        />
 
-                    <ShopCartButton />
+                        <ShopCartButton
+                            productId={props.variants[0].productId}
+                            quantity={quantity}
+                        />
+                    </Grid>
                 </Grid>
+                <Carousel />
             </Grid>
         </Container>
-    );
-};
+    )
+}
 
-export default ProductDetail;
+export default ProductDetail

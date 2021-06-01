@@ -4,9 +4,9 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import QuickViewContent from './QuickViewContent'
 import { makeStyles } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import ProductDetail from 'components/ProductDetail'
 
 const useStyles = makeStyles({
     dialogContent: {
@@ -52,7 +52,7 @@ export default function AlertDialog(props) {
                     VISTA RAPIDA DEL PRODUCTO
                 </DialogTitle>
                 <DialogContent className={classes.dialogContent}>
-                    <QuickViewContent {...props} />
+                    <ProductDetail {...props} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

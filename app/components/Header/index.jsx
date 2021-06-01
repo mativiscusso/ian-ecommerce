@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import SearchIcon from "@material-ui/icons/Search";
-import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
-import { ALL_COLLECTIONS } from "graphql/queries";
-import { useQuery } from "@apollo/client";
+import { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { makeStyles } from '@material-ui/core/styles'
+import Toolbar from '@material-ui/core/Toolbar'
+import Link from '@material-ui/core/Link'
+import { ALL_COLLECTIONS } from 'graphql/queries'
+import { useQuery } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -18,27 +14,27 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
     },
     toolbarSecondary: {
-        justifyContent: "space-between",
-        overflowX: "auto",
+        justifyContent: 'space-between',
+        overflowX: 'auto',
     },
     toolbarLink: {
         padding: theme.spacing(1),
         flexShrink: 0,
     },
-}));
+}))
 
 export default function Header(props) {
-    const classes = useStyles();
-    const [collections, setCollections] = useState(undefined);
-    const { data, loading, error } = useQuery(ALL_COLLECTIONS);
+    const classes = useStyles()
+    const [collections, setCollections] = useState(undefined)
+    const { data, loading, error } = useQuery(ALL_COLLECTIONS)
 
     useEffect(() => {
         if (data && !error) {
-            setCollections(data.collections);
+            setCollections(data.collections)
         }
-    }, [data, error]);
+    }, [data, error])
 
-    console.log(collections);
+    console.log(collections)
     return (
         <>
             <Toolbar
@@ -60,10 +56,10 @@ export default function Header(props) {
                     ))}
             </Toolbar>
         </>
-    );
+    )
 }
 
 Header.propTypes = {
     sections: PropTypes.array,
     title: PropTypes.string,
-};
+}

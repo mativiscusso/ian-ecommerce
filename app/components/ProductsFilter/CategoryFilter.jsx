@@ -10,54 +10,53 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Divider from '@material-ui/core/Divider'
 
 const categories = [
-  { title: 'Technology', url: '#' },
-  { title: 'Design', url: '#' },
-  { title: 'Culture', url: '#' },
-  { title: 'Business', url: '#' },
-  { title: 'Politics', url: '#' },
-  { title: 'Opinion', url: '#' },
-  { title: 'Science', url: '#' },
-  { title: 'Health', url: '#' },
-  { title: 'Style', url: '#' },
-  { title: 'Travel', url: '#' }
+    { title: 'Technology', url: '#' },
+    { title: 'Design', url: '#' },
+    { title: 'Culture', url: '#' },
+    { title: 'Business', url: '#' },
+    { title: 'Politics', url: '#' },
+    { title: 'Opinion', url: '#' },
+    { title: 'Science', url: '#' },
+    { title: 'Health', url: '#' },
+    { title: 'Style', url: '#' },
+    { title: 'Travel', url: '#' },
 ]
 const CategoryFilter = () => {
-  const [state, setState] = useState({})
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked })
-  }
-  return (
-    <article>
-      <Accordion elevation={0}>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
-          <Typography>Categorias</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormGroup>
-            {categories.map((category) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state[category.title]}
-                    onChange={handleChange}
-                    name={category.title}
-                    color='primary'
-                  />
+    const [state, setState] = useState({})
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.checked })
+    }
+    return (
+        <article>
+            <Accordion elevation={0}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                >
+                    <Typography>Categorias</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                    <FormGroup>
+                        {categories.map((category) => (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={state[category.title]}
+                                        onChange={handleChange}
+                                        name={category.title}
+                                        color="primary"
+                                    />
                                 }
-                label={category.title}
-              />
-            ))}
-          </FormGroup>
-        </AccordionDetails>
-      </Accordion>
-      <Divider variant='middle' />
-
-    </article>
-  )
+                                label={category.title}
+                            />
+                        ))}
+                    </FormGroup>
+                </AccordionDetails>
+            </Accordion>
+            <Divider variant="middle" />
+        </article>
+    )
 }
 
 export default CategoryFilter

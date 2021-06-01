@@ -1,3 +1,6 @@
+import { useState, useEffect, useContext } from 'react'
+import NextLink from 'next/link'
+
 import {
     AppBar,
     Toolbar,
@@ -6,81 +9,62 @@ import {
     IconButton,
     Drawer,
     Grid,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
-import React, { useState, useEffect } from "react";
-import Link from "components/Link";
-import NextLink from "next/link";
-import ProductSearch from "components/ProductSearch";
-import IconCart from "components/Cart/IconCart";
+    Button,
+    CircularProgress,
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 
-const headersData = [
-    {
-        label: "Home",
-        href: "/",
-    },
-    {
-        label: "Shop",
-        href: "/products/all",
-    },
-    {
-        label: "Cart",
-        href: "/cart",
-    },
-    {
-        label: "Checkout",
-        href: "/checkout",
-    },
-    {
-        label: "SignIn",
-        href: "/login",
-    },
-];
+import Link from 'components/Link'
+import ProductSearch from 'components/ProductSearch'
+import IconCart from 'components/Cart/IconCart'
+import UserItem from './UserItem'
+
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     header: {
         backgroundColor: theme.palette.primary,
-        "@media (max-width: 900px)": {
+        '@media (max-width: 900px)': {
             paddingLeft: 0,
         },
     },
     logo: {
         fontWeight: 600,
-        color: "#FFFEFE",
-        textAlign: "left",
+        color: '#FFFEFE',
+        textAlign: 'left',
     },
     menuButton: {
-        textTransform: "uppercase",
-        [theme.breakpoints.down("md")]: {
+        textTransform: 'uppercase',
+        [theme.breakpoints.down('md')]: {
             marginLeft: 0,
-            padding: "0 1rem 2rem 1rem",
+            padding: '0 1rem 2rem 1rem',
         },
     },
     toolbar: {
-        display: "flex",
-        justifyContent: "space-between",
+        display: 'flex',
+        justifyContent: 'space-between',
     },
     drawerContainer: {
-        padding: "20px 30px",
-        display: "flex",
-        flexDirection: "column",
+        padding: '20px 30px',
+        display: 'flex',
+        flexDirection: 'column',
     },
     menuItems: {
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
-}));
+}))
 
 export default function Navbar() {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
-        useStyles();
+        useStyles()
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
-    });
-
-    const { mobileView, drawerOpen } = state;
+    })
+    const { mobileView, drawerOpen } = state
+    const { user, userLoading } = useContext(UserContext)
 
     useEffect(() => {
         const setResponsiveness = () => {
@@ -89,13 +73,13 @@ export default function Navbar() {
                 : setState((prevState) => ({
                       ...prevState,
                       mobileView: false,
-                  }));
-        };
+                  }))
+        }
 
-        setResponsiveness();
+        setResponsiveness()
 
-        window.addEventListener("resize", () => setResponsiveness());
-    }, []);
+        window.addEventListener('resize', () => setResponsiveness())
+    }, [])
 
     const displayDesktop = () => {
         return (
@@ -114,26 +98,30 @@ export default function Navbar() {
                     <Grid item className={menuItems} lg={6} xl={5}>
                         {getMenuButtons()}
                         <IconCart />
+                        {userLoading && (
+                            <CircularProgress color="inherit" size={20} />
+                        )}
+                        {user && <UserItem user={user} />}
                     </Grid>
                 </Grid>
             </Toolbar>
-        );
-    };
+        )
+    }
 
     const displayMobile = () => {
         const handleDrawerOpen = () =>
-            setState((prevState) => ({ ...prevState, drawerOpen: true }));
+            setState((prevState) => ({ ...prevState, drawerOpen: true }))
         const handleDrawerClose = () =>
-            setState((prevState) => ({ ...prevState, drawerOpen: false }));
+            setState((prevState) => ({ ...prevState, drawerOpen: false }))
 
         return (
             <Toolbar>
                 <IconButton
                     {...{
-                        edge: "start",
-                        color: "inherit",
-                        "aria-label": "menu",
-                        "aria-haspopup": "true",
+                        edge: 'start',
+                        color: 'inherit',
+                        'aria-label': 'menu',
+                        'aria-haspopup': 'true',
                         onClick: handleDrawerOpen,
                     }}
                 >
@@ -142,9 +130,11 @@ export default function Navbar() {
 
                 <div>{Logo}</div>
                 <ProductSearch />
+                <IconCart />
+                {user && <UserItem user={user} />}
                 <Drawer
                     {...{
-                        anchor: "left",
+                        anchor: 'left',
                         open: drawerOpen,
                         onClose: handleDrawerClose,
                     }}
@@ -152,23 +142,37 @@ export default function Navbar() {
                     <div className={drawerContainer}>{getDrawerChoices()}</div>
                 </Drawer>
             </Toolbar>
-        );
-    };
+        )
+    }
 
     const getDrawerChoices = () => {
-        return headersData.map(({ label, href }, i) => {
-            return (
+        return (
+            <>
+                <Link href={'/'} color="inherit" className={menuButton}>
+                    home
+                </Link>
                 <Link
-                    href={href}
+                    href={'/products/all'}
                     color="inherit"
                     className={menuButton}
-                    key={i + "menu-link"}
                 >
-                    {label}
+                    shop
                 </Link>
-            );
-        });
-    };
+
+                {!user && (
+                    <Link
+                        href={'/login'}
+                        color="inherit"
+                        className={menuButton}
+                    >
+                        <Button color="inherit" variant="outlined">
+                            signup
+                        </Button>
+                    </Link>
+                )}
+            </>
+        )
+    }
 
     const Logo = (
         <NextLink href="/">
@@ -178,24 +182,36 @@ export default function Navbar() {
                 </Typography>
             </a>
         </NextLink>
-    );
+    )
 
     const getMenuButtons = () => {
-        return headersData.map(({ label, href }, i) => {
-            return (
-                <>
+        return (
+            <>
+                <Link href={'/'} color="inherit" className={menuButton}>
+                    home
+                </Link>
+                <Link
+                    href={'/products/all'}
+                    color="inherit"
+                    className={menuButton}
+                >
+                    shop
+                </Link>
+
+                {!user && (
                     <Link
-                        href={href}
+                        href={'/login'}
                         color="inherit"
                         className={menuButton}
-                        key={i + "menu-btn"}
                     >
-                        {label}
+                        <Button color="inherit" variant="outlined">
+                            signup
+                        </Button>
                     </Link>
-                </>
-            );
-        });
-    };
+                )}
+            </>
+        )
+    }
 
     return (
         <nav>
@@ -203,5 +219,5 @@ export default function Navbar() {
                 {mobileView ? displayMobile() : displayDesktop()}
             </AppBar>
         </nav>
-    );
+    )
 }

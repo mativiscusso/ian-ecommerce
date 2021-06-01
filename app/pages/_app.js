@@ -10,44 +10,44 @@ import Layout from 'components/Layout'
 
 import { ApolloProvider } from '@apollo/client'
 import client from 'graphql/client'
-import { CartProvider } from 'utils/cartContext'
+import { UserProvider } from 'utils/userContext'
 
 export const cache = createCache({ key: 'css', prepend: true })
 
-export default function MyApp (props) {
-  const { Component, pageProps } = props
+export default function MyApp(props) {
+    const { Component, pageProps } = props
 
-  React.useEffect(() => {
-    const jssStyles = document.querySelector('#jss-server-side')
-    if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles)
-    }
-  }, [])
+    React.useEffect(() => {
+        const jssStyles = document.querySelector('#jss-server-side')
+        if (jssStyles) {
+            jssStyles.parentElement.removeChild(jssStyles)
+        }
+    }, [])
 
-  return (
-    <CacheProvider value={cache}>
-      <Head>
-        <title>E-commerce Starter</title>
-        <meta
-          name='viewport'
-          content='initial-scale=1, width=device-width'
-        />
-      </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <ApolloProvider client={client}>
-          <CartProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </CartProvider>
-        </ApolloProvider>
-      </ThemeProvider>
-    </CacheProvider>
-  )
+    return (
+        <CacheProvider value={cache}>
+            <Head>
+                <title>E-commerce Starter</title>
+                <meta
+                    name="viewport"
+                    content="initial-scale=1, width=device-width"
+                />
+            </Head>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <ApolloProvider client={client}>
+                    <UserProvider>
+                        <Layout>
+                            <Component {...pageProps} />
+                        </Layout>
+                    </UserProvider>
+                </ApolloProvider>
+            </ThemeProvider>
+        </CacheProvider>
+    )
 }
 
 MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  pageProps: PropTypes.object.isRequired
+    Component: PropTypes.elementType.isRequired,
+    pageProps: PropTypes.object.isRequired,
 }
