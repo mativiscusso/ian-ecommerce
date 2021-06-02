@@ -135,9 +135,59 @@ export const ORDER_ACTIVE = gql`
                 quantity
                 linePrice
             }
+            shippingAddress {
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                phoneNumber
+            }
             totalQuantity
             subTotal
             total
+            shipping
+            payments {
+                method
+                state
+                transactionId
+                amount
+                errorMessage
+                refunds {
+                    total
+                    reason
+                }
+                metadata
+            }
+            currencyCode
+            fulfillments {
+                id
+                state
+                method
+                trackingCode
+            }
+            shippingLines {
+                shippingMethod {
+                    code
+                    name
+                    customFields
+                    description
+                    checker {
+                        code
+                        args {
+                            name
+                            value
+                        }
+                    }
+                    calculator {
+                        code
+                        args {
+                            name
+                            value
+                        }
+                    }
+                }
+            }
         }
     }
 `
@@ -173,5 +223,34 @@ export const ALL_COLLECTIONS = gql`
             }
             totalItems
         }
+    }
+`
+export const ORDER_SHIPPING_METHODS = gql`
+    {
+        eligibleShippingMethods {
+            id
+            price
+            code
+            name
+            description
+            metadata
+        }
+    }
+`
+export const ORDER_PAYMENT_METHODS = gql`
+    {
+        eligiblePaymentMethods {
+            id
+            code
+            name
+            description
+            isEligible
+            eligibilityMessage
+        }
+    }
+`
+export const NEXT_STATES_ORDER = gql`
+    {
+        nextOrderStates
     }
 `

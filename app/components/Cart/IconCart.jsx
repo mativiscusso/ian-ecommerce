@@ -51,7 +51,7 @@ export default function ButtonCartHome() {
         const isEmpty = cartLenght === 0
 
         const handleClick = async () => {
-            await router.push('/cart')
+            await router.push('/checkout')
             setShow({ right: false })
         }
         return (
@@ -69,7 +69,7 @@ export default function ButtonCartHome() {
                             className={classes.btnComprar}
                             onClick={handleClick}
                         >
-                            COMPRAR
+                            FINALIZAR COMPRA
                         </Button>
                     ) : (
                         ''
