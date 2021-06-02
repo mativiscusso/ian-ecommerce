@@ -4,8 +4,9 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { makeStyles } from '@material-ui/core'
+import { IconButton, makeStyles } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import ProductDetail from 'components/ProductDetail'
 
 const useStyles = makeStyles({
@@ -14,6 +15,10 @@ const useStyles = makeStyles({
     },
     quickView: {
         maxWidth: 800,
+    },
+    btnRounded: {
+        borderRadius: '50%',
+        width: 50,
     },
 })
 
@@ -31,15 +36,10 @@ export default function AlertDialog(props) {
 
     return (
         <div>
-            <Button
-                variant="outlined"
-                color="primary"
-                onClick={handleClickOpen}
-                size="small"
-                startIcon={<SearchIcon />}
-            >
-                Ver
-            </Button>
+            <IconButton color="primary" onClick={handleClickOpen}>
+                <VisibilityIcon />
+            </IconButton>
+
             <Dialog
                 open={open}
                 onClose={handleClose}

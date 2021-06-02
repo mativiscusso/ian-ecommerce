@@ -13,6 +13,25 @@ export const CART_FRAGMENT = gql`
         currencyCode
         customer {
             id
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+            addresses {
+                fullName
+                company
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    name
+                }
+                defaultShippingAddress
+                defaultBillingAddress
+                customFields
+            }
         }
         lines {
             id
@@ -39,6 +58,29 @@ export const CART_FRAGMENT = gql`
                 }
                 productId
             }
+        }
+    }
+`
+export const PAYMENTS = gql`
+    fragment Payments on Order {
+        payments {
+            method
+            state
+            transactionId
+            amount
+            errorMessage
+            refunds {
+                total
+                reason
+            }
+            metadata
+        }
+        currencyCode
+        fulfillments {
+            id
+            state
+            method
+            trackingCode
         }
     }
 `
