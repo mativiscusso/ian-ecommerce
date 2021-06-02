@@ -60,7 +60,7 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
             await setCustomerToOrder({ variables: { input: customerState } })
         }
 
-        const result = await setAddressesToCustomer({
+        await setAddressesToCustomer({
             variables: {
                 input: {
                     ...addresses,
@@ -102,6 +102,7 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         onChange={handleNames}
                         autoComplete="given-name"
                         value={customerState.firstName}
+                        disabled={!!customerState.firstName}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -114,6 +115,7 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         onChange={handleNames}
                         autoComplete="family-name"
                         value={customerState.lastName}
+                        disabled={!!customerState.lastName}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -126,6 +128,7 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         onChange={handleNames}
                         autoComplete="email-name"
                         value={customerState.emailAddress}
+                        disabled={!!customerState.emailAddress}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>

@@ -32,13 +32,12 @@ const useStyles = makeStyles((theme) => ({
     productName: {
         height: 35,
         textTransform: 'uppercase',
-        fontWeight: 'bolder',
-        marginBottom: 5,
+        fontWeight: 'bold',
     },
     productPrice: {
         position: 'relative',
         top: 10,
-        fontWeight: 'bold',
+        fontWeight: 'bolder',
     },
     ribbonNew: {
         position: 'absolute',
@@ -54,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
+    console.log(props)
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
@@ -68,8 +68,8 @@ export default function Product(props) {
                         <CardContent>
                             <Typography
                                 gutterBottom
-                                variant="body2"
-                                color="textSecondary"
+                                variant="body1"
+                                color="textPrimary"
                                 className={classes.productName}
                             >
                                 {props.name}
@@ -77,7 +77,7 @@ export default function Product(props) {
 
                             <Typography
                                 gutterBottom
-                                variant="h6"
+                                variant="h5"
                                 color="textPrimary"
                                 className={classes.productPrice}
                             >
@@ -87,11 +87,11 @@ export default function Product(props) {
                     </CardActionArea>
                 </a>
             </Link>
-            <CardActions className={classes.buttonsActions}>
+            <CardActions>
                 <QuickView {...props} />
                 <Link href={`/products/${props.id}`}>
-                    <a>
-                        <Button variant="contained" size="small">
+                    <a style={{ width: '100%' }}>
+                        <Button variant="outlined" fullWidth>
                             COMPRAR
                         </Button>
                     </a>

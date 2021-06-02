@@ -18,6 +18,7 @@ import Link from 'components/Link'
 import ProductSearch from 'components/ProductSearch'
 import IconCart from 'components/Cart/IconCart'
 import UserItem from './UserItem'
+import { useRouter } from 'next/router'
 
 import { UserContext } from 'utils/userContext'
 
@@ -59,12 +60,18 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar() {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles()
+    const [isCheckoutPage, setIsCheckoutPage] = useState(false)
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
     })
     const { mobileView, drawerOpen } = state
     const { user, userLoading } = useContext(UserContext)
+
+    const router = useRouter()
+    useEffect(() => {
+        setIsCheckoutPage(router.pathname.includes('checkout'))
+    }, [router])
 
     useEffect(() => {
         const setResponsiveness = () => {
@@ -216,7 +223,15 @@ export default function Navbar() {
     return (
         <nav>
             <AppBar className={header}>
-                {mobileView ? displayMobile() : displayDesktop()}
+                {isCheckoutPage === false ? (
+                    mobileView ? (
+                        displayMobile()
+                    ) : (
+                        displayDesktop()
+                    )
+                ) : (
+                    <Toolbar>{Logo}</Toolbar>
+                )}
             </AppBar>
         </nav>
     )

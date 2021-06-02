@@ -61,3 +61,26 @@ export const CART_FRAGMENT = gql`
         }
     }
 `
+export const PAYMENTS = gql`
+    fragment Payments on Order {
+        payments {
+            method
+            state
+            transactionId
+            amount
+            errorMessage
+            refunds {
+                total
+                reason
+            }
+            metadata
+        }
+        currencyCode
+        fulfillments {
+            id
+            state
+            method
+            trackingCode
+        }
+    }
+`

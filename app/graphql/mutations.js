@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { CART_FRAGMENT } from './fragments'
+import { CART_FRAGMENT, PAYMENTS } from './fragments'
 
 export const USER_ACCOUNT_VERIFY = `
     mutation verifyCustomerAccount($token: String!, $password: String) {
@@ -90,6 +90,29 @@ export const SET_ADDRESSES_ORDER = gql`
         setOrderShippingAddress(input: $input) {
             __typename
             ...Cart
+        }
+    }
+`
+export const SET_SHIPPING_METHOD_ORDER = gql`
+    mutation setShippingMethod($shippingMethod: ID!) {
+        setOrderShippingMethod(shippingMethodId: $shippingMethod) {
+            __typename
+        }
+    }
+`
+export const CHANGE_STATE_ORDER = gql`
+    mutation transitionOrderToState($state: String!) {
+        transitionOrderToState(state: $state) {
+            __typename
+        }
+    }
+`
+export const SET_PAYMENT_METHOD_ORDER = gql`
+    ${PAYMENTS}
+    mutation addPaymentToOrder($input: PaymentInput!) {
+        addPaymentToOrder(input: $input) {
+            __typename
+            ...Payments
         }
     }
 `

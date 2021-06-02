@@ -5,10 +5,19 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Button from '@material-ui/core/Button'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import Radio from '@material-ui/core/Radio'
-import { useQuery } from '@apollo/client'
-import { ORDER_PAYMENT_METHODS, ORDER_SHIPPING_METHODS } from 'graphql/queries'
+import { useMutation, useQuery } from '@apollo/client'
+import {
+    ORDER_ACTIVE,
+    ORDER_PAYMENT_METHODS,
+    ORDER_SHIPPING_METHODS,
+} from 'graphql/queries'
+import { SET_SHIPPING_METHOD_ORDER } from 'graphql/mutations'
 
-export default function ShippingsForm({ handleNext, handleBack }) {
+export default function ShippingsForm({
+    handleNext,
+    handleBack,
+    setPaymentElegibled,
+}) {
     const [shippingMethods, setShippingMethods] = useState(undefined)
     const [paymentMethod, setPaymentMethods] = useState(undefined)
 
@@ -18,6 +27,10 @@ export default function ShippingsForm({ handleNext, handleBack }) {
         loading: loadingPayments,
         error: errorPayments,
     } = useQuery(ORDER_PAYMENT_METHODS)
+
+    const [addShippingMethod] = useMutation(SET_SHIPPING_METHOD_ORDER, {
+        refetchQueries: [{ query: ORDER_ACTIVE }],
+    })
 
     useEffect(() => {
         if (data && !error) {
@@ -33,8 +46,17 @@ export default function ShippingsForm({ handleNext, handleBack }) {
 
     if (loading) return 'loading'
     if (loadingPayments) return 'loading'
+
     const handleClickNext = async () => {
         await handleNext()
+    }
+    const handleChangeShipping = async (e) => {
+        await addShippingMethod({
+            variables: { shippingMethod: e.target.value },
+        })
+    }
+    const handleChangePayment = async (e) => {
+        setPaymentElegibled(e.target.value)
     }
     return (
         <>
@@ -50,10 +72,11 @@ export default function ShippingsForm({ handleNext, handleBack }) {
                         {shippingMethods &&
                             shippingMethods.map((method) => (
                                 <FormControlLabel
-                                    value={method.code}
+                                    value={method.id}
                                     control={<Radio color="primary" />}
                                     label={`${method.name} - Precio: $ ${method.price}`}
                                     key={method.code}
+                                    onChange={handleChangeShipping}
                                 />
                             ))}
                     </RadioGroup>
@@ -74,6 +97,7 @@ export default function ShippingsForm({ handleNext, handleBack }) {
                                     control={<Radio color="primary" />}
                                     label={method.name}
                                     key={method.code}
+                                    onChange={handleChangePayment}
                                 />
                             ))}
                     </RadioGroup>

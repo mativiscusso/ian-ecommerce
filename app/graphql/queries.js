@@ -151,14 +151,40 @@ export const ORDER_ACTIVE = gql`
                 method
                 state
                 transactionId
+                amount
+                errorMessage
+                refunds {
+                    total
+                    reason
+                }
+                metadata
+            }
+            currencyCode
+            fulfillments {
+                id
+                state
+                method
+                trackingCode
             }
             shippingLines {
                 shippingMethod {
                     code
                     name
+                    customFields
                     description
                     checker {
                         code
+                        args {
+                            name
+                            value
+                        }
+                    }
+                    calculator {
+                        code
+                        args {
+                            name
+                            value
+                        }
                     }
                 }
             }
@@ -187,5 +213,10 @@ export const ORDER_PAYMENT_METHODS = gql`
             isEligible
             eligibilityMessage
         }
+    }
+`
+export const NEXT_STATES_ORDER = gql`
+    {
+        nextOrderStates
     }
 `

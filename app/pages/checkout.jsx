@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import Typography from '@material-ui/core/Typography'
-import { Container } from '@material-ui/core'
+import { Button, Container, Divider, Grid } from '@material-ui/core'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemText from '@material-ui/core/ListItemText'
 
 import AddressForm from 'components/AddressForm'
 import Review from 'components/Review'
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
             marginTop: theme.spacing(6),
             marginBottom: theme.spacing(6),
-            padding: theme.spacing(3),
+            padding: theme.spacing(4),
         },
     },
     stepper: {
@@ -44,16 +46,11 @@ export default function Checkout() {
     const [activeStep, setActiveStep] = useState(0)
     const [customer, setCustomer] = useState(undefined)
     const [orderActive, setOrderActive] = useState(undefined)
-    const {
-        data: dataCustomer,
-        loading: loadingCustomer,
-        error: errorCustomer,
-    } = useQuery(CUSTOMER_ACTIVE)
-    const {
-        data: dataOrder,
-        loading: loadingOrder,
-        error: errorOrder,
-    } = useQuery(ORDER_ACTIVE)
+    const [paymentElegibled, setPaymentElegibled] = useState(undefined)
+
+    const { data: dataCustomer, error: errorCustomer } =
+        useQuery(CUSTOMER_ACTIVE)
+    const { data: dataOrder, error: errorOrder } = useQuery(ORDER_ACTIVE)
 
     useEffect(() => {
         if (dataCustomer && !errorCustomer) {
@@ -92,14 +89,17 @@ export default function Checkout() {
                     <ShippingsForm
                         handleNext={handleNext}
                         handleBack={handleBack}
+                        setPaymentElegibled={setPaymentElegibled}
                     />
                 )
             case 2:
                 return (
                     <Review
                         handleBack={handleBack}
+                        handleNext={handleNext}
                         customer={customer}
                         orderActive={orderActive}
+                        paymentElegibled={paymentElegibled}
                     />
                 )
             default:
@@ -117,21 +117,19 @@ export default function Checkout() {
 
     return (
         <>
-            <Container maxWidth="lg">
-                <Paper className={classes.paper}>
-                    <Typography component="h1" variant="h4" align="center">
-                        Checkout
-                    </Typography>
-                    <Stepper
-                        activeStep={activeStep}
-                        className={classes.stepper}
-                    >
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
+            <Container maxWidth="lg" className={classes.paper}>
+                <Typography component="h1" variant="h4" align="center">
+                    Checkout
+                </Typography>
+                <Stepper activeStep={activeStep} className={classes.stepper}>
+                    {steps.map((label) => (
+                        <Step key={label}>
+                            <StepLabel>{label}</StepLabel>
+                        </Step>
+                    ))}
+                </Stepper>
+
+                <Grid container spacing={3}>
                     <>
                         {activeStep === steps.length ? (
                             <>
@@ -139,17 +137,62 @@ export default function Checkout() {
                                     Gracias por su orden.
                                 </Typography>
                                 <Typography variant="subtitle1">
-                                    Your order number is #2001539. We have
-                                    emailed your order confirmation, and will
-                                    send you an update when your order has
-                                    shipped.
+                                    Ingrese a su cuenta para ver los detalles.
                                 </Typography>
+                                <Button variant="contained" href="/">
+                                    SEGUIR COMPRANDO
+                                </Button>
                             </>
                         ) : (
-                            <>{getStepContent(activeStep)}</>
+                            <>
+                                <Grid item xs={12} lg={8}>
+                                    {getStepContent(activeStep)}
+                                </Grid>
+                                <Grid item xs={12} lg={4}>
+                                    <Typography variant="h6" gutterBottom>
+                                        Tu pedido
+                                    </Typography>
+                                    <List disablePadding>
+                                        {orderActive &&
+                                            orderActive.lines.map((product) => (
+                                                <ListItem
+                                                    className={classes.listItem}
+                                                    key={
+                                                        product.productVariant
+                                                            .name
+                                                    }
+                                                >
+                                                    <ListItemText
+                                                        primary={
+                                                            product
+                                                                .productVariant
+                                                                .name
+                                                        }
+                                                        secondary={`$ ${product.productVariant.price} x ${product.quantity}`}
+                                                    />
+                                                    <Typography variant="body2">
+                                                        ${product.linePrice}
+                                                    </Typography>
+                                                </ListItem>
+                                            ))}
+                                        <Divider />
+                                        <ListItem className={classes.listItem}>
+                                            <ListItemText primary="Total" />
+                                            <Typography
+                                                variant="subtitle1"
+                                                className={classes.total}
+                                            >
+                                                ${' '}
+                                                {orderActive &&
+                                                    orderActive.total}
+                                            </Typography>
+                                        </ListItem>
+                                    </List>
+                                </Grid>
+                            </>
                         )}
                     </>
-                </Paper>
+                </Grid>
             </Container>
         </>
     )
