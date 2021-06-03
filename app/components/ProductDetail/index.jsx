@@ -37,7 +37,7 @@ const ProductDetail = (props) => {
     return (
         <Container>
             <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={5}>
                     {props.assets ? (
                         <Carousel images={props.assets} />
                     ) : (
@@ -48,7 +48,13 @@ const ProductDetail = (props) => {
                         />
                     )}
                 </Grid>
-                <Grid item xs={12} md={6} className={classes.detailProduct}>
+                <Grid
+                    item
+                    xs={12}
+                    md={7}
+                    className={classes.detailProduct}
+                    style={{ padding: '2rem' }}
+                >
                     <Typography variant="body1" gutterBottom>
                         Categoria del producto
                     </Typography>
@@ -62,17 +68,25 @@ const ProductDetail = (props) => {
                     <Typography variant="body1" gutterBottom>
                         {props.description}
                     </Typography>
-                    <Grid item xs={12}>
+                    <Grid
+                        item
+                        xs={12}
+                        alignContent="space-between"
+                        alignItems="top"
+                        style={{ padding: '1rem 0' }}
+                    >
                         <TextField
                             id="quantity"
                             label="Cantidad"
                             type="number"
                             size="small"
+                            variant="outlined"
                             defaultValue={quantity}
                             onChange={({ target }) => {
                                 const qty = Number(target.value)
                                 setQuantity(qty)
                             }}
+                            style={{ width: '20%', marginRight: 15 }}
                         />
 
                         <ShopCartButton

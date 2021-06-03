@@ -191,11 +191,7 @@ export default function Navbar() {
 
     const Logo = (
         <NextLink href="/">
-            <a>
-                <Typography variant="h6" component="h1" className={logo}>
-                    Ecommerce
-                </Typography>
-            </a>
+            <a className={logo}>Ecommerce</a>
         </NextLink>
     )
 

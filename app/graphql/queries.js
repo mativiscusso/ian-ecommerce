@@ -252,3 +252,29 @@ export const NEXT_STATES_ORDER = gql`
         nextOrderStates
     }
 `
+export const SEARCH_PRODUCTS = gql`
+    query SearchProducts($searchInput: SearchInput!) {
+        search(input: $searchInput) {
+            totalItems
+            items {
+                sku
+                slug
+                productId
+                productName
+                productAsset {
+                    preview
+                }
+                productVariantId
+                productVariantName
+                productVariantAsset {
+                    preview
+                }
+                price {
+                    __typename
+                }
+                description
+                score
+            }
+        }
+    }
+`

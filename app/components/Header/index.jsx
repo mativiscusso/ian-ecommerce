@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import Toolbar from '@material-ui/core/Toolbar'
-import Link from '@material-ui/core/Link'
+import Link from 'next/link'
 import { ALL_COLLECTIONS } from 'graphql/queries'
 import { useQuery } from '@apollo/client'
 import { Button } from '@material-ui/core'
@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     toolbarLink: {
         padding: theme.spacing(1),
         flexShrink: 0,
+        textTransform: 'uppercase',
+        '&:hover': {
+            cursor: 'pointer',
+        },
     },
 }))
 
@@ -50,10 +54,10 @@ export default function Header(props) {
                             noWrap
                             key={collection.name}
                             variant="body2"
-                            className={classes.toolbarLink}
+                            href={`/products/all${collection.slug}`}
                         >
-                            <a>
-                                <Button>{collection.name}</Button>
+                            <a className={classes.toolbarLink}>
+                                {collection.name}
                             </a>
                         </Link>
                     ))}
@@ -61,12 +65,9 @@ export default function Header(props) {
                     color="inherit"
                     noWrap
                     variant="body2"
-                    className={classes.toolbarLink}
                     href="/products/all"
                 >
-                    <a>
-                        <Button>ALL CATEGORIES</Button>
-                    </a>
+                    <a className={classes.toolbarLink}>ALL CATEGORIES</a>
                 </Link>
             </Toolbar>
         </>

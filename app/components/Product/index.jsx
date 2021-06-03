@@ -56,35 +56,33 @@ export default function Product(props) {
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
-                <a>
-                    <CardActionArea>
-                        <CardMedia
-                            className={classes.media}
-                            image={formatURLImage(props.assets[0].source)}
-                            title={props.name}
-                        />
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={formatURLImage(props.assets[0].source)}
+                        title={props.name}
+                    />
 
-                        <CardContent>
-                            <Typography
-                                gutterBottom
-                                variant="body1"
-                                color="textPrimary"
-                                className={classes.productName}
-                            >
-                                {props.name}
-                            </Typography>
+                    <CardContent>
+                        <Typography
+                            gutterBottom
+                            variant="body1"
+                            color="textPrimary"
+                            className={classes.productName}
+                        >
+                            {props.name}
+                        </Typography>
 
-                            <Typography
-                                gutterBottom
-                                variant="h5"
-                                color="textPrimary"
-                                className={classes.productPrice}
-                            >
-                                ${props.variants[0].price}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </a>
+                        <Typography
+                            gutterBottom
+                            variant="h5"
+                            color="textPrimary"
+                            className={classes.productPrice}
+                        >
+                            ${props.variants[0].price}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
             </Link>
             <CardActions>
                 <QuickView {...props} />
