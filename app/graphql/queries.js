@@ -205,8 +205,6 @@ export const ALL_COLLECTIONS = gql`
                 }
                 children {
                     id
-                    name
-                    slug
                 }
 
                 featuredAsset {

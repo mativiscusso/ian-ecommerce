@@ -21,6 +21,7 @@ import UserItem from './UserItem'
 import { useRouter } from 'next/router'
 
 import { UserContext } from 'utils/userContext'
+import { AccountCircle } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -61,6 +62,7 @@ export default function Navbar() {
     const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles()
     const [isCheckoutPage, setIsCheckoutPage] = useState(false)
+
     const [state, setState] = useState({
         mobileView: false,
         drawerOpen: false,
@@ -96,19 +98,37 @@ export default function Navbar() {
                     alignContent="space-between"
                     alignItems="center"
                 >
-                    <Grid item lg={2} xl={3}>
+                    <Grid item lg={3} xl={4}>
                         {Logo}
                     </Grid>
-                    <Grid item lg={4} xl={4}>
-                        <ProductSearch />
+                    <Grid item lg={5} xl={5}>
+                        <ProductSearch mobileState={mobileView} />
                     </Grid>
-                    <Grid item className={menuItems} lg={6} xl={5}>
-                        {getMenuButtons()}
+                    <Grid item className={menuItems} lg={4} xl={3}>
                         <IconCart />
                         {userLoading && (
                             <CircularProgress color="inherit" size={20} />
                         )}
-                        {user && <UserItem user={user} />}
+                        {user ? (
+                            <UserItem user={user} />
+                        ) : (
+                            <Link
+                                href={'/login'}
+                                color="inherit"
+                                className={menuButton}
+                            >
+                                <IconButton color="inherit">
+                                    <AccountCircle />
+                                    <Typography
+                                        variant="caption"
+                                        color="inherit"
+                                        style={{ marginLeft: 10 }}
+                                    >
+                                        Ingresar
+                                    </Typography>
+                                </IconButton>
+                            </Link>
+                        )}
                     </Grid>
                 </Grid>
             </Toolbar>
@@ -122,7 +142,7 @@ export default function Navbar() {
             setState((prevState) => ({ ...prevState, drawerOpen: false }))
 
         return (
-            <Toolbar>
+            <Toolbar style={{ justifyContent: 'space-between' }}>
                 <IconButton
                     {...{
                         edge: 'start',
@@ -136,9 +156,25 @@ export default function Navbar() {
                 </IconButton>
 
                 <div>{Logo}</div>
-                <ProductSearch />
+                <ProductSearch mobileState={mobileView} />
+
                 <IconCart />
-                {user && <UserItem user={user} />}
+                {user ? (
+                    <UserItem user={user} />
+                ) : (
+                    <Link href={'/login'} color="inherit">
+                        <IconButton color="inherit">
+                            <AccountCircle />
+                            <Typography
+                                variant="caption"
+                                color="inherit"
+                                style={{ marginLeft: 10 }}
+                            >
+                                Ingresar
+                            </Typography>
+                        </IconButton>
+                    </Link>
+                )}
                 <Drawer
                     {...{
                         anchor: 'left',
@@ -146,38 +182,10 @@ export default function Navbar() {
                         onClose: handleDrawerClose,
                     }}
                 >
-                    <div className={drawerContainer}>{getDrawerChoices()}</div>
+                    {/* <div className={drawerContainer}>{getDrawerChoices()}</div> */}
+                    <div className={drawerContainer}>Links</div>
                 </Drawer>
             </Toolbar>
-        )
-    }
-
-    const getDrawerChoices = () => {
-        return (
-            <>
-                <Link href={'/'} color="inherit" className={menuButton}>
-                    home
-                </Link>
-                <Link
-                    href={'/products/all'}
-                    color="inherit"
-                    className={menuButton}
-                >
-                    shop
-                </Link>
-
-                {!user && (
-                    <Link
-                        href={'/login'}
-                        color="inherit"
-                        className={menuButton}
-                    >
-                        <Button color="inherit" variant="outlined">
-                            signup
-                        </Button>
-                    </Link>
-                )}
-            </>
         )
     }
 
@@ -190,35 +198,6 @@ export default function Navbar() {
             </a>
         </NextLink>
     )
-
-    const getMenuButtons = () => {
-        return (
-            <>
-                <Link href={'/'} color="inherit" className={menuButton}>
-                    home
-                </Link>
-                <Link
-                    href={'/products/all'}
-                    color="inherit"
-                    className={menuButton}
-                >
-                    shop
-                </Link>
-
-                {!user && (
-                    <Link
-                        href={'/login'}
-                        color="inherit"
-                        className={menuButton}
-                    >
-                        <Button color="inherit" variant="outlined">
-                            signup
-                        </Button>
-                    </Link>
-                )}
-            </>
-        )
-    }
 
     return (
         <nav>

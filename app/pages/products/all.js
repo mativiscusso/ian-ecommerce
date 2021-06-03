@@ -5,15 +5,15 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
     mainProducts: {
-        marginTop: theme.spacing(10),
+        marginTop: theme.spacing(12),
     },
 }))
 
 export default function AllProducts() {
     const { mainProducts } = useStyles()
     return (
-        <Container maxWidth="xl" className={mainProducts}>
-            <Grid container>
+        <Container maxWidth="xl" className={mainProducts} disableGutters>
+            <Grid container alignContent="space-between">
                 <Grid item xs={12} lg={3} xl={2}>
                     <ProductFilters />
                 </Grid>

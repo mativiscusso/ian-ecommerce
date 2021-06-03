@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from '../ProductQuickView'
 import Link from 'next/link'
-import { formatURLImage } from 'helpers'
+import { formatURLImage } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {

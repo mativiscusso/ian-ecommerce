@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Link from '@material-ui/core/Link'
 import { ALL_COLLECTIONS } from 'graphql/queries'
 import { useQuery } from '@apollo/client'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -51,9 +52,22 @@ export default function Header(props) {
                             variant="body2"
                             className={classes.toolbarLink}
                         >
-                            {collection.name}
+                            <a>
+                                <Button>{collection.name}</Button>
+                            </a>
                         </Link>
                     ))}
+                <Link
+                    color="inherit"
+                    noWrap
+                    variant="body2"
+                    className={classes.toolbarLink}
+                    href="/products/all"
+                >
+                    <a>
+                        <Button>ALL CATEGORIES</Button>
+                    </a>
+                </Link>
             </Toolbar>
         </>
     )

@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import { Container, Grid } from '@material-ui/core'
 
 import { UserContext } from 'utils/userContext'
-import { formatURLImage } from 'helpers'
+import { formatURLImage } from 'utils/helpers'
 import { gql, useMutation } from '@apollo/client'
 
 import {

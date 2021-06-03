@@ -8,12 +8,7 @@ import ShopCartButton from 'components/Product/ShopCartButton'
 import Carousel from 'components/Carousel'
 import { TextField } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        [theme.breakpoints.up('lg')]: {
-            marginTop: 150,
-        },
-    },
+const useStyles = makeStyles({
     detailProduct: {
         display: 'flex',
         flexDirection: 'column',
@@ -32,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         right: 0,
         width: 70,
     },
-}))
+})
 
 const ProductDetail = (props) => {
     const classes = useStyles()
@@ -40,7 +35,7 @@ const ProductDetail = (props) => {
 
     const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (
-        <Container className={classes.root}>
+        <Container>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     {props.assets ? (
