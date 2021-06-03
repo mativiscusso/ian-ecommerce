@@ -1,23 +1,14 @@
-import * as React from 'react'
-import { CacheProvider } from '@emotion/react'
-import createCache from '@emotion/cache'
+import React from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheets } from '@material-ui/styles'
-import createEmotionServer from '@emotion/server/create-instance'
+import { ServerStyleSheets } from '@material-ui/core/styles'
 import theme from '../utils/theme'
-
-const getCache = () => {
-    const cache = createCache({ key: 'css', prepend: true })
-    cache.compat = true
-
-    return cache
-}
 
 export default class MyDocument extends Document {
     render() {
         return (
             <Html lang="en">
                 <Head>
+                    {/* PWA primary color */}
                     <meta
                         name="theme-color"
                         content={theme.palette.primary.main}
@@ -37,7 +28,7 @@ export default class MyDocument extends Document {
 }
 
 // `getInitialProps` belongs to `_document` (instead of `_app`),
-// it's compatible with static-site generation (SSG).
+// it's compatible with server-side generation (SSG).
 MyDocument.getInitialProps = async (ctx) => {
     // Resolution order
     //
@@ -65,31 +56,12 @@ MyDocument.getInitialProps = async (ctx) => {
     const sheets = new ServerStyleSheets()
     const originalRenderPage = ctx.renderPage
 
-    const cache = getCache()
-    const { extractCriticalToChunks } = createEmotionServer(cache)
-
     ctx.renderPage = () =>
         originalRenderPage({
             enhanceApp: (App) => (props) => sheets.collect(<App {...props} />),
-            // Take precedence over the CacheProvider in our custom _app.js
-            enhanceComponent: (Component) => (props) =>
-                (
-                    <CacheProvider value={cache}>
-                        <Component {...props} />
-                    </CacheProvider>
-                ),
         })
 
     const initialProps = await Document.getInitialProps(ctx)
-    const emotionStyles = extractCriticalToChunks(initialProps.html)
-    const emotionStyleTags = emotionStyles.styles.map((style) => (
-        <style
-            data-emotion={`${style.key} ${style.ids.join(' ')}`}
-            key={style.key}
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: style.css }}
-        />
-    ))
 
     return {
         ...initialProps,
@@ -97,7 +69,6 @@ MyDocument.getInitialProps = async (ctx) => {
         styles: [
             ...React.Children.toArray(initialProps.styles),
             sheets.getStyleElement(),
-            ...emotionStyleTags,
         ],
     }
 }

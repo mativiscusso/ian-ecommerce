@@ -8,7 +8,7 @@ const mainFeaturedPost = {
     title: 'SUPER OFERTAS',
     description:
         'Tienda online base para poder implementar facilmente un storefront de vendure.',
-    image: 'https://www.areacocotrosario.com.ar/imagenes/carrousel/20183793855d827cc08ff9f-1.png',
+    image: 'https://c4.wallpaperflare.com/wallpaper/87/999/705/apple-music-gradient-wallpaper-preview.jpg',
     imgText: 'main image description',
     linkText: 'Seguir leyendo',
 }

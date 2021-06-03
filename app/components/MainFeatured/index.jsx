@@ -11,8 +11,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.grey[800],
         color: theme.palette.common.white,
         marginBottom: theme.spacing(6),
-        backgroundImage:
-            'url(https://www.areacocotrosario.com.ar/imagenes/carrousel/20183793855d827cc08ff9f-1.png)',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
@@ -50,11 +48,11 @@ export default function MainFeaturedPost(props) {
             className={classes.mainFeaturedPost}
             style={{ backgroundImage: `url(${post.image})` }}
         >
-            <img
+            {/* <img
                 style={{ display: 'none' }}
                 src={post.image}
                 alt={post.imageText}
-            />
+            /> */}
             <div className={classes.overlay} />
             <Grid container>
                 <Grid item md={6}>
