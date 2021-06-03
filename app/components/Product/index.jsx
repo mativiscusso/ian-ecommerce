@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
-    console.log(props)
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.id}`}>
@@ -91,7 +90,7 @@ export default function Product(props) {
                 <QuickView {...props} />
                 <Link href={`/products/${props.id}`}>
                     <a style={{ width: '100%' }}>
-                        <Button variant="outlined" fullWidth>
+                        <Button variant="outlined" color="primary" fullWidth>
                             COMPRAR
                         </Button>
                     </a>
