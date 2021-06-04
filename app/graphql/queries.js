@@ -254,13 +254,13 @@ export const NEXT_STATES_ORDER = gql`
     }
 `
 export const SEARCH_PRODUCTS = gql`
-    ${SEARCH_RESULT_FRAGMENT}
-    query SearchProducts($searchInput: SearchInput!) {
-        search(input: $searchInput) {
+    query SearchProducts($input: SearchInput!) {
+        search(input: $input) {
             totalItems
             items {
                 ...SearchResult
             }
         }
     }
+    ${SEARCH_RESULT_FRAGMENT}
 `

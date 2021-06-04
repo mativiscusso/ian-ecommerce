@@ -5,6 +5,7 @@ import SearchIcon from '@material-ui/icons/Search'
 import InputBase from '@material-ui/core/InputBase'
 import InputLabel from '@material-ui/core/InputLabel'
 import { Button, Dialog } from '@material-ui/core'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -73,59 +74,75 @@ const useStyles = makeStyles((theme) => ({
 const ProductSearch = ({ mobileState }) => {
     const classes = useStyles()
 
-    const [name, setName] = useState('')
+    const [search, setSearch] = useState('')
     const [productsSearch, setProductsSearch] = useState([])
     const [open, setOpen] = useState(false)
+
+    const router = useRouter()
 
     const handleClickOpen = () => {
         setOpen(true)
     }
     const handleClose = (value) => {
         setProductsSearch([])
-        setName('')
+        setSearch('')
         setOpen(false)
     }
 
     const handleChange = async (e) => {
         if (e.target.value === '') {
             setProductsSearch([])
-            setName('')
+            setSearch('')
         } else {
-            await setName(e.target.value)
+            await setSearch(e.target.value)
         }
     }
+    const handleSearch = (e) => {
+        e.preventDefault()
 
+        if (e.key === 'Enter') {
+            // const q = e.currentTarget.value
+
+            router.push(
+                {
+                    pathname: `/products/search`,
+                    query: search ? { q: search } : {},
+                },
+                undefined,
+                { shallow: true }
+            )
+        }
+    }
     return (
         <>
             {!mobileState ? (
                 <>
-                    <form action="/products/all" method="get">
-                        <div className={classes.search}>
-                            <IconButton
-                                aria-label="search"
-                                type="submit"
-                                style={{ color: '#fff' }}
-                            >
-                                <SearchIcon />
-                            </IconButton>
+                    <div className={classes.search}>
+                        <IconButton
+                            aria-label="search"
+                            type="submit"
+                            style={{ color: '#fff' }}
+                        >
+                            <SearchIcon />
+                        </IconButton>
 
-                            <InputLabel htmlFor="searchDesktop"></InputLabel>
-                            <InputBase
-                                id="searchDesktop"
-                                name="search"
-                                placeholder="Search any product..."
-                                classes={{
-                                    root: classes.inputRoot,
-                                    input: classes.inputInput,
-                                }}
-                                inputProps={{ 'aria-label': 'search' }}
-                                value={name}
-                                onChange={handleChange}
-                                autoComplete="off"
-                            />
-                        </div>
+                        <InputLabel htmlFor="searchDesktop"></InputLabel>
+                        <InputBase
+                            id="searchDesktop"
+                            name="search"
+                            placeholder="¿Qué estas buscando?"
+                            classes={{
+                                root: classes.inputRoot,
+                                input: classes.inputInput,
+                            }}
+                            inputProps={{ 'aria-label': 'search' }}
+                            value={search}
+                            onChange={handleChange}
+                            onKeyUp={handleSearch}
+                            autoComplete="off"
+                        />
                         <div className={classes.grow} />
-                    </form>
+                    </div>
                     <section className={classes.listProductsInline}>
                         {productsSearch.map((item) => (
                             <a
@@ -176,7 +193,7 @@ const ProductSearch = ({ mobileState }) => {
                                 <InputBase
                                     id="searchMobile"
                                     name="search"
-                                    placeholder="Search any product..."
+                                    placeholder="¿Qué estas buscando?"
                                     classes={{
                                         root: classes.inputRoot,
                                         input: classes.inputInput,

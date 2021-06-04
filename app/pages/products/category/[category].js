@@ -19,7 +19,7 @@ export default function AllProducts() {
 
     const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
         variables: {
-            searchInput: { collectionSlug: category, groupByProduct: true },
+            input: { collectionSlug: category, groupByProduct: true },
         },
     })
 

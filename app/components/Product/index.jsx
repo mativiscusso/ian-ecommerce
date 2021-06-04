@@ -53,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
-    console.log(props)
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.productId}`}>

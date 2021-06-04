@@ -61,14 +61,16 @@ export default function Header() {
                             </a>
                         </Link>
                     ))}
-                <Link
-                    color="inherit"
-                    noWrap
-                    variant="body2"
-                    href="/products/all"
-                >
-                    <a className={classes.toolbarLink}>ALL CATEGORIES</a>
-                </Link>
+                {collections && (
+                    <Link
+                        color="inherit"
+                        noWrap
+                        variant="body2"
+                        href="/products/search?q="
+                    >
+                        <a className={classes.toolbarLink}>ALL CATEGORIES</a>
+                    </Link>
+                )}
             </Toolbar>
         </>
     )
