@@ -13,15 +13,17 @@ import { ALL_COLLECTIONS } from 'graphql/queries'
 import { listToTree } from 'utils/helpers'
 
 const CategoryFilter = () => {
-    const [state, setState] = useState({})
-    const [collections, setCollections] = useState(undefined)
     const { data, loading, error } = useQuery(ALL_COLLECTIONS)
+    const [collections, setCollections] = useState(undefined)
 
     useEffect(() => {
         if (data && !error) {
-            setCollections(data.collections.items)
+            setCollections(listToTree(data.collections.items))
         }
     }, [data, error])
+
+    if (loading) return 'loading'
+    if (error) console.log(error)
 
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
@@ -30,41 +32,8 @@ const CategoryFilter = () => {
                 : null}
         </TreeItem>
     )
-    const handleChange = (event) => {
-        setState({ ...state, [event.target.name]: event.target.checked })
-    }
 
-    // if (collections) {
-    //     console.log(collections)
-    //     const a = listToTree(data.collections.items, {
-    //         idKey: 'id',
-    //         parentKey: 'parent',
-    //         childrenKey: 'children',
-    //     })
-    //     console.log(a)
-    // }
-
-    const datas = {
-        id: 'root',
-        name: 'Parent',
-        children: [
-            {
-                id: '1',
-                name: 'Child - 1',
-            },
-            {
-                id: '3',
-                name: 'Child - 3',
-                children: [
-                    {
-                        id: '4',
-                        name: 'Child - 4',
-                    },
-                ],
-            },
-        ],
-    }
-
+    console.log(collections)
     return (
         <article>
             <Accordion elevation={0}>
@@ -81,7 +50,10 @@ const CategoryFilter = () => {
                         defaultExpanded={['root']}
                         defaultExpandIcon={<ChevronRightIcon />}
                     >
-                        {renderTree(datas)}
+                        {collections &&
+                            collections.map((collection) =>
+                                renderTree(collection)
+                            )}
                     </TreeView>
                 </AccordionDetails>
             </Accordion>

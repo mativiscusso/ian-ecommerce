@@ -27,7 +27,7 @@ export default function AllProducts() {
     if (error) console.log(error)
 
     return (
-        <Container maxWidth="xl" className={mainProducts} disableGutters>
+        <Container maxWidth="xl" className={mainProducts}>
             <Grid container justify="center">
                 <Grid item xs={12} lg={3} xl={2}>
                     <ProductFilters />

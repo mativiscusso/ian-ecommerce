@@ -204,10 +204,6 @@ export const ALL_COLLECTIONS = gql`
                     name
                     slug
                 }
-                children {
-                    id
-                }
-
                 featuredAsset {
                     preview
                 }
