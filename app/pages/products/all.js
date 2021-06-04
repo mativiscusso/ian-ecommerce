@@ -15,7 +15,7 @@ export default function AllProducts() {
     const route = useRouter()
     return (
         <Container maxWidth="xl" className={mainProducts} disableGutters>
-            <Grid container alignContent="space-between">
+            <Grid container justify="center">
                 <Grid item xs={12} lg={3} xl={2}>
                     <ProductFilters />
                 </Grid>

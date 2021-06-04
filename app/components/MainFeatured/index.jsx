@@ -64,15 +64,8 @@ export default function MainFeaturedPost(props) {
                         <Typography variant="h5" color="inherit" paragraph>
                             {post.description}
                         </Typography>
-                        <Link
-                            variant="contained"
-                            color="primary"
-                            href="#"
-                            component="button"
-                        >
-                            <Button variant="contained" color="primary">
-                                {post.linkText}
-                            </Button>
+                        <Link color="inherit" href="#" component="button">
+                            {post.linkText}
                         </Link>
                     </div>
                 </Grid>

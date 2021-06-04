@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { SEARCH_RESULT_FRAGMENT } from './fragments'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -253,27 +254,12 @@ export const NEXT_STATES_ORDER = gql`
     }
 `
 export const SEARCH_PRODUCTS = gql`
+    ${SEARCH_RESULT_FRAGMENT}
     query SearchProducts($searchInput: SearchInput!) {
         search(input: $searchInput) {
             totalItems
             items {
-                sku
-                slug
-                productId
-                productName
-                productAsset {
-                    preview
-                }
-                productVariantId
-                productVariantName
-                productVariantAsset {
-                    preview
-                }
-                price {
-                    __typename
-                }
-                description
-                score
+                ...SearchResult
             }
         }
     }

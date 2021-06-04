@@ -84,3 +84,36 @@ export const PAYMENTS = gql`
         }
     }
 `
+export const SEARCH_RESULT_FRAGMENT = gql`
+    fragment SearchResult on SearchResult {
+        productId
+        productName
+        description
+        description
+        slug
+        sku
+        currencyCode
+        productAsset {
+            id
+            preview
+        }
+        price {
+            ... on SinglePrice {
+                value
+            }
+            ... on PriceRange {
+                min
+                max
+            }
+        }
+        priceWithTax {
+            ... on SinglePrice {
+                value
+            }
+            ... on PriceRange {
+                min
+                max
+            }
+        }
+    }
+`

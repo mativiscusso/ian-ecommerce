@@ -17,20 +17,23 @@ export default function AllProducts() {
     const router = useRouter()
     const { category } = router.query
 
-    const { data, loading, error } = useQuery(SEARCH_PRODUCTS)
+    const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
+        variables: {
+            searchInput: { collectionSlug: category, groupByProduct: true },
+        },
+    })
 
     if (loading) return 'loading'
     if (error) console.log(error)
 
-    console.log(category, data)
     return (
         <Container maxWidth="xl" className={mainProducts} disableGutters>
-            <Grid container alignContent="space-between">
+            <Grid container justify="center">
                 <Grid item xs={12} lg={3} xl={2}>
                     <ProductFilters />
                 </Grid>
                 <Grid item xs={12} lg={8} xl={10}>
-                    <ProductsList />
+                    <ProductsList data={data} />
                 </Grid>
             </Grid>
         </Container>

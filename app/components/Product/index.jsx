@@ -53,14 +53,15 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
+    console.log(props)
     return (
         <Card className={classes.root} elevation={0}>
-            <Link href={`/products/${props.id}`}>
+            <Link href={`/products/${props.productId}`}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
-                        image={formatURLImage(props.assets[0].source)}
-                        title={props.name}
+                        image={formatURLImage(props.productAsset.preview)}
+                        title={props.productName}
                     />
 
                     <CardContent>
@@ -70,7 +71,7 @@ export default function Product(props) {
                             color="textPrimary"
                             className={classes.productName}
                         >
-                            {props.name}
+                            {props.productName}
                         </Typography>
 
                         <Typography
@@ -79,14 +80,14 @@ export default function Product(props) {
                             color="textPrimary"
                             className={classes.productPrice}
                         >
-                            ${props.variants[0].price}
+                            ${props.priceWithTax.max}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
             </Link>
             <CardActions>
                 <QuickView {...props} />
-                <Link href={`/products/${props.id}`}>
+                <Link href={`/products/${props.productId}`}>
                     <a style={{ width: '100%' }}>
                         <Button variant="outlined" color="primary" fullWidth>
                             COMPRAR

@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function Header(props) {
+export default function Header() {
     const classes = useStyles()
     const [collections, setCollections] = useState(undefined)
     const { data, loading, error } = useQuery(ALL_COLLECTIONS)
@@ -54,7 +54,7 @@ export default function Header(props) {
                             noWrap
                             key={collection.name}
                             variant="body2"
-                            href={`/products/all${collection.slug}`}
+                            href={`/products/category/${collection.slug}`}
                         >
                             <a className={classes.toolbarLink}>
                                 {collection.name}
