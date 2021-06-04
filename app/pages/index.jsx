@@ -4,6 +4,10 @@ import Header from 'components/Header'
 import MainFeatured from 'components/MainFeatured'
 import ProductList from 'components/ProductList'
 
+import { useQuery } from '@apollo/client'
+
+import { SEARCH_PRODUCTS } from 'graphql/queries'
+
 const mainFeaturedPost = {
     title: 'SUPER OFERTAS',
     description:
@@ -12,27 +16,31 @@ const mainFeaturedPost = {
     imgText: 'main image description',
     linkText: 'Seguir leyendo',
 }
-const sections = [
-    { title: 'Technology', url: '#' },
-    { title: 'Design', url: '#' },
-    { title: 'Culture', url: '#' },
-    { title: 'Business', url: '#' },
-    { title: 'Politics', url: '#' },
-    { title: 'Opinion', url: '#' },
-    { title: 'Science', url: '#' },
-    { title: 'Health', url: '#' },
-    { title: 'Style', url: '#' },
-    { title: 'Travel', url: '#' },
-]
 
 export default function Blog() {
+    const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
+        variables: {
+            input: { term: '', groupByProduct: true },
+        },
+    })
+    if (loading) {
+        return <h1>loading...</h1>
+    }
+
+    if (error) {
+        console.dir(error)
+        return <h1> error </h1>
+    }
+
     return (
         <>
             <Container maxWidth={false} disableGutters>
-                <Header title="E-Commerce" sections={sections} />
+                <Header title="E-Commerce" />
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
-                    <ProductList />
+                    <Container maxWidth={false}>
+                        <ProductList data={data} />
+                    </Container>
                 </main>
             </Container>
         </>

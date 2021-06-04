@@ -60,7 +60,7 @@ const UserItem = ({ user }) => {
                         color="inherit"
                         style={{ marginLeft: 10 }}
                     >
-                        {splitUsername(user.me.identifier)}
+                        Mi Cuenta
                     </Typography>
                 </IconButton>
                 <Popper
@@ -87,8 +87,12 @@ const UserItem = ({ user }) => {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
+                                        <MenuItem>
+                                            Hola,{' '}
+                                            {splitUsername(user.me.identifier)}
+                                        </MenuItem>
                                         <MenuItem onClick={handleClose}>
-                                            Mi Cuenta
+                                            Perfil
                                         </MenuItem>
                                         <MenuItem onClick={handleLogout}>
                                             Logout

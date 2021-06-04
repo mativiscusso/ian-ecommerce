@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
+import { Button } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
     mainFeaturedPost: {
@@ -48,11 +49,6 @@ export default function MainFeaturedPost(props) {
             className={classes.mainFeaturedPost}
             style={{ backgroundImage: `url(${post.image})` }}
         >
-            {/* <img
-                style={{ display: 'none' }}
-                src={post.image}
-                alt={post.imageText}
-            /> */}
             <div className={classes.overlay} />
             <Grid container>
                 <Grid item md={6}>
@@ -68,12 +64,7 @@ export default function MainFeaturedPost(props) {
                         <Typography variant="h5" color="inherit" paragraph>
                             {post.description}
                         </Typography>
-                        <Link
-                            variant="contained"
-                            color="primary"
-                            href="#"
-                            component="button"
-                        >
+                        <Link color="inherit" href="#" component="button">
                             {post.linkText}
                         </Link>
                     </div>

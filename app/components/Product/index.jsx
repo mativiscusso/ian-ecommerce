@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from '../ProductQuickView'
 import Link from 'next/link'
-import { formatURLImage } from 'helpers'
+import { formatURLImage } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,40 +55,38 @@ export default function Product(props) {
     const classes = useStyles()
     return (
         <Card className={classes.root} elevation={0}>
-            <Link href={`/products/${props.id}`}>
-                <a>
-                    <CardActionArea>
-                        <CardMedia
-                            className={classes.media}
-                            image={formatURLImage(props.assets[0].source)}
-                            title={props.name}
-                        />
+            <Link href={`/products/${props.productId}`}>
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={formatURLImage(props.productAsset.preview)}
+                        title={props.productName}
+                    />
 
-                        <CardContent>
-                            <Typography
-                                gutterBottom
-                                variant="body1"
-                                color="textPrimary"
-                                className={classes.productName}
-                            >
-                                {props.name}
-                            </Typography>
+                    <CardContent>
+                        <Typography
+                            gutterBottom
+                            variant="body1"
+                            color="textPrimary"
+                            className={classes.productName}
+                        >
+                            {props.productName}
+                        </Typography>
 
-                            <Typography
-                                gutterBottom
-                                variant="h5"
-                                color="textPrimary"
-                                className={classes.productPrice}
-                            >
-                                ${props.variants[0].price}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </a>
+                        <Typography
+                            gutterBottom
+                            variant="h5"
+                            color="textPrimary"
+                            className={classes.productPrice}
+                        >
+                            ${props.priceWithTax.max}
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
             </Link>
             <CardActions>
                 <QuickView {...props} />
-                <Link href={`/products/${props.id}`}>
+                <Link href={`/products/${props.productId}`}>
                     <a style={{ width: '100%' }}>
                         <Button variant="outlined" color="primary" fullWidth>
                             COMPRAR

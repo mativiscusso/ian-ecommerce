@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import { SEARCH_RESULT_FRAGMENT } from './fragments'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -191,6 +192,34 @@ export const ORDER_ACTIVE = gql`
         }
     }
 `
+export const ALL_COLLECTIONS = gql`
+    {
+        collections {
+            items {
+                id
+                name
+                slug
+                parent {
+                    id
+                    name
+                    slug
+                }
+                featuredAsset {
+                    preview
+                }
+                assets {
+                    name
+                    source
+                    preview
+                }
+                productVariants {
+                    totalItems
+                }
+            }
+            totalItems
+        }
+    }
+`
 export const ORDER_SHIPPING_METHODS = gql`
     {
         eligibleShippingMethods {
@@ -219,4 +248,15 @@ export const NEXT_STATES_ORDER = gql`
     {
         nextOrderStates
     }
+`
+export const SEARCH_PRODUCTS = gql`
+    query SearchProducts($input: SearchInput!) {
+        search(input: $input) {
+            totalItems
+            items {
+                ...SearchResult
+            }
+        }
+    }
+    ${SEARCH_RESULT_FRAGMENT}
 `

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
+import DoneIcon from '@material-ui/icons/Done'
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart'
 import Button from '@material-ui/core/Button'
 
@@ -41,9 +41,9 @@ export default function ShopCartButton({ productId, quantity }) {
                     variant="outlined"
                     color="primary"
                     disabled={quantity === 0}
-                    startIcon={<AddShoppingCartIcon />}
+                    startIcon={<DoneIcon />}
                 >
-                    Producto agregado
+                    Agregado
                 </Button>
             ) : (
                 <Button
@@ -51,10 +51,10 @@ export default function ShopCartButton({ productId, quantity }) {
                     variant="contained"
                     color="primary"
                     disabled={quantity === 0}
-                    startIcon={<ShoppingCartIcon />}
+                    startIcon={<AddShoppingCartIcon />}
                     onClick={handleClick}
                 >
-                    Agregar al carrito
+                    Agregar
                 </Button>
             )}
         </>

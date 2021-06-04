@@ -48,8 +48,9 @@ const ColorFilter = () => {
                 </AccordionSummary>
                 <AccordionDetails className={colorsFlex}>
                     {colors &&
-                        colors.map((color) => (
+                        colors.map((color, i) => (
                             <button
+                                key={i + 'a'}
                                 className={colorButton}
                                 style={{
                                     backgroundColor: color,
