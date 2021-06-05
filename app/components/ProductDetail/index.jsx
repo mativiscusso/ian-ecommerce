@@ -10,6 +10,7 @@ import { TextField } from '@material-ui/core'
 import { useQuery } from '@apollo/client'
 import { ONE_PRODUCT } from 'graphql/queries'
 import { formatURLImage } from 'utils/helpers'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles({
     detailProduct: {
@@ -37,8 +38,15 @@ const ProductDetail = (props) => {
     const [quantity, setQuantity] = useState(1)
     const [product, setProduct] = useState(undefined)
 
+    const router = useRouter()
+    const { slug } = router.query
+    console.log(props.productId)
+    const variableProduct = props.productId
+        ? { id: props.productId }
+        : { slug: slug }
+
     const { data, loading, error } = useQuery(ONE_PRODUCT, {
-        variables: { id: props.productId },
+        variables: variableProduct,
     })
 
     useEffect(() => {

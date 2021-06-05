@@ -20,6 +20,7 @@ export const USER_REGISTER = `
     mutation Register($data: RegisterCustomerInput!) {
         registerCustomerAccount(input: $data) {
             __typename
+            ... on CurrentUser
         }
     }
 `

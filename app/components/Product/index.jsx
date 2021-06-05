@@ -55,7 +55,7 @@ export default function Product(props) {
     const classes = useStyles()
     return (
         <Card className={classes.root} elevation={0}>
-            <Link href={`/products/${props.productId}`}>
+            <Link href={`/products/${props.slug}`}>
                 <CardActionArea>
                     <CardMedia
                         className={classes.media}
