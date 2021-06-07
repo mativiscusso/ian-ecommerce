@@ -33,7 +33,6 @@ const CategoryFilter = () => {
         </TreeItem>
     )
 
-    console.log(collections)
     return (
         <article>
             <Accordion elevation={0}>

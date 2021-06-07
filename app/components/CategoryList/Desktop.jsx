@@ -8,14 +8,10 @@ import { useQuery } from '@apollo/client'
 import { listToTree } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
-    toolbar: {
-        borderBottom: `1px solid ${theme.palette.divider}`,
-    },
-    toolbarTitle: {
-        flex: 1,
-    },
     toolbarSecondary: {
         justifyContent: 'center',
+        marginTop: theme.spacing(8),
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
     toolbarLink: {
         padding: theme.spacing(3),
@@ -94,9 +90,7 @@ export default function Header() {
             >
                 {collections &&
                     collections.map((collection, i) => (
-                        <ul key={i + 'menu'} id="menu">
-                            {renderTree(collection)}
-                        </ul>
+                        <ul key={i + 'menu'}>{renderTree(collection)}</ul>
                     ))}
                 {collections && (
                     <li className={classes.parent}>

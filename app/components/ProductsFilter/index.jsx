@@ -9,8 +9,8 @@ export default function ProductFilters() {
             <Typography variant="h6" gutterBottom>
                 Filtrar por
             </Typography>
-            <ColorFilter />
             <CategoryFilter />
+            <ColorFilter />
             <PriceFilter />
         </section>
     )
