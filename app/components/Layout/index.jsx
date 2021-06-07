@@ -18,6 +18,11 @@ const globalStyles = css.global`
         font-weight: bolder;
         text-decoration: none !important;
     }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
 `
 export default function Layout({ children }) {
     const { mainGrid } = useStyles()

@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Link from 'next/link'
 import { ALL_COLLECTIONS } from 'graphql/queries'
 import { useQuery } from '@apollo/client'
-import { Button } from '@material-ui/core'
+import { listToTree } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     toolbar: {
@@ -15,15 +15,41 @@ const useStyles = makeStyles((theme) => ({
         flex: 1,
     },
     toolbarSecondary: {
-        justifyContent: 'space-between',
-        overflowX: 'auto',
+        justifyContent: 'center',
     },
     toolbarLink: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(3),
         flexShrink: 0,
         textTransform: 'uppercase',
         '&:hover': {
             cursor: 'pointer',
+        },
+    },
+    parent: {
+        display: 'block',
+        position: 'relative',
+
+        '&:hover > ul': {
+            display: 'block',
+            position: 'absolute',
+            padding: '10px 0 0 0',
+            width: 180,
+            lineHeight: 2,
+            zIndex: 1,
+            '& > li:hover > ul': {
+                display: 'block',
+                position: 'relative',
+                padding: '0 0 0 10px',
+                width: 180,
+                lineHeight: 2,
+                zIndex: 1,
+            },
+        },
+    },
+    child: {
+        display: 'none',
+        '& li': {
+            backgroundColor: '#fff',
         },
     },
 }))
@@ -35,9 +61,28 @@ export default function Header() {
 
     useEffect(() => {
         if (data && !error) {
-            setCollections(data.collections)
+            setCollections(listToTree(data.collections.items))
         }
     }, [data, error])
+
+    const renderTree = (nodes) => (
+        <li key={nodes.id} className={classes.parent}>
+            <Link
+                color="inherit"
+                noWrap
+                variant="body2"
+                href={`/products/category/${nodes.slug}`}
+            >
+                <a className={classes.toolbarLink}>{nodes.name}</a>
+            </Link>
+
+            {Array.isArray(nodes.children) ? (
+                <ul className={classes.child}>
+                    {nodes.children.map((node) => renderTree(node))}
+                </ul>
+            ) : null}
+        </li>
+    )
 
     console.log(collections)
     return (
@@ -48,28 +93,24 @@ export default function Header() {
                 className={classes.toolbarSecondary}
             >
                 {collections &&
-                    collections.items.map((collection) => (
+                    collections.map((collection, i) => (
+                        <ul key={i + 'menu'} id="menu">
+                            {renderTree(collection)}
+                        </ul>
+                    ))}
+                {collections && (
+                    <li className={classes.parent}>
                         <Link
                             color="inherit"
                             noWrap
-                            key={collection.name}
                             variant="body2"
-                            href={`/products/category/${collection.slug}`}
+                            href="/products/search?q="
                         >
                             <a className={classes.toolbarLink}>
-                                {collection.name}
+                                ALL CATEGORIES
                             </a>
                         </Link>
-                    ))}
-                {collections && (
-                    <Link
-                        color="inherit"
-                        noWrap
-                        variant="body2"
-                        href="/products/search?q="
-                    >
-                        <a className={classes.toolbarLink}>ALL CATEGORIES</a>
-                    </Link>
+                    </li>
                 )}
             </Toolbar>
         </>
