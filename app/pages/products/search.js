@@ -1,9 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Container, Grid, Typography } from '@material-ui/core'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
+import { Container, Grid } from '@material-ui/core'
 
 import ProductsList from 'components/ProductList'
 import ProductFilters from 'components/ProductsFilter'
@@ -13,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useQuery } from '@apollo/client'
 
 import { SEARCH_PRODUCTS } from 'graphql/queries'
+import OrderFilter from 'components/ProductsFilter/OrderFilter'
 
 const useStyles = makeStyles((theme) => ({
     mainProducts: {
@@ -26,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AllProducts() {
     const [products, setProducts] = useState(undefined)
-    const [order, setOrder] = useState('')
 
     const { mainProducts } = useStyles()
     const router = useRouter()
@@ -50,13 +46,8 @@ export default function AllProducts() {
         }
     }, [q, data, error])
 
-    if (loading) {
-        return <h1>loading...</h1>
-    }
+    if (loading) return 'loading'
 
-    const handleChange = (event) => {
-        setOrder(event.target.value)
-    }
     return (
         <Container maxWidth="xl" className={mainProducts}>
             <Grid container justify="center">
@@ -64,46 +55,12 @@ export default function AllProducts() {
                     <ProductFilters />
                 </Grid>
                 <Grid item xs={12} lg={8} xl={10}>
-                    <Grid
-                        container
-                        alignItems="flex-end"
-                        justify="space-between"
-                    >
-                        <Grid item xs={12} lg={6}>
-                            <Typography variant="subtitle2">
-                                Su búsqueda arrojó{' '}
-                                {products && products.search.totalItems}{' '}
-                                resultados
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} lg={6} style={{ textAlign: 'end' }}>
-                            <FormControl style={{ width: 200 }}>
-                                <InputLabel id="demo-simple-select-label">
-                                    Ordenar por
-                                </InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={order}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="name:ASC">
-                                        Nombre A - Z
-                                    </MenuItem>
-                                    <MenuItem value="name:DESC">
-                                        Nombre Z - A
-                                    </MenuItem>
-                                    <MenuItem value="price:ASC">
-                                        Precio Menor - Mayor
-                                    </MenuItem>
-                                    <MenuItem value="price:ASC">
-                                        Precio Mayor - Menor
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
-                    <ProductsList data={data} />
+                    <OrderFilter
+                        products={products}
+                        setProducts={setProducts}
+                        queryString={q}
+                    />
+                    <ProductsList data={products} />
                 </Grid>
             </Grid>
         </Container>

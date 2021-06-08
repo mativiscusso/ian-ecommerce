@@ -80,7 +80,6 @@ export default function Header() {
         </li>
     )
 
-    console.log(collections)
     return (
         <>
             <Toolbar

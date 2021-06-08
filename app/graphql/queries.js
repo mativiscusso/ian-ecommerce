@@ -48,6 +48,10 @@ export const ONE_PRODUCT = gql`
                 sku
                 price
                 productId
+                options {
+                    code
+                    name
+                }
                 stockLevel
             }
             facetValues {
@@ -55,6 +59,10 @@ export const ONE_PRODUCT = gql`
                 facet {
                     name
                 }
+            }
+            collections {
+                id
+                slug
             }
         }
     }

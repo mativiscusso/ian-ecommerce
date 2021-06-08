@@ -7,7 +7,7 @@ import { ONE_PRODUCT } from 'graphql/queries'
 const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up('lg')]: {
-            marginTop: 150,
+            marginTop: 50,
         },
     },
 }))

@@ -40,7 +40,6 @@ const ProductDetail = (props) => {
 
     const router = useRouter()
     const { slug } = router.query
-    console.log(props.productId)
     const variableProduct = props.productId
         ? { id: props.productId }
         : { slug: slug }

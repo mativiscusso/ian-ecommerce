@@ -1,18 +1,15 @@
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-import { Container, Grid, Typography } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import MenuItem from '@material-ui/core/MenuItem'
-import FormControl from '@material-ui/core/FormControl'
-import Select from '@material-ui/core/Select'
-import InputLabel from '@material-ui/core/InputLabel'
 
 import ProductsList from 'components/ProductList'
 import ProductFilters from 'components/ProductsFilter'
 
-import { useQuery } from '@apollo/client'
+import { useLazyQuery, useQuery } from '@apollo/client'
 import { SEARCH_PRODUCTS } from 'graphql/queries'
+import OrderFilter from 'components/ProductsFilter/OrderFilter'
 
 const useStyles = makeStyles((theme) => ({
     mainProducts: {
@@ -24,9 +21,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function AllProducts() {
-    const [order, setOrder] = useState('')
+    const [products, setProducts] = useState(undefined)
+    const [orderBy, setOrderBy] = useState('')
 
     const { mainProducts } = useStyles()
+
     const router = useRouter()
     const { category } = router.query
 
@@ -35,12 +34,32 @@ export default function AllProducts() {
             input: { collectionSlug: category, groupByProduct: true },
         },
     })
+    const [sortProducts] = useLazyQuery(SEARCH_PRODUCTS, {
+        variables: {
+            input: { collectionSlug: category, groupByProduct: true },
+        },
+    })
 
     if (loading) return 'loading'
     if (error) console.log(error)
 
+    useEffect(() => {
+        if (error) {
+            console.dir(error)
+            return <h1> error </h1>
+        }
+
+        if (data && !error) {
+            setProducts(data)
+        }
+    }, [data, error])
+
+    if (loading) {
+        return <h1>loading...</h1>
+    }
+
     const handleChange = (event) => {
-        setOrder(event.target.value)
+        setOrderBy(event.target.value)
     }
 
     return (
@@ -50,44 +69,11 @@ export default function AllProducts() {
                     <ProductFilters />
                 </Grid>
                 <Grid item xs={12} lg={8} xl={10}>
-                    <Grid
-                        container
-                        alignItems="flex-end"
-                        justify="space-between"
-                    >
-                        <Grid item xs={12} lg={6}>
-                            <Typography variant="subtitle2">
-                                Su búsqueda arrojó {data.search.totalItems}{' '}
-                                resultados
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} lg={6} style={{ textAlign: 'end' }}>
-                            <FormControl style={{ width: 200 }}>
-                                <InputLabel id="demo-simple-select-label">
-                                    Ordenar por
-                                </InputLabel>
-                                <Select
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={order}
-                                    onChange={handleChange}
-                                >
-                                    <MenuItem value="name:ASC">
-                                        Nombre A - Z
-                                    </MenuItem>
-                                    <MenuItem value="name:DESC">
-                                        Nombre Z - A
-                                    </MenuItem>
-                                    <MenuItem value="price:ASC">
-                                        Precio Menor - Mayor
-                                    </MenuItem>
-                                    <MenuItem value="price:ASC">
-                                        Precio Mayor - Menor
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
+                    <OrderFilter
+                        products={products}
+                        handleChange={handleChange}
+                        orderBy={orderBy}
+                    />
                     <ProductsList data={data} />
                 </Grid>
             </Grid>

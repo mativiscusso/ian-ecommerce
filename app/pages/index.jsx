@@ -20,7 +20,7 @@ const mainFeaturedPost = {
 export default function Blog() {
     const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
         variables: {
-            input: { term: '', groupByProduct: true },
+            input: { term: '', groupByProduct: true, skip: 25 },
         },
     })
     if (loading) {

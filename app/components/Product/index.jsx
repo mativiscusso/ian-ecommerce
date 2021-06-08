@@ -17,10 +17,11 @@ const useStyles = makeStyles((theme) => ({
     root: {
         textAlign: 'left',
         transition: 'all 0.1s',
-        height: '100%',
+        height: '80%',
         '&:hover': {
-            transform: 'scale(1.05) translateY(-20px)',
+            transform: 'scale(1.01) translateY(-5px)',
             zIndex: 1000,
+            height: '100%',
         },
 
         marginBottom: '1rem',
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
+
     return (
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.slug}`}>

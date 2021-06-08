@@ -13,6 +13,15 @@ export const USER_LOGIN = `
     mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
         login(username: $user, password: $password, rememberMe: $rememberMe) {
             __typename
+            ... on CurrentUser {
+                id
+                identifier
+                channels {
+                    id
+                    token
+                    code
+                }
+            }
         }
     }
 `
@@ -20,7 +29,7 @@ export const USER_REGISTER = `
     mutation Register($data: RegisterCustomerInput!) {
         registerCustomerAccount(input: $data) {
             __typename
-            ... on CurrentUser
+            
         }
     }
 `
