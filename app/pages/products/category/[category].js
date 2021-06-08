@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 import ProductsList from 'components/ProductList'
 import ProductFilters from 'components/ProductsFilter'
 
-import { useLazyQuery, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { SEARCH_PRODUCTS } from 'graphql/queries'
 import OrderFilter from 'components/ProductsFilter/OrderFilter'
 
@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AllProducts() {
     const [products, setProducts] = useState(undefined)
-    const [orderBy, setOrderBy] = useState('')
 
     const { mainProducts } = useStyles()
 
@@ -34,14 +33,6 @@ export default function AllProducts() {
             input: { collectionSlug: category, groupByProduct: true },
         },
     })
-    const [sortProducts] = useLazyQuery(SEARCH_PRODUCTS, {
-        variables: {
-            input: { collectionSlug: category, groupByProduct: true },
-        },
-    })
-
-    if (loading) return 'loading'
-    if (error) console.log(error)
 
     useEffect(() => {
         if (error) {
@@ -52,15 +43,10 @@ export default function AllProducts() {
         if (data && !error) {
             setProducts(data)
         }
-    }, [data, error])
+    }, [category, data, error])
 
-    if (loading) {
-        return <h1>loading...</h1>
-    }
-
-    const handleChange = (event) => {
-        setOrderBy(event.target.value)
-    }
+    if (loading) return 'loading'
+    if (error) console.log(error)
 
     return (
         <Container maxWidth="xl" className={mainProducts}>
@@ -71,10 +57,10 @@ export default function AllProducts() {
                 <Grid item xs={12} lg={8} xl={10}>
                     <OrderFilter
                         products={products}
-                        handleChange={handleChange}
-                        orderBy={orderBy}
+                        setProducts={setProducts}
+                        collectionSlug={category}
                     />
-                    <ProductsList data={data} />
+                    <ProductsList data={products} />
                 </Grid>
             </Grid>
         </Container>

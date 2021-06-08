@@ -9,7 +9,12 @@ import InputLabel from '@material-ui/core/InputLabel'
 import { useLazyQuery } from '@apollo/client'
 import { SEARCH_PRODUCTS } from 'graphql/queries'
 
-export default function OrderFilter({ products, setProducts, queryString }) {
+export default function OrderFilter({
+    products,
+    setProducts,
+    queryString = '',
+    collectionSlug = '',
+}) {
     const [orderBy, setOrderBy] = useState('')
 
     const [
@@ -37,6 +42,7 @@ export default function OrderFilter({ products, setProducts, queryString }) {
                 variables: {
                     input: {
                         term: queryString,
+                        collectionSlug: collectionSlug,
                         groupByProduct: true,
                         sort: formatValueOrderBy(e.target.value),
                     },
