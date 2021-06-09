@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 
-import { Grid, Typography } from '@material-ui/core'
+import {
+    CircularProgress,
+    Container,
+    Grid,
+    Typography,
+} from '@material-ui/core'
 import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
@@ -28,7 +33,7 @@ export default function OrderFilter({
         }
     }, [dataSort, errorSort])
 
-    if (loadingSort) return 'loading'
+    if (loadingSort) return <CircularProgress />
 
     const formatValueOrderBy = (value) => {
         const splitted = value.split(':')
@@ -52,35 +57,37 @@ export default function OrderFilter({
     }
 
     return (
-        <Grid container alignItems="flex-end" justify="space-between">
-            <Grid item xs={12} lg={6}>
-                <Typography variant="subtitle2">
-                    Su búsqueda arrojó {products && products.search.totalItems}{' '}
-                    resultados
-                </Typography>
+        <Container style={{ margin: 10 }}>
+            <Grid container alignItems="flex-end" justify="space-between">
+                <Grid item xs={12} lg={6}>
+                    <Typography variant="subtitle2">
+                        Su búsqueda arrojó{' '}
+                        {products && products.search.totalItems} resultados
+                    </Typography>
+                </Grid>
+                <Grid item xs={12} lg={6} style={{ textAlign: 'end' }}>
+                    <FormControl style={{ width: 200 }}>
+                        <InputLabel id="demo-simple-select-label">
+                            Ordenar por
+                        </InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={orderBy}
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="name:ASC">Nombre A - Z</MenuItem>
+                            <MenuItem value="name:DESC">Nombre Z - A</MenuItem>
+                            <MenuItem value="price:ASC">
+                                Precio Menor - Mayor
+                            </MenuItem>
+                            <MenuItem value="price:DESC">
+                                Precio Mayor - Menor
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
             </Grid>
-            <Grid item xs={12} lg={6} style={{ textAlign: 'end' }}>
-                <FormControl style={{ width: 200 }}>
-                    <InputLabel id="demo-simple-select-label">
-                        Ordenar por
-                    </InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={orderBy}
-                        onChange={handleChange}
-                    >
-                        <MenuItem value="name:ASC">Nombre A - Z</MenuItem>
-                        <MenuItem value="name:DESC">Nombre Z - A</MenuItem>
-                        <MenuItem value="price:ASC">
-                            Precio Menor - Mayor
-                        </MenuItem>
-                        <MenuItem value="price:DESC">
-                            Precio Mayor - Menor
-                        </MenuItem>
-                    </Select>
-                </FormControl>
-            </Grid>
-        </Grid>
+        </Container>
     )
 }

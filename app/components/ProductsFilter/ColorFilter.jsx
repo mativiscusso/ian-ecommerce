@@ -34,7 +34,7 @@ const colors = [
     '#202020',
 ]
 
-const ColorFilter = () => {
+const ColorFilter = ({ products }) => {
     const { colorsFlex, colorButton } = useStyles()
     return (
         <article>

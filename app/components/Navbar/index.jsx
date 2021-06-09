@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar() {
-    const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
+    const { logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles()
     const [isCheckoutPage, setIsCheckoutPage] = useState(false)
 
@@ -76,6 +76,7 @@ export default function Navbar() {
     const { user, userLoading } = useContext(UserContext)
 
     const router = useRouter()
+    
     useEffect(() => {
         setIsCheckoutPage(router.pathname.includes('checkout'))
     }, [router])

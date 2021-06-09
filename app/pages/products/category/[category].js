@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 
-import { Container, Grid } from '@material-ui/core'
+import { CircularProgress, Container, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import ProductsList from 'components/ProductList'
@@ -45,14 +45,19 @@ export default function AllProducts() {
         }
     }, [category, data, error])
 
-    if (loading) return 'loading'
+    if (loading) return <CircularProgress />
+
     if (error) console.log(error)
 
     return (
         <Container maxWidth="xl" className={mainProducts}>
             <Grid container justify="center">
                 <Grid item xs={12} lg={3} xl={2}>
-                    <ProductFilters />
+                    <ProductFilters
+                        products={products}
+                        setProducts={setProducts}
+                        collectionSlug={category}
+                    />
                 </Grid>
                 <Grid item xs={12} lg={8} xl={10}>
                     <OrderFilter

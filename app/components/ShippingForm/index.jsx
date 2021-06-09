@@ -12,6 +12,7 @@ import {
     ORDER_SHIPPING_METHODS,
 } from 'graphql/queries'
 import { SET_SHIPPING_METHOD_ORDER } from 'graphql/mutations'
+import { CircularProgress } from '@material-ui/core'
 
 export default function ShippingsForm({
     handleNext,
@@ -44,8 +45,8 @@ export default function ShippingsForm({
         }
     }, [dataPayments, errorPayments])
 
-    if (loading) return 'loading'
-    if (loadingPayments) return 'loading'
+    if (loading) return <CircularProgress/>
+    if (loadingPayments) return <CircularProgress/
 
     const handleClickNext = async () => {
         await handleNext()

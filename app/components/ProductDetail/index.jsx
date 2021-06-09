@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import ShopCartButton from 'components/Product/ShopCartButton'
 import Carousel from 'components/Carousel'
-import { TextField } from '@material-ui/core'
+import { CircularProgress, TextField } from '@material-ui/core'
 import { useQuery } from '@apollo/client'
 import { ONE_PRODUCT } from 'graphql/queries'
 import { formatURLImage } from 'utils/helpers'
@@ -54,8 +54,7 @@ const ProductDetail = (props) => {
         }
     }, [data, error])
 
-    if (loading) return 'loading'
-    console.log(product)
+    if (loading) return <CircularProgress />
 
     // const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (

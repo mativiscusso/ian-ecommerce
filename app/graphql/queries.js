@@ -264,6 +264,17 @@ export const SEARCH_PRODUCTS = gql`
             items {
                 ...SearchResult
             }
+            facetValues {
+                count
+                facetValue {
+                    id
+                    name
+                    facet {
+                        id
+                        name
+                    }
+                }
+            }
         }
     }
     ${SEARCH_RESULT_FRAGMENT}
