@@ -2,36 +2,73 @@ import { gql } from '@apollo/client'
 import { CART_FRAGMENT, PAYMENTS } from './fragments'
 
 export const USER_ACCOUNT_VERIFY = `
-    mutation verifyCustomerAccount($token: String!, $password: String) {
-        verifyCustomerAccount(token: $token, password: $password) {
-            __typename
+mutation verifyCustomerAccount($token: String!, $password: String) {
+    verifyCustomerAccount(token: $token, password: $password) {
+        __typename
+        ... on CurrentUser {
+        id
+        identifier
+        }
+        ... on VerificationTokenInvalidError {
+        message
+        }
+        ... on VerificationTokenExpiredError {
+        message
+        }
+        ... on MissingPasswordError {
+        
+        message
+        }
+        ... on PasswordAlreadySetError {
+        message
+        }
+        ... on NativeAuthStrategyError {
+        message
         }
     }
+}
 `
 
 export const USER_LOGIN = `
-    mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
-        login(username: $user, password: $password, rememberMe: $rememberMe) {
-            __typename
-            ... on CurrentUser {
+mutation login($user: String!, $password: String!, $rememberMe: Boolean) {
+    login(username: $user, password: $password, rememberMe: $rememberMe) {
+        __typename
+        ... on CurrentUser {
+            id
+            identifier
+            channels {
                 id
-                identifier
-                channels {
-                    id
-                    token
-                    code
-                }
+                token
+                code
             }
         }
-    }
-`
-export const USER_REGISTER = `
-    mutation Register($data: RegisterCustomerInput!) {
-        registerCustomerAccount(input: $data) {
-            __typename
-            
+        ... on InvalidCredentialsError {
+        authenticationError
+        message
+        }
+        ... on NotVerifiedError {
+        errorCode
+        message
+        }
+        ... on NativeAuthStrategyError {
+        message
         }
     }
+}
+`
+export const USER_REGISTER = `
+mutation Register($data: RegisterCustomerInput!) {
+    registerCustomerAccount(input: $data) {
+        __typename
+        ... on Success {
+            success
+        }
+        ... on ErrorResult {
+          errorCode
+          message
+        }
+    }
+}
 `
 
 export const USER_LOGOUT = `
@@ -61,7 +98,17 @@ export const ADD_ITEM_CART = gql`
     mutation addItem($productId: ID!, $quantity: Int!) {
         addItemToOrder(productVariantId: $productId, quantity: $quantity) {
             __typename
-            ...Cart
+            ... on InsufficientStockError {
+                quantityAvailable
+                message
+                order {
+                    ...Cart
+                }
+            }
+            ... on ErrorResult {
+                errorCode
+                message
+            }
         }
     }
 `
