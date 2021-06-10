@@ -66,7 +66,7 @@ export default function OrderFilter({
                     </Typography>
                 </Grid>
                 <Grid item xs={12} lg={6} style={{ textAlign: 'end' }}>
-                    <FormControl style={{ width: 200 }}>
+                    <FormControl style={{ width: 200, textAlign: 'center' }}>
                         <InputLabel id="demo-simple-select-label">
                             Ordenar por
                         </InputLabel>

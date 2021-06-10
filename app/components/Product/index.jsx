@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from '../ProductQuickView'
+import NoPhoto from './NoPhoto'
 import Link from 'next/link'
 import { formatURLImage } from 'utils/helpers'
 
@@ -59,11 +60,15 @@ export default function Product(props) {
         <Card className={classes.root} elevation={0}>
             <Link href={`/products/${props.slug}`}>
                 <CardActionArea>
-                    <CardMedia
-                        className={classes.media}
-                        image={formatURLImage(props.productAsset.preview)}
-                        title={props.productName}
-                    />
+                    {props.productAsset?.preview ? (
+                        <CardMedia
+                            className={classes.media}
+                            image={formatURLImage(props.productAsset.preview)}
+                            title={props.productName}
+                        />
+                    ) : (
+                        <NoPhoto />
+                    )}
 
                     <CardContent>
                         <Typography

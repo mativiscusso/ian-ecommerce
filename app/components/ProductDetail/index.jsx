@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
+import { CircularProgress, TextField } from '@material-ui/core'
+
 import ShopCartButton from 'components/Product/ShopCartButton'
 import Carousel from 'components/Carousel'
-import { CircularProgress, TextField } from '@material-ui/core'
+import NoPhoto from 'components/Product/NoPhoto'
+
 import { useQuery } from '@apollo/client'
 import { ONE_PRODUCT } from 'graphql/queries'
-import { formatURLImage } from 'utils/helpers'
-import { useRouter } from 'next/router'
 
 const useStyles = makeStyles({
     detailProduct: {
@@ -55,21 +58,15 @@ const ProductDetail = (props) => {
     }, [data, error])
 
     if (loading) return <CircularProgress />
-
-    // const image = props.assets[0].source.replace(/[\\]+/g, '/')
     return (
         <Container>
             {product && (
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={5}>
-                        {product.assets ? (
+                        {product.assets.length > 0 ? (
                             <Carousel images={product.assets} />
                         ) : (
-                            <img
-                                src={formatURLImage(product.assets[0].source)}
-                                alt="Product"
-                                className={classes.imgFluid}
-                            />
+                            <NoPhoto />
                         )}
                     </Grid>
                     <Grid

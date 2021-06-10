@@ -95,21 +95,38 @@ const CategoryFilter = ({
                             <AccordionDetails>
                                 <FormGroup>
                                     {facet.values.map((value) => (
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    size="small"
-                                                    checked={state.checkedA}
-                                                    onChange={handleChange}
-                                                    name={value.facetValue.name}
-                                                    value={value.facetValue.id}
-                                                />
-                                            }
-                                            label={value.facetValue.name}
-                                            key={
-                                                value.facetValue.name + 'facet'
-                                            }
-                                        />
+                                        <div
+                                            key={value.facetValue.name + 'root'}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        size="small"
+                                                        checked={state.checkedA}
+                                                        onChange={handleChange}
+                                                        name={
+                                                            value.facetValue
+                                                                .name
+                                                        }
+                                                        value={
+                                                            value.facetValue.id
+                                                        }
+                                                    />
+                                                }
+                                                label={value.facetValue.name}
+                                                key={
+                                                    value.facetValue.name +
+                                                    'facet'
+                                                }
+                                            />
+                                            <Typography variant="caption">
+                                                ({value.count})
+                                            </Typography>
+                                        </div>
                                     ))}
                                 </FormGroup>
                             </AccordionDetails>
