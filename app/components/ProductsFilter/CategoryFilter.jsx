@@ -24,7 +24,7 @@ const CategoryFilter = ({
     const [facets, setFacets] = useState(undefined)
     const [state, setState] = useState(false)
     const [facetsSelected, setFacetsSelected] = useState([])
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 900)
+    const [isMobile] = useState(window.innerWidth < 900)
 
     const [filterByFacet, { data, loading, error }] =
         useLazyQuery(SEARCH_PRODUCTS)
@@ -64,13 +64,15 @@ const CategoryFilter = ({
     }
 
     const handleDelete = (chipToDelete) => () => {
+        console.log(chipToDelete)
         setFacetsSelected((prevState) =>
             prevState.filter((chip) => chip !== chipToDelete.key)
         )
+        setState({ ...state, [chipToDelete.label]: false })
     }
 
     if (loading) return <CircularProgress />
-
+    console.log(state)
     return (
         <article>
             {facets && facetsSelected.length > 0 && (
@@ -106,7 +108,24 @@ const CategoryFilter = ({
                                                 control={
                                                     <Checkbox
                                                         size="small"
-                                                        checked={state.checkedA}
+                                                        checked={
+                                                            state[
+                                                                value.facetValue
+                                                                    .name
+                                                            ]
+                                                                ? state[
+                                                                      value
+                                                                          .facetValue
+                                                                          .name
+                                                                  ]
+                                                                : false
+                                                        }
+                                                        disabled={
+                                                            state[
+                                                                value.facetValue
+                                                                    .name
+                                                            ]
+                                                        }
                                                         onChange={handleChange}
                                                         name={
                                                             value.facetValue
