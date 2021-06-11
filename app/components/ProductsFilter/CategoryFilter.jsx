@@ -72,7 +72,6 @@ const CategoryFilter = ({
     }
 
     if (loading) return <CircularProgress />
-    console.log(state)
     return (
         <article>
             {facets && facetsSelected.length > 0 && (

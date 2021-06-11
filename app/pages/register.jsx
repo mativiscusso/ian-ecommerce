@@ -19,7 +19,7 @@ import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(4),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -39,14 +39,13 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register() {
     const classes = useStyles()
-    const [alertOpen, setAlertOpen] = useState(false)
     const [firstName, setFirstName] = useState(null)
     const [lastName, setLastName] = useState(null)
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
     const [statusLogin, setStatusLogin] = useState(false)
 
-    const { register, statusRequest } = useContext(UserContext)
+    const { register, statusRequest, alertOpen } = useContext(UserContext)
 
     useEffect(() => {
         if (statusRequest) {
@@ -68,7 +67,7 @@ export default function Register() {
     const handlePassword = (e) => {
         setPassword(e.target.value)
     }
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
         const user = {
             emailAddress: email,
@@ -82,9 +81,9 @@ export default function Register() {
             user.lastName &&
             user.password
         ) {
-            await register(USER_REGISTER, user)
+            const result = register(USER_REGISTER, user)
+            console.log(result)
             if (statusLogin.status) {
-                setAlertOpen(true)
                 setTimeout(() => {
                     router.push('/')
                 }, 2500)
@@ -96,12 +95,10 @@ export default function Register() {
             })
         }
     }
+    console.log(alertOpen, statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
                 <Typography component="h1" variant="h5">
                     Registro
                 </Typography>
