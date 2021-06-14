@@ -12,7 +12,7 @@ import Button from '@material-ui/core/Button'
 import QuickView from '../ProductQuickView'
 import NoPhoto from './NoPhoto'
 import Link from 'next/link'
-import { formatURLImage } from 'utils/helpers'
+import { formatURLImage, toThousand } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -86,7 +86,7 @@ export default function Product(props) {
                             color="textPrimary"
                             className={classes.productPrice}
                         >
-                            ${props.priceWithTax.max}
+                            ${toThousand(props.priceWithTax.max)}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client'
-import { CART_FRAGMENT, SEARCH_RESULT_FRAGMENT } from './fragments'
+import {
+    ASSETS_FRAGMENT,
+    CART_FRAGMENT,
+    SEARCH_RESULT_FRAGMENT,
+} from './fragments'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -32,40 +36,47 @@ export const ALL_PRODUCTS = gql`
     }
 `
 export const ONE_PRODUCT = gql`
-    query oneProduct($slug: String, $id: ID) {
-        product(slug: $slug, id: $id) {
+    query oneProduct($slug: String) {
+        product(slug: $slug) {
             id
             name
             description
-            assets {
+            variants {
                 id
                 name
-                preview
-                source
-            }
-            variants {
-                name
-                sku
-                price
-                productId
                 options {
                     code
                     name
+                    __typename
                 }
-                stockLevel
+                price
+                priceWithTax
+                sku
+                __typename
             }
-            facetValues {
-                name
-                facet {
-                    name
-                }
+            featuredAsset {
+                ...Asset
+                __typename
+            }
+            assets {
+                ...Asset
+                __typename
             }
             collections {
                 id
                 slug
+                breadcrumbs {
+                    id
+                    name
+                    slug
+                    __typename
+                }
+                __typename
             }
+            __typename
         }
     }
+    ${ASSETS_FRAGMENT}
 `
 
 export const USER_ACTIVE = gql`

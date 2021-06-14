@@ -99,3 +99,6 @@ export const mappedFacetsSelected = (facetValues, facetsSelected) => {
         facetSelectedFormated(facetValues, facet)
     )
 }
+
+export const toThousand = (n) =>
+    n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')

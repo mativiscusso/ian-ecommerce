@@ -17,7 +17,7 @@ export default function CarouselCustom({ images }) {
         >
             {images &&
                 images.map((item, i) => (
-                    <Item key={i} item={formatURLImage(item.source)} />
+                    <Item key={i} item={formatURLImage(item.preview)} />
                 ))}
         </Carousel>
     )
@@ -25,7 +25,6 @@ export default function CarouselCustom({ images }) {
 
 function Item({ item }) {
     const { imageFluid } = useStyles()
-    console.log(item)
     return (
         <figure>
             <img src={item} alt="Product image" className={imageFluid} />
