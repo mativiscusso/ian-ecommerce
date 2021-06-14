@@ -22,7 +22,7 @@ function valuetext(value) {
     return `${value}°C`
 }
 
-const PriceFilter = () => {
+const PriceFilter = ({ products }) => {
     const [state, setState] = useState({})
     const handleChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked })
@@ -35,7 +35,7 @@ const PriceFilter = () => {
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography>Precio</Typography>
+                    <Typography variant="button">Precio</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Slider

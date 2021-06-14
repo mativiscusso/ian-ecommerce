@@ -1,5 +1,9 @@
 import { gql } from '@apollo/client'
-import { SEARCH_RESULT_FRAGMENT } from './fragments'
+import {
+    ASSETS_FRAGMENT,
+    CART_FRAGMENT,
+    SEARCH_RESULT_FRAGMENT,
+} from './fragments'
 
 export const ALL_PRODUCTS = gql`
     query allProducts {
@@ -32,32 +36,47 @@ export const ALL_PRODUCTS = gql`
     }
 `
 export const ONE_PRODUCT = gql`
-    query oneProduct($id: ID) {
-        product(id: $id) {
+    query oneProduct($slug: String) {
+        product(slug: $slug) {
             id
             name
             description
-            assets {
+            variants {
                 id
                 name
-                preview
-                source
-            }
-            variants {
-                name
-                sku
-                price
-                productId
-                stockLevel
-            }
-            facetValues {
-                name
-                facet {
+                options {
+                    code
                     name
+                    __typename
                 }
+                price
+                priceWithTax
+                sku
+                __typename
             }
+            featuredAsset {
+                ...Asset
+                __typename
+            }
+            assets {
+                ...Asset
+                __typename
+            }
+            collections {
+                id
+                slug
+                breadcrumbs {
+                    id
+                    name
+                    slug
+                    __typename
+                }
+                __typename
+            }
+            __typename
         }
     }
+    ${ASSETS_FRAGMENT}
 `
 
 export const USER_ACTIVE = gql`
@@ -118,79 +137,11 @@ export const CUSTOMER_ACTIVE = gql`
 export const ORDER_ACTIVE = gql`
     query orderActive {
         activeOrder {
-            id
-            state
-            code
-            active
-            lines {
-                id
-                featuredAsset {
-                    source
-                    preview
-                }
-                productVariant {
-                    productId
-                    name
-                    price
-                }
-                quantity
-                linePrice
-            }
-            shippingAddress {
-                streetLine1
-                streetLine2
-                city
-                province
-                postalCode
-                phoneNumber
-            }
-            totalQuantity
-            subTotal
-            total
-            shipping
-            payments {
-                method
-                state
-                transactionId
-                amount
-                errorMessage
-                refunds {
-                    total
-                    reason
-                }
-                metadata
-            }
-            currencyCode
-            fulfillments {
-                id
-                state
-                method
-                trackingCode
-            }
-            shippingLines {
-                shippingMethod {
-                    code
-                    name
-                    customFields
-                    description
-                    checker {
-                        code
-                        args {
-                            name
-                            value
-                        }
-                    }
-                    calculator {
-                        code
-                        args {
-                            name
-                            value
-                        }
-                    }
-                }
-            }
+            ...Cart
+            __typename
         }
     }
+    ${CART_FRAGMENT}
 `
 export const ALL_COLLECTIONS = gql`
     {
@@ -255,6 +206,17 @@ export const SEARCH_PRODUCTS = gql`
             totalItems
             items {
                 ...SearchResult
+            }
+            facetValues {
+                count
+                facetValue {
+                    id
+                    name
+                    facet {
+                        id
+                        name
+                    }
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import { Container, Grid } from '@material-ui/core'
 
 import { UserContext } from 'utils/userContext'
-import { formatURLImage } from 'utils/helpers'
+import { formatURLImage, toThousand } from 'utils/helpers'
 import { gql, useMutation } from '@apollo/client'
 
 import {
@@ -98,6 +98,7 @@ export default function Cart({ isEmpty }) {
     const handleRemoveAll = async () => {
         await removeAll()
     }
+    console.log(cart)
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>
@@ -136,20 +137,12 @@ export default function Cart({ isEmpty }) {
                                             padding="none"
                                             className={classes.cellImgProduct}
                                         >
-                                            {line.featuredAsset ? (
+                                            {line.featuredAsset && (
                                                 <img
                                                     src={formatURLImage(
                                                         line.featuredAsset
-                                                            .source
+                                                            .preview
                                                     )}
-                                                    className={
-                                                        classes.imgProduct
-                                                    }
-                                                    alt="Foto producto"
-                                                />
-                                            ) : (
-                                                <img
-                                                    src="https://www.chanchao.com.tw/TWSF/kaohsiung/images/default.jpg"
                                                     className={
                                                         classes.imgProduct
                                                     }
@@ -174,7 +167,7 @@ export default function Cart({ isEmpty }) {
                                                 label="Qty."
                                                 type="number"
                                                 size="small"
-                                                variant="outlined"
+                                                variant="standard"
                                                 onChange={handleChange}
                                             />
                                         </TableCell>
@@ -183,7 +176,7 @@ export default function Cart({ isEmpty }) {
                                             padding="none"
                                             align="left"
                                         >
-                                            ${line.linePrice}
+                                            ${toThousand(line.unitPrice)}
                                         </TableCell>
                                     </TableRow>
                                 )
@@ -203,7 +196,7 @@ export default function Cart({ isEmpty }) {
                             <TableRow>
                                 <TableCell padding="none" colSpan={2}>
                                     <Typography variant="subtitle2">
-                                        TOTAL CART
+                                        Total
                                     </Typography>
                                 </TableCell>
                                 <TableCell colSpan={5} align="center">

@@ -7,7 +7,7 @@ import { ONE_PRODUCT } from 'graphql/queries'
 const useStyles = makeStyles((theme) => ({
     root: {
         [theme.breakpoints.up('lg')]: {
-            marginTop: 150,
+            marginTop: 50,
         },
     },
 }))
@@ -15,9 +15,9 @@ const useStyles = makeStyles((theme) => ({
 export default function ProductDetailPage() {
     const { root } = useStyles()
     const router = useRouter()
-    const { id } = router.query
+    const { slug } = router.query
     const { loading, error, data } = useQuery(ONE_PRODUCT, {
-        variables: { id: id },
+        variables: { slug: slug },
     })
 
     if (loading) return <span>Loading</span>

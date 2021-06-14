@@ -9,7 +9,6 @@ import {
     IconButton,
     Drawer,
     Grid,
-    Button,
     CircularProgress,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -22,6 +21,8 @@ import { useRouter } from 'next/router'
 
 import { UserContext } from 'utils/userContext'
 import { AccountCircle } from '@material-ui/icons'
+import CategoriesDesktop from 'components/CategoryList/Desktop'
+import CategoriesMobile from 'components/CategoryList/Mobile'
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -45,9 +46,13 @@ const useStyles = makeStyles((theme) => ({
     toolbar: {
         display: 'flex',
         justifyContent: 'space-between',
+        backgroundColor: theme.palette.primary,
+        '@media (max-width: 900px)': {
+            paddingLeft: 0,
+        },
     },
     drawerContainer: {
-        padding: '20px 30px',
+        padding: '20px 80px 20px 30px',
         display: 'flex',
         flexDirection: 'column',
     },
@@ -59,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar() {
-    const { header, logo, menuButton, toolbar, drawerContainer, menuItems } =
+    const { logo, menuButton, toolbar, drawerContainer, menuItems } =
         useStyles()
     const [isCheckoutPage, setIsCheckoutPage] = useState(false)
 
@@ -71,6 +76,7 @@ export default function Navbar() {
     const { user, userLoading } = useContext(UserContext)
 
     const router = useRouter()
+    
     useEffect(() => {
         setIsCheckoutPage(router.pathname.includes('checkout'))
     }, [router])
@@ -92,46 +98,54 @@ export default function Navbar() {
 
     const displayDesktop = () => {
         return (
-            <Toolbar className={toolbar}>
-                <Grid
-                    container
-                    alignContent="space-between"
-                    alignItems="center"
-                >
-                    <Grid item lg={3} xl={4}>
-                        {Logo}
-                    </Grid>
-                    <Grid item lg={5} xl={5}>
-                        <ProductSearch mobileState={mobileView} />
-                    </Grid>
-                    <Grid item className={menuItems} lg={4} xl={3}>
-                        <IconCart />
-                        {userLoading && (
-                            <CircularProgress color="inherit" size={20} />
-                        )}
-                        {user ? (
-                            <UserItem user={user} />
-                        ) : (
-                            <Link
-                                href={'/login'}
-                                color="inherit"
-                                className={menuButton}
-                            >
-                                <IconButton color="inherit">
-                                    <AccountCircle />
-                                    <Typography
-                                        variant="caption"
+            <>
+                <AppBar>
+                    <Toolbar className={toolbar}>
+                        <Grid
+                            container
+                            alignContent="space-between"
+                            alignItems="center"
+                        >
+                            <Grid item lg={3} xl={4}>
+                                {Logo}
+                            </Grid>
+                            <Grid item lg={5} xl={5}>
+                                <ProductSearch mobileState={mobileView} />
+                            </Grid>
+                            <Grid item className={menuItems} lg={4} xl={3}>
+                                <IconCart />
+                                {userLoading && (
+                                    <CircularProgress
                                         color="inherit"
-                                        style={{ marginLeft: 10 }}
+                                        size={20}
+                                    />
+                                )}
+                                {user ? (
+                                    <UserItem user={user} />
+                                ) : (
+                                    <Link
+                                        href={'/login'}
+                                        color="inherit"
+                                        className={menuButton}
                                     >
-                                        Ingresar
-                                    </Typography>
-                                </IconButton>
-                            </Link>
-                        )}
-                    </Grid>
-                </Grid>
-            </Toolbar>
+                                        <IconButton color="inherit">
+                                            <AccountCircle />
+                                            <Typography
+                                                variant="caption"
+                                                color="inherit"
+                                                style={{ marginLeft: 10 }}
+                                            >
+                                                Ingresar
+                                            </Typography>
+                                        </IconButton>
+                                    </Link>
+                                )}
+                            </Grid>
+                        </Grid>
+                    </Toolbar>
+                </AppBar>
+                <CategoriesDesktop />
+            </>
         )
     }
 
@@ -142,50 +156,56 @@ export default function Navbar() {
             setState((prevState) => ({ ...prevState, drawerOpen: false }))
 
         return (
-            <Toolbar style={{ justifyContent: 'space-between' }}>
-                <IconButton
-                    {...{
-                        edge: 'start',
-                        color: 'inherit',
-                        'aria-label': 'menu',
-                        'aria-haspopup': 'true',
-                        onClick: handleDrawerOpen,
-                    }}
+            <AppBar>
+                <Toolbar
+                    style={{ justifyContent: 'space-between' }}
+                    className={toolbar}
                 >
-                    <MenuIcon />
-                </IconButton>
+                    <IconButton
+                        {...{
+                            edge: 'start',
+                            color: 'inherit',
+                            'aria-label': 'menu',
+                            'aria-haspopup': 'true',
+                            onClick: handleDrawerOpen,
+                        }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
 
-                <div>{Logo}</div>
-                <ProductSearch mobileState={mobileView} />
+                    <div>{Logo}</div>
+                    <ProductSearch mobileState={mobileView} />
 
-                <IconCart />
-                {user ? (
-                    <UserItem user={user} />
-                ) : (
-                    <Link href={'/login'} color="inherit">
-                        <IconButton color="inherit">
-                            <AccountCircle />
-                            <Typography
-                                variant="caption"
-                                color="inherit"
-                                style={{ marginLeft: 10 }}
-                            >
-                                Ingresar
-                            </Typography>
-                        </IconButton>
-                    </Link>
-                )}
-                <Drawer
-                    {...{
-                        anchor: 'left',
-                        open: drawerOpen,
-                        onClose: handleDrawerClose,
-                    }}
-                >
-                    {/* <div className={drawerContainer}>{getDrawerChoices()}</div> */}
-                    <div className={drawerContainer}>Links</div>
-                </Drawer>
-            </Toolbar>
+                    <IconCart />
+                    {user ? (
+                        <UserItem user={user} />
+                    ) : (
+                        <Link href={'/login'} color="inherit">
+                            <IconButton color="inherit">
+                                <AccountCircle />
+                                <Typography
+                                    variant="caption"
+                                    color="inherit"
+                                    style={{ marginLeft: 10 }}
+                                >
+                                    Ingresar
+                                </Typography>
+                            </IconButton>
+                        </Link>
+                    )}
+                    <Drawer
+                        {...{
+                            anchor: 'left',
+                            open: drawerOpen,
+                            onClose: handleDrawerClose,
+                        }}
+                    >
+                        <div className={drawerContainer}>
+                            <CategoriesMobile />
+                        </div>
+                    </Drawer>
+                </Toolbar>
+            </AppBar>
         )
     }
 
@@ -197,17 +217,15 @@ export default function Navbar() {
 
     return (
         <nav>
-            <AppBar className={header}>
-                {isCheckoutPage === false ? (
-                    mobileView ? (
-                        displayMobile()
-                    ) : (
-                        displayDesktop()
-                    )
+            {isCheckoutPage === false ? (
+                mobileView ? (
+                    displayMobile()
                 ) : (
-                    <Toolbar>{Logo}</Toolbar>
-                )}
-            </AppBar>
+                    displayDesktop()
+                )
+            ) : (
+                <Toolbar>{Logo}</Toolbar>
+            )}
         </nav>
     )
 }

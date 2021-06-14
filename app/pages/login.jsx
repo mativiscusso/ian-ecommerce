@@ -22,7 +22,7 @@ import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(8),
+        marginTop: theme.spacing(4),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -46,6 +46,7 @@ export default function Login() {
     const [password, setPassword] = useState(null)
     const [rememberMe, setRememberMe] = useState(false)
     const [statusLogin, setStatusLogin] = useState(false)
+    const [errorExist, setErrorExist] = useState(false)
 
     const { login, statusRequest } = useContext(UserContext)
 
@@ -73,6 +74,10 @@ export default function Login() {
     }
     const handleForgotPassword = async () => {
         if (email) {
+            setErrorExist({
+                status: false,
+                msg: '',
+            })
             const result = await forgotPassword({ variables: { email: email } })
             if (result) {
                 setStatusLogin({
@@ -82,10 +87,9 @@ export default function Login() {
                 })
             }
         } else {
-            setStatusLogin({
+            setErrorExist({
                 status: true,
                 msg: 'El campo email debe estar completo',
-                several: 'error',
             })
         }
     }
@@ -106,12 +110,10 @@ export default function Login() {
             })
         }
     }
+    console.log(statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
-                </Avatar>
                 <Typography component="h1" variant="h5">
                     Ingresar
                 </Typography>
@@ -131,6 +133,8 @@ export default function Login() {
                         autoComplete="email"
                         autoFocus
                         onChange={handleEmail}
+                        error={errorExist.status}
+                        helperText={errorExist.msg}
                     />
                     <TextField
                         variant="outlined"
@@ -173,9 +177,9 @@ export default function Login() {
                             </Link>
                         </Grid>
                         <Grid item xs={12}>
-                            {statusLogin.status === false && (
+                            {statusLogin.status && (
                                 <Alert
-                                    isOpen={true}
+                                    isOpen={statusLogin.status}
                                     text={statusLogin.msg}
                                     severity={statusLogin.several || 'error'}
                                 />

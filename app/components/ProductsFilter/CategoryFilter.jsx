@@ -4,60 +4,154 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import TreeView from '@material-ui/lab/TreeView'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 import TreeItem from '@material-ui/lab/TreeItem'
 import Divider from '@material-ui/core/Divider'
-import { useQuery } from '@apollo/client'
-import { ALL_COLLECTIONS } from 'graphql/queries'
-import { listToTree } from 'utils/helpers'
+import { useLazyQuery } from '@apollo/client'
+import { SEARCH_PRODUCTS } from 'graphql/queries'
+import { formatFacetValues, mappedFacetsSelected } from 'utils/helpers'
+import { CircularProgress, FormGroup } from '@material-ui/core'
+import ChipsArray from 'components/ChipList'
 
-const CategoryFilter = () => {
-    const { data, loading, error } = useQuery(ALL_COLLECTIONS)
-    const [collections, setCollections] = useState(undefined)
+const CategoryFilter = ({
+    products,
+    queryString,
+    collectionSlug,
+    setProducts,
+}) => {
+    // const [collections, setCollections] = useState(undefined)
+    const [facets, setFacets] = useState(undefined)
+    const [state, setState] = useState(false)
+    const [facetsSelected, setFacetsSelected] = useState([])
+    const [isMobile] = useState(window.innerWidth < 900)
+
+    const [filterByFacet, { data, loading, error }] =
+        useLazyQuery(SEARCH_PRODUCTS)
 
     useEffect(() => {
         if (data && !error) {
-            setCollections(listToTree(data.collections.items))
+            setProducts(data)
         }
     }, [data, error])
 
-    if (loading) return 'loading'
-    if (error) console.log(error)
+    useEffect(() => {
+        if (products) {
+            setFacets(formatFacetValues(products.search.facetValues))
+        }
+    }, [products])
 
-    const renderTree = (nodes) => (
-        <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name}>
-            {Array.isArray(nodes.children)
-                ? nodes.children.map((node) => renderTree(node))
-                : null}
-        </TreeItem>
-    )
+    useEffect(() => {
+        if (facetsSelected) {
+            filterByFacet({
+                variables: {
+                    input: {
+                        term: queryString || '',
+                        collectionSlug: collectionSlug || '',
+                        groupByProduct: true,
+                        facetValueIds: facetsSelected,
+                    },
+                },
+            })
+        }
+    }, [facetsSelected])
 
-    console.log(collections)
+    const handleChange = (event) => {
+        setState({ ...state, [event.target.name]: event.target.checked })
+        if (!facetsSelected.find((facet) => facet === event.target.value)) {
+            setFacetsSelected((prevState) => [...prevState, event.target.value])
+        }
+    }
+
+    const handleDelete = (chipToDelete) => () => {
+        console.log(chipToDelete)
+        setFacetsSelected((prevState) =>
+            prevState.filter((chip) => chip !== chipToDelete.key)
+        )
+        setState({ ...state, [chipToDelete.label]: false })
+    }
+
+    if (loading) return <CircularProgress />
     return (
         <article>
-            <Accordion elevation={0}>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography>Categorias</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <TreeView
-                        defaultCollapseIcon={<ExpandMoreIcon />}
-                        defaultExpanded={['root']}
-                        defaultExpandIcon={<ChevronRightIcon />}
-                    >
-                        {collections &&
-                            collections.map((collection) =>
-                                renderTree(collection)
-                            )}
-                    </TreeView>
-                </AccordionDetails>
-            </Accordion>
-            <Divider variant="middle" />
+            {facets && facetsSelected.length > 0 && (
+                <ChipsArray
+                    data={mappedFacetsSelected(facets, facetsSelected)}
+                    handleDelete={handleDelete}
+                />
+            )}
+            {facets &&
+                facets.map((facet, i) => (
+                    <div key={facet.name + i}>
+                        <Accordion elevation={0} defaultExpanded={!isMobile}>
+                            <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1a-content"
+                                id={facet.name}
+                            >
+                                <Typography variant="button">
+                                    {facet.name}
+                                </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <FormGroup>
+                                    {facet.values.map((value) => (
+                                        <div
+                                            key={value.facetValue.name + 'root'}
+                                            style={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        size="small"
+                                                        checked={
+                                                            state[
+                                                                value.facetValue
+                                                                    .name
+                                                            ]
+                                                                ? state[
+                                                                      value
+                                                                          .facetValue
+                                                                          .name
+                                                                  ]
+                                                                : false
+                                                        }
+                                                        disabled={
+                                                            state[
+                                                                value.facetValue
+                                                                    .name
+                                                            ]
+                                                        }
+                                                        onChange={handleChange}
+                                                        name={
+                                                            value.facetValue
+                                                                .name
+                                                        }
+                                                        value={
+                                                            value.facetValue.id
+                                                        }
+                                                    />
+                                                }
+                                                label={value.facetValue.name}
+                                                key={
+                                                    value.facetValue.name +
+                                                    'facet'
+                                                }
+                                            />
+                                            <Typography variant="caption">
+                                                ({value.count})
+                                            </Typography>
+                                        </div>
+                                    ))}
+                                </FormGroup>
+                            </AccordionDetails>
+                        </Accordion>
+                        <Divider variant="inset" />
+                    </div>
+                ))}
         </article>
     )
 }

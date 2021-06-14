@@ -18,13 +18,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionAlerts({ isOpen, text, severity }) {
     const classes = useStyles()
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(isOpen)
     const { setStatusRequest } = useContext(UserContext)
 
     useEffect(() => {
         setOpen(isOpen)
-    }, [isOpen])
+    }, [])
 
+    console.log('isopen' + isOpen, 'open' + open)
     return (
         <div className={classes.root}>
             <Collapse in={open}>
@@ -35,7 +36,7 @@ export default function TransitionAlerts({ isOpen, text, severity }) {
                             color="inherit"
                             size="small"
                             onClick={() => {
-                                setOpen(false)
+                                setOpen(!isOpen)
                                 setStatusRequest(undefined)
                             }}
                         >

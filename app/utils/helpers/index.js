@@ -61,8 +61,44 @@ export const listToTree = (nodes) => {
         }
     }
     // tslint:disable-next-line:no-non-null-assertion
-    const rootId = topLevelNodes.length ? topLevelNodes[0].parent.id : undefined
     return [...topLevelNodes]
 }
 
 export const formatURLImage = (image) => image.replace(/[\\]+/g, '/')
+
+export const formatFacetValues = (facetValues) => {
+    const facets = []
+
+    for (let index = 1; index < facetValues.length; index++) {
+        const element = facetValues[index]
+        if (!facets.some((el) => el.name === element.facetValue.facet.name)) {
+            facets.push({ name: element.facetValue.facet.name, values: [] })
+        }
+        for (const facet of facets) {
+            if (facet.name === element.facetValue.facet.name) {
+                facet.values.push(element)
+            }
+        }
+    }
+    return facets
+}
+const facetSelectedFormated = (facetValues, facetSelected) => {
+    let result
+    facetValues.forEach(({ values }) => {
+        values.forEach(({ facetValue }) => {
+            if (facetValue.id === facetSelected) {
+                result = facetValue.name
+            }
+        })
+    })
+    return { key: facetSelected, label: result }
+}
+
+export const mappedFacetsSelected = (facetValues, facetsSelected) => {
+    return facetsSelected.map((facet) =>
+        facetSelectedFormated(facetValues, facet)
+    )
+}
+
+export const toThousand = (n) =>
+    n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')

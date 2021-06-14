@@ -1,65 +1,82 @@
 import { gql } from '@apollo/client'
 
+export const ASSETS_FRAGMENT = gql`
+    fragment Asset on Asset {
+        id
+        width
+        height
+        name
+        preview
+        focalPoint {
+            x
+            y
+            __typename
+        }
+        __typename
+    }
+`
+
 export const CART_FRAGMENT = gql`
     fragment Cart on Order {
         id
         code
-        createdAt
+        state
+        active
+        lines {
+            id
+            featuredAsset {
+                ...Asset
+                __typename
+            }
+            unitPrice
+            unitPriceWithTax
+            quantity
+            linePriceWithTax
+            discountedLinePriceWithTax
+            productVariant {
+                id
+                name
+                __typename
+            }
+            discounts {
+                amount
+                amountWithTax
+                description
+                adjustmentSource
+                type
+                __typename
+            }
+            __typename
+        }
         totalQuantity
         subTotal
         subTotalWithTax
         total
         totalWithTax
-        currencyCode
-        customer {
-            id
-            firstName
-            lastName
-            phoneNumber
-            emailAddress
-            addresses {
-                fullName
-                company
-                streetLine1
-                streetLine2
-                city
-                province
-                postalCode
-                country {
-                    name
-                }
-                defaultShippingAddress
-                defaultBillingAddress
-                customFields
-            }
-        }
-        lines {
-            id
-            quantity
-            linePriceWithTax
-            discountedLinePriceWithTax
-            featuredAsset {
+        shipping
+        shippingWithTax
+        shippingLines {
+            priceWithTax
+            shippingMethod {
                 id
-                preview
-            }
-            discounts {
-                description
-                amount
-            }
-            productVariant {
-                id
+                code
                 name
-                sku
-                price
-                priceWithTax
-                stockLevel
-                product {
-                    slug
-                }
-                productId
+                description
+                __typename
             }
+            __typename
         }
+        discounts {
+            amount
+            amountWithTax
+            description
+            adjustmentSource
+            type
+            __typename
+        }
+        __typename
     }
+    ${ASSETS_FRAGMENT}
 `
 export const PAYMENTS = gql`
     fragment Payments on Order {

@@ -10,17 +10,19 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 // import { ReactComponent as RbNew } from '../utils/svg/rb-new.svg'
 import QuickView from '../ProductQuickView'
+import NoPhoto from './NoPhoto'
 import Link from 'next/link'
-import { formatURLImage } from 'utils/helpers'
+import { formatURLImage, toThousand } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     root: {
         textAlign: 'left',
         transition: 'all 0.1s',
-        height: '100%',
+        height: '80%',
         '&:hover': {
-            transform: 'scale(1.05) translateY(-20px)',
+            transform: 'scale(1.01) translateY(-5px)',
             zIndex: 1000,
+            height: '100%',
         },
 
         marginBottom: '1rem',
@@ -53,15 +55,20 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Product(props) {
     const classes = useStyles()
+
     return (
         <Card className={classes.root} elevation={0}>
-            <Link href={`/products/${props.productId}`}>
+            <Link href={`/products/${props.slug}`}>
                 <CardActionArea>
-                    <CardMedia
-                        className={classes.media}
-                        image={formatURLImage(props.productAsset.preview)}
-                        title={props.productName}
-                    />
+                    {props.productAsset?.preview ? (
+                        <CardMedia
+                            className={classes.media}
+                            image={formatURLImage(props.productAsset.preview)}
+                            title={props.productName}
+                        />
+                    ) : (
+                        <NoPhoto />
+                    )}
 
                     <CardContent>
                         <Typography
@@ -79,7 +86,7 @@ export default function Product(props) {
                             color="textPrimary"
                             className={classes.productPrice}
                         >
-                            ${props.priceWithTax.max}
+                            ${toThousand(props.priceWithTax.max)}
                         </Typography>
                     </CardContent>
                 </CardActionArea>

@@ -11,6 +11,7 @@ export const UserProvider = ({ children }) => {
     const [statusRequest, setStatusRequest] = useState(undefined)
     const [cartLenght, setCartLenght] = useState(0)
     const [cart, setCart] = useState([])
+    const [alertOpen, setAlertOpen] = useState(false)
 
     const [
         activeOrder,
@@ -139,11 +140,16 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
+                console.log(res.data.registerCustomerAccount)
                 if (res.data.registerCustomerAccount.__typename === 'Success') {
-                    setStatusRequest({ status: true, msg: 'Ok' })
+                    setAlertOpen(true)
+                    setStatusRequest({
+                        status: res.data.registerCustomerAccount.success,
+                        msg: 'Ok',
+                    })
                 } else {
                     setStatusRequest({
-                        status: false,
+                        status: res.data.registerCustomerAccount.success,
                         msg: 'Verifique los campos email y password',
                     })
                 }
@@ -213,6 +219,7 @@ export const UserProvider = ({ children }) => {
                 return result.json()
             })
             .then((res) => {
+                console.log(res.data.resetPassword)
                 if (res.data.resetPassword.__typename === 'CurrentUser') {
                     currentUser()
                     if (dataUser) {
@@ -242,6 +249,7 @@ export const UserProvider = ({ children }) => {
                 resetPassword,
                 statusRequest,
                 setStatusRequest,
+                alertOpen,
                 cartLenght,
                 cart,
             }}

@@ -5,7 +5,11 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
     mainGrid: {
-        marginTop: theme.spacing(10),
+        marginTop: theme.spacing(8),
+
+        [theme.breakpoints.up('md')]: {
+            marginTop: theme.spacing(0),
+        },
     },
 }))
 const globalStyles = css.global`
@@ -18,11 +22,16 @@ const globalStyles = css.global`
         font-weight: bolder;
         text-decoration: none !important;
     }
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
 `
 export default function Layout({ children }) {
     const { mainGrid } = useStyles()
     return (
-        <main>
+        <>
             <Navbar />
             <main className={mainGrid}>{children}</main>
             <Footer
@@ -32,6 +41,6 @@ export default function Layout({ children }) {
             <style jsx global>
                 {globalStyles}
             </style>
-        </main>
+        </>
     )
 }

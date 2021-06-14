@@ -1,6 +1,6 @@
 import React from 'react'
 import Container from '@material-ui/core/Container'
-import Header from 'components/Header'
+import Header from 'components/CategoryList/Desktop'
 import MainFeatured from 'components/MainFeatured'
 import ProductList from 'components/ProductList'
 
@@ -20,7 +20,7 @@ const mainFeaturedPost = {
 export default function Blog() {
     const { data, loading, error } = useQuery(SEARCH_PRODUCTS, {
         variables: {
-            input: { term: '', groupByProduct: true },
+            input: { term: '', groupByProduct: true, skip: 0 },
         },
     })
     if (loading) {
@@ -35,7 +35,6 @@ export default function Blog() {
     return (
         <>
             <Container maxWidth={false} disableGutters>
-                <Header title="E-Commerce" />
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
                     <Container maxWidth={false}>
