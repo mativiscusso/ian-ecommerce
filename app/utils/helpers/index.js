@@ -102,3 +102,38 @@ export const mappedFacetsSelected = (facetValues, facetsSelected) => {
 
 export const toThousand = (n) =>
     n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+
+export const optionsToVariantsMapped = (variants) => {
+    const options = variants.map((variant) =>
+        variant.options.map((v) => v.name)
+    )
+    const sanityArray = [...new Set(options.flat())].sort()
+    return sanityArray.join(', ')
+}
+
+const DATE_UNITS = [
+    ['day', 86400],
+    ['hour', 3600],
+    ['minute', 60],
+    ['second', 1],
+]
+
+const getDateDiffs = (timestamp) => {
+    const now = Date.now()
+    const dateToCompare = new Date(timestamp).getTime()
+    const elapsed = (dateToCompare - now) / 1000
+
+    for (const [unit, secondsInUnit] of DATE_UNITS) {
+        if (Math.abs(elapsed) > secondsInUnit || unit === 'second') {
+            const value = Math.floor(elapsed / secondsInUnit)
+            return { value, unit }
+        }
+    }
+}
+
+export const timeAgo = (timestamp) => {
+    const timeago = getDateDiffs(timestamp)
+    const rtf = new Intl.RelativeTimeFormat('es', { style: 'short' })
+    const { value, unit } = timeago
+    return rtf.format(value, unit)
+}

@@ -1,5 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 import {
     AppBar,
@@ -12,17 +14,15 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import LaunchIcon from '@material-ui/icons/Launch'
 
 import Link from 'components/Link'
 import ProductSearch from 'components/ProductSearch'
 import IconCart from 'components/Cart/IconCart'
 import UserItem from './UserItem'
-import { useRouter } from 'next/router'
-
-import { UserContext } from 'utils/userContext'
-import { AccountCircle } from '@material-ui/icons'
 import CategoriesDesktop from 'components/CategoryList/Desktop'
 import CategoriesMobile from 'components/CategoryList/Mobile'
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -32,9 +32,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     logo: {
-        fontWeight: 600,
-        color: '#FFFEFE',
-        textAlign: 'left',
+        position: 'absolute',
+        top: 0,
     },
     menuButton: {
         textTransform: 'uppercase',
@@ -76,7 +75,7 @@ export default function Navbar() {
     const { user, userLoading } = useContext(UserContext)
 
     const router = useRouter()
-    
+
     useEffect(() => {
         setIsCheckoutPage(router.pathname.includes('checkout'))
     }, [router])
@@ -129,7 +128,7 @@ export default function Navbar() {
                                         className={menuButton}
                                     >
                                         <IconButton color="inherit">
-                                            <AccountCircle />
+                                            <LaunchIcon />
                                             <Typography
                                                 variant="caption"
                                                 color="inherit"
@@ -182,7 +181,7 @@ export default function Navbar() {
                     ) : (
                         <Link href={'/login'} color="inherit">
                             <IconButton color="inherit">
-                                <AccountCircle />
+                                <LaunchIcon />
                                 <Typography
                                     variant="caption"
                                     color="inherit"
@@ -211,7 +210,14 @@ export default function Navbar() {
 
     const Logo = (
         <NextLink href="/">
-            <a className={logo}>Ecommerce</a>
+            <a className={logo}>
+                <Image
+                    src="/assets/logo.png"
+                    alt="Logo Cocot"
+                    width={100}
+                    height={100}
+                />
+            </a>
         </NextLink>
     )
 
@@ -224,7 +230,9 @@ export default function Navbar() {
                     displayDesktop()
                 )
             ) : (
-                <Toolbar>{Logo}</Toolbar>
+                <AppBar>
+                    <Toolbar>{Logo}</Toolbar>
+                </AppBar>
             )}
         </nav>
     )

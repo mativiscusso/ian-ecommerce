@@ -62,6 +62,11 @@ export const CART_FRAGMENT = gql`
                 code
                 name
                 description
+                checker {
+                    args {
+                        value
+                    }
+                }
                 __typename
             }
             __typename
@@ -133,4 +138,76 @@ export const SEARCH_RESULT_FRAGMENT = gql`
             }
         }
     }
+`
+export const ORDER_LIST_FRAGMENT = gql`
+    fragment OrderList on OrderList {
+        totalItems
+        items {
+            id
+            code
+            state
+            active
+            createdAt
+            orderPlacedAt
+            lines {
+                id
+                featuredAsset {
+                    ...Asset
+                    __typename
+                }
+                unitPrice
+                unitPriceWithTax
+                quantity
+                linePriceWithTax
+                discountedLinePriceWithTax
+                productVariant {
+                    id
+                    name
+                    __typename
+                }
+                discounts {
+                    amount
+                    amountWithTax
+                    description
+                    adjustmentSource
+                    type
+                    __typename
+                }
+                __typename
+            }
+            totalQuantity
+            subTotal
+            subTotalWithTax
+            total
+            totalWithTax
+            shipping
+            shippingWithTax
+            shippingLines {
+                priceWithTax
+                shippingMethod {
+                    id
+                    code
+                    name
+                    description
+                    checker {
+                        args {
+                            value
+                        }
+                    }
+                    __typename
+                }
+                __typename
+            }
+            discounts {
+                amount
+                amountWithTax
+                description
+                adjustmentSource
+                type
+                __typename
+            }
+            __typename
+        }
+    }
+    ${ASSETS_FRAGMENT}
 `

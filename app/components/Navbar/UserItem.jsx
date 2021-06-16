@@ -13,6 +13,7 @@ import { IconButton } from '@material-ui/core'
 import { UserContext } from 'utils/userContext'
 
 import { USER_LOGOUT } from 'graphql/mutations'
+import Link from 'components/Link'
 
 const UserItem = ({ user }) => {
     const [open, setOpen] = useState(false)
@@ -87,13 +88,13 @@ const UserItem = ({ user }) => {
                                         id="menu-list-grow"
                                         onKeyDown={handleListKeyDown}
                                     >
-                                        <MenuItem>
+                                        <MenuItem disabled>
                                             Hola,{' '}
                                             {splitUsername(user.me.identifier)}
                                         </MenuItem>
-                                        <MenuItem onClick={handleClose}>
-                                            Perfil
-                                        </MenuItem>
+                                        <Link href="/users/me" color="inherit">
+                                            <MenuItem>Perfil</MenuItem>
+                                        </Link>
                                         <MenuItem onClick={handleLogout}>
                                             Logout
                                         </MenuItem>

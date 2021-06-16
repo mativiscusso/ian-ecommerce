@@ -5,7 +5,7 @@ import { Typography } from '@material-ui/core'
 
 const ProductsList = ({ data }) => {
     return (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
             {data && data.search && data.search.items.length > 0 ? (
                 data.search.items.map((product) => (
                     <Grid

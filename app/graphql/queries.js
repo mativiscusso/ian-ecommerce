@@ -3,6 +3,7 @@ import {
     ASSETS_FRAGMENT,
     CART_FRAGMENT,
     SEARCH_RESULT_FRAGMENT,
+    ORDER_LIST_FRAGMENT,
 } from './fragments'
 
 export const ALL_PRODUCTS = gql`
@@ -138,6 +139,15 @@ export const ORDER_ACTIVE = gql`
     query orderActive {
         activeOrder {
             ...Cart
+            shippingAddress {
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country
+                phoneNumber
+            }
             __typename
         }
     }
@@ -221,4 +231,40 @@ export const SEARCH_PRODUCTS = gql`
         }
     }
     ${SEARCH_RESULT_FRAGMENT}
+`
+export const ACTIVE_CUSTOMER = gql`
+    query activeCustomer {
+        activeCustomer {
+            id
+            createdAt
+            title
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+            addresses {
+                fullName
+                streetLine1
+                streetLine2
+                city
+                province
+                postalCode
+                country {
+                    code
+                    name
+                }
+                phoneNumber
+            }
+            orders(options: { sort: { createdAt: DESC } }) {
+                ...OrderList
+            }
+            user {
+                id
+                identifier
+                verified
+                lastLogin
+            }
+        }
+    }
+    ${ORDER_LIST_FRAGMENT}
 `

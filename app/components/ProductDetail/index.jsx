@@ -16,7 +16,7 @@ import Link from 'components/Link'
 
 import { useQuery } from '@apollo/client'
 import { ONE_PRODUCT } from 'graphql/queries'
-import { toThousand } from 'utils/helpers'
+import { optionsToVariantsMapped, toThousand } from 'utils/helpers'
 
 const useStyles = makeStyles({
     detailProduct: {
@@ -61,7 +61,7 @@ const ProductDetail = (props) => {
 
     if (loading) return <CircularProgress />
 
-    console.log(product, variant)
+    console.log(product)
     return (
         <Container>
             {product && (
@@ -86,10 +86,10 @@ const ProductDetail = (props) => {
                                     <Link
                                         key={collection.name + i}
                                         href={`/products/category/${collection.slug}`}
-                                        color="textPrimary"
+                                        color="textSecondary"
                                         variant="button"
                                     >
-                                        <a>{collection.slug}</a>
+                                        {collection.slug}
                                     </Link>
                                 ))}
                         </Breadcrumbs>
@@ -106,25 +106,46 @@ const ProductDetail = (props) => {
                         <Typography variant="body1" gutterBottom>
                             {product.description}
                         </Typography>
-                        <Autocomplete
-                            id="combo-box-demo"
-                            options={product.variants}
-                            getOptionLabel={(option) => option.name}
-                            style={{ width: 260, padding: '1rem 0' }}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Elegí una variante del producto"
-                                    variant="outlined"
-                                    size="small"
+                        {product.variants.length > 1 && (
+                            <>
+                                <div>
+                                    <Typography
+                                        variant="subtitle2"
+                                        color="inherit"
+                                    >
+                                        Opciones de variantes sugeridas:
+                                    </Typography>
+                                    <Typography
+                                        variant="subtitle2"
+                                        color="primary"
+                                    >
+                                        {optionsToVariantsMapped(
+                                            product.variants
+                                        )}
+                                    </Typography>
+                                </div>
+                                <Autocomplete
+                                    id="combo-box-demo"
+                                    options={product.variants}
+                                    getOptionLabel={(option) => option.name}
+                                    style={{ width: 260, padding: '1rem 0' }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Elegí una variante del producto"
+                                            variant="outlined"
+                                            size="small"
+                                        />
+                                    )}
+                                    onChange={(event, newValue) => {
+                                        setVariant(newValue)
+                                    }}
+                                    value={variant}
+                                    disableClearable={true}
+                                    disabled={product.variants.length <= 1}
                                 />
-                            )}
-                            onChange={(event, newValue) => {
-                                setVariant(newValue)
-                            }}
-                            value={variant}
-                            disableClearable={true}
-                        />
+                            </>
+                        )}
                         <Grid item xs={12} style={{ padding: '1rem 0' }}>
                             <TextField
                                 id="quantity"
