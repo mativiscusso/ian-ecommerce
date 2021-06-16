@@ -1,40 +1,39 @@
 # IAN Ecommerce
 
-_El desarrollo consiste en una base robusta de una plataforma para venta online que se puede tomar como punto de partida para su implementacion o recibir mejoras_
+_The development consists of a robust base of an online sales platform that can be taken as a starting point for its implementation or receive improvements._
 
 ## Comenzando 🚀
 
-_Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
+_These instructions will allow you to get a copy of the project running on your local machine for development and testing purposes._
 
-Mira **Deployment** para conocer como desplegar el proyecto.
 
-### Pre-requisitos 📋
+### Requirements 📋
 
-_Para correr el proyecto necesitaras tener instalado_
+_To run the project you will need to have installed_
 
 -   VS Code + extensiones -> Prettier y ESLint
--   Node v12 (minimo)
+-   Node v12 (or more)
 -   XAMPP / Laragon
 
-### Instalación 🔧
+### Install 🔧
 
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
+_A series of step-by-step examples that tells you what to run to have a development environment running_
 
-_Siempre partiendo desde la raiz del proyecto_
+_Always starting from the root of the project_
 
 ```bash
 cd app && npm install
 ```
 
-_Y repite_
+_and repeat_
 
 ```bash
 cd api && npm install
 ```
 
-## Ejecutando los entornos ⚙️
+## Run the enviroments ⚙️
 
-_Para poner en marcha ambos ambientes, debes correr los siquientes comandos_
+_To start both environments, you must run the following commands_
 
 #### Server + Admin UI | API
 
@@ -44,7 +43,7 @@ cd api && npm start
 cd api && yarn start
 ```
 
-Chequear los enlaces que ofrece la API en la terminal de comandos.
+Check the links offered by the API in the command terminal.
 
 #### Storefront | APP
 
@@ -54,13 +53,13 @@ cd app && npm run dev
 cd app && yarn dev
 ```
 
-Abrir [http://localhost:3000](http://localhost:3000) con el navegador para acceder al sitio.
+Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ---
 
-### Migraciones
+### Migrations
 
-[Migrations](https://www.vendure.io/docs/developer-guide/migrations/) - Permitir actualizaciones seguras del esquema de la base de datos.
+[Migrations](https://www.vendure.io/docs/developer-guide/migrations/) - Allow secure updates to the database schema.
 
 ```bash
 yarn migration:generate [name]
@@ -68,7 +67,7 @@ yarn migration:generate [name]
 npm run migration:generate [name]
 ```
 
-ejecutar las migraciones pendientes que se hayan generado:
+run pending migrations that have been generated:
 
 ```bash
 yarn migration:run
@@ -76,7 +75,7 @@ yarn migration:run
 npm run migration:run
 ```
 
-y revertir la migración aplicada más recientemente:
+and roll back the most recently applied migration:
 
 ```bash
 yarn migration:revert
@@ -84,9 +83,9 @@ yarn migration:revert
 npm run migration:revert
 ```
 
-### Estructura del proyecto 📁
+### Project structure 📁
 
-_Detalle de la estructura de carpetas del proyecto_
+_Detail of the project folder structure_
 
 ```
 ├── api
@@ -110,34 +109,31 @@ _Detalle de la estructura de carpetas del proyecto_
 
 ### Test ⌨️
 
-_Pendiente_
+_Cooming soon_
 
 ```
 .
 ```
 
-## Despliegue 📦
+## Deploy 📦
 
-_Pendiente_
+_Cooming soon_
 
-## Construido con 🛠️
+## Build  🛠️
 
 -   [Vendure](https://www.vendure.io/) - Headless e-commerce framework
 -   [Next JS](https://nextjs.org/) - React framework
--   [Material UI](https://material-ui.com/) - Libreria de estilos
+-   [Material UI](https://material-ui.com/) - Styles library
 
-## Versionado 📌
-
-Usamos [SemVer](http://semver.org/) para el versionado.
 
 ## Autores ✒️
 
 -   **Mati Viscusso** - _Software Developer_ - [mativiscusso](https://github.com/mativiscusso)
 
-## Licencia 📄
+## License 📄
 
-Este proyecto está bajo la Licencia MIT
+This project is under the License MIT
 
 ---
 
-⌨️ con 💪 por [Mati Viscusso](https://github.com/mativiscusso) 🐱‍👤
+⌨️ with 💪 for [Mati Viscusso](https://github.com/mativiscusso) 🐱‍👤
