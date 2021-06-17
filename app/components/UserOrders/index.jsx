@@ -13,10 +13,12 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import AppBar from '@material-ui/core/AppBar'
-import VisibilityIcon from '@material-ui/icons/VisibilityTwoTone'
 import IconButton from '@material-ui/core/IconButton'
+import TablePagination from '@material-ui/core/TablePagination'
 
 import { toThousand, timeAgo } from 'utils/helpers'
+
+import OrderBtnView from './OrdersBtnView'
 
 const useStyles = makeStyles((theme) => ({
     table: {
@@ -40,7 +42,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box p={1}>
+                <Box p={0}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -58,9 +60,20 @@ function navigatorTabs(index) {
 export default function UserOrders({ orders }) {
     const classes = useStyles()
     const [value, setValue] = useState(0)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
 
     const handleChange = (event, newValue) => {
         setValue(newValue)
+    }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage)
+    }
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10))
+        setPage(0)
     }
 
     return (
@@ -97,48 +110,63 @@ export default function UserOrders({ orders }) {
                         </TableHead>
                         <TableBody>
                             {orders &&
-                                orders.items.map((row, i) => (
-                                    <TableRow key={row.code}>
-                                        <TableCell align="center">
-                                            {i + 1}
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <Typography variant="caption">
-                                                {row.code}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {timeAgo(row.createdAt)}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.active === false ? 'NO' : 'SI'}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Typography>
-                                                {/* This function split words by CamelCase */}
-                                                {row.state.replace(
-                                                    /([a-z])([A-Z])/g,
-                                                    '$1 $2'
-                                                )}
-                                            </Typography>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            ${toThousand(row.totalWithTax)}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <IconButton
-                                                color="inherit"
-                                                aria-label="ver mas "
-                                                component="button"
+                                orders.items
+                                    .slice(
+                                        page * rowsPerPage,
+                                        page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map((row, i) => (
+                                        <TableRow key={row.code}>
+                                            <TableCell align="center">
+                                                {i + 1}
+                                            </TableCell>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
                                             >
-                                                <VisibilityIcon />
-                                            </IconButton>
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
+                                                <Typography variant="caption">
+                                                    {row.code}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {timeAgo(row.createdAt)}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                {row.active === false
+                                                    ? 'NO'
+                                                    : 'SI'}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <Typography variant="subtitle2">
+                                                    {/* This function split words by CamelCase */}
+                                                    {row.state.replace(
+                                                        /([a-z])([A-Z])/g,
+                                                        '$1 $2'
+                                                    )}
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell align="right">
+                                                ${toThousand(row.totalWithTax)}
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <OrderBtnView
+                                                    orderCode={row.code}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={orders.items.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
             </TabPanel>
         </div>
     )

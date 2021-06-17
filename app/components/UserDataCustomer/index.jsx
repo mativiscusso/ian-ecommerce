@@ -7,7 +7,12 @@ export default function UserAdresses() {
         <form autoComplete="off">
             <TextField id="firstName" label="Nombre" fullWidth required />
             <TextField id="lastName" label="Apellido" fullWidth required />
-            <TextField id="phoneNumber" label="Teléfono" fullWidth required />
+            <TextField
+                id="phoneNumberUser"
+                label="Teléfono"
+                fullWidth
+                required
+            />
             <TextField id="email" label="E-mail" fullWidth required />
             <Button
                 variant="contained"

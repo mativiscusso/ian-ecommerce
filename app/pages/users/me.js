@@ -9,7 +9,7 @@ import { ACTIVE_CUSTOMER } from 'graphql/queries'
 import { useQuery } from '@apollo/client'
 import { UserContext } from 'utils/userContext'
 
-import UserTabs from 'components/UserTabs'
+import UserTabs from 'components/UserProfile'
 import UserOrders from 'components/UserOrders'
 
 export default function UserProfile() {
@@ -22,23 +22,24 @@ export default function UserProfile() {
             setCustomerActive(data.activeCustomer)
         }
     }, [data, error])
-    console.log(user)
 
     if (loading) return <CircularProgress />
 
-    console.log(customerActive)
     return (
         <Container maxWidth="xl" style={{ marginTop: '2rem' }}>
-            {user && (
-                <Typography variant="h6" style={{ marginBottom: '1rem' }}>
-                    Hola, {user.me.identifier}
-                </Typography>
-            )}
             <Grid container spacing={1}>
-                <Grid item xl={12} lg={4}>
+                <Grid item xs={12} lg={4}>
+                    {user && (
+                        <Typography
+                            variant="h6"
+                            style={{ marginBottom: '1rem' }}
+                        >
+                            Hola, {user.me.identifier}
+                        </Typography>
+                    )}
                     <UserTabs user={user} customer={customerActive} />
                 </Grid>
-                <Grid item xl={12} lg={8}>
+                <Grid item xs={12} lg={8}>
                     {customerActive && (
                         <UserOrders orders={customerActive.orders} />
                     )}

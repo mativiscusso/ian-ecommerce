@@ -268,3 +268,37 @@ export const ACTIVE_CUSTOMER = gql`
     }
     ${ORDER_LIST_FRAGMENT}
 `
+export const ORDER_BY_CODE = gql`
+    query getOrderByCode($code: String!) {
+        orderByCode(code: $code) {
+            ...Cart
+            fulfillments {
+                createdAt
+                state
+                method
+                trackingCode
+            }
+            history {
+                items {
+                    type
+                    data
+                }
+                totalItems
+            }
+            surcharges {
+                description
+                sku
+                taxLines {
+                    description
+                    taxRate
+                }
+                price
+                priceWithTax
+                taxRate
+            }
+            createdAt
+            orderPlacedAt
+        }
+    }
+    ${CART_FRAGMENT}
+`
