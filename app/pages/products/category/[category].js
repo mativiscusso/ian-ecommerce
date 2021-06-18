@@ -45,8 +45,6 @@ export default function AllProducts() {
         }
     }, [category, data, error])
 
-    if (loading) return <CircularProgress />
-
     if (error) console.log(error)
 
     return (
@@ -65,7 +63,7 @@ export default function AllProducts() {
                         setProducts={setProducts}
                         collectionSlug={category}
                     />
-                    <ProductsList data={products} />
+                    <ProductsList data={products} loading={loading} />
                 </Grid>
             </Grid>
         </Container>

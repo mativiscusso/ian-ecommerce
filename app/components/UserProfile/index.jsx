@@ -5,11 +5,11 @@ import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
 import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import UserDataCustomer from 'components/UserDataCustomer'
-import UserAddresses from 'components/UserAddresses'
+import UserDataCustomer from './UserDataCustomer'
+import UserAddresses from './UserAddresses'
+import ButtonUpdate from './ButtonUpdate'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +32,7 @@ export default function UserProfile({ user, customerActive }) {
                     <Typography variant="button">Mis Datos</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <UserDataCustomer />
+                    <UserDataCustomer customerActive={customerActive} />
                 </AccordionDetails>
             </Accordion>
             <Accordion>
@@ -44,7 +44,7 @@ export default function UserProfile({ user, customerActive }) {
                     <Typography variant="button">Mis direcciones</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <UserAddresses />
+                    <UserAddresses customerActive={customerActive} />
                 </AccordionDetails>
             </Accordion>
             <Accordion>
@@ -71,14 +71,12 @@ export default function UserProfile({ user, customerActive }) {
                             fullWidth
                             required
                         />
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            style={{ marginTop: '1rem' }}
-                            type="submit"
-                        >
-                            GUARDAR
-                        </Button>
+                        <ButtonUpdate
+                            dataToProcess={[]}
+                            dialogTitle="¿Desea actualizar su contraseña?"
+                            dialogContent="Si presiona SI, procedo a la actualización. Si NO quiere
+                        actualizar su constraseña, presione CANCELAR."
+                        />
                     </form>
                 </AccordionDetails>
             </Accordion>

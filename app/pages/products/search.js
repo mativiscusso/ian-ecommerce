@@ -46,8 +46,6 @@ export default function AllProducts() {
         }
     }, [q, data, error])
 
-    if (loading) return <CircularProgress />
-
     return (
         <Container maxWidth="xl" className={mainProducts}>
             <Grid container justify="center">
@@ -64,7 +62,7 @@ export default function AllProducts() {
                         setProducts={setProducts}
                         queryString={q}
                     />
-                    <ProductsList data={products} />
+                    <ProductsList data={products} loading={loading} />
                 </Grid>
             </Grid>
         </Container>

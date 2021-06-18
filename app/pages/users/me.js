@@ -37,7 +37,7 @@ export default function UserProfile() {
                             Hola, {user.me.identifier}
                         </Typography>
                     )}
-                    <UserTabs user={user} customer={customerActive} />
+                    <UserTabs user={user} customerActive={customerActive} />
                 </Grid>
                 <Grid item xs={12} lg={8}>
                     {customerActive && (

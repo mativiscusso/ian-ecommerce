@@ -80,7 +80,6 @@ export default function FullScreenDialog({ orderCode }) {
     if (loading) return <CircularProgress />
     if (error) console.log(error)
 
-    console.log(order)
     return (
         <div>
             <IconButton

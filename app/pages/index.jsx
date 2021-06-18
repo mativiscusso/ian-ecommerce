@@ -23,9 +23,6 @@ export default function Blog() {
             input: { term: '', groupByProduct: true, skip: 0 },
         },
     })
-    if (loading) {
-        return <h1>loading...</h1>
-    }
 
     if (error) {
         console.dir(error)
@@ -38,7 +35,7 @@ export default function Blog() {
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
                     <Container maxWidth={false}>
-                        <ProductList data={data} />
+                        <ProductList data={data} loading={loading} />
                     </Container>
                 </main>
             </Container>
