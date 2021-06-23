@@ -23,7 +23,7 @@ export default function TransitionAlerts({ isOpen, text, severity }) {
 
     useEffect(() => {
         setOpen(isOpen)
-    }, [])
+    }, [isOpen])
 
     console.log('isopen' + isOpen, 'open' + open)
     return (

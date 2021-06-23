@@ -1,11 +1,12 @@
 import React from 'react'
+
 import Container from '@material-ui/core/Container'
-import Header from 'components/CategoryList/Desktop'
+
+import ProductSlider from 'components/ProductSlider'
 import MainFeatured from 'components/MainFeatured'
 import ProductList from 'components/ProductList'
 
 import { useQuery } from '@apollo/client'
-
 import { SEARCH_PRODUCTS } from 'graphql/queries'
 
 const mainFeaturedPost = {
@@ -34,8 +35,9 @@ export default function Blog() {
             <Container maxWidth={false} disableGutters>
                 <main>
                     <MainFeatured post={mainFeaturedPost} />
+
                     <Container maxWidth={false}>
-                        <ProductList data={data} loading={loading} />
+                        <ProductSlider data={data} loading={loading} />
                     </Container>
                 </main>
             </Container>

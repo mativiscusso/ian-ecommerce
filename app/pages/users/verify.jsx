@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { USER_ACCOUNT_VERIFY } from 'graphql/mutations'
 import { UserContext } from 'utils/userContext'
+import { useMutation } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => ({
     backdrop: {
@@ -19,11 +20,11 @@ export default function verifyUserPage() {
     const { token } = router.query
     const { backdrop } = useStyles()
 
-    const { verifyUser } = useContext(UserContext)
+    const [verifyUser] = useMutation(USER_ACCOUNT_VERIFY)
 
     useEffect(() => {
         if (token) {
-            verifyUser(USER_ACCOUNT_VERIFY, token)
+            verifyUser({ variables: { token: token } })
             setTimeout(() => {
                 router.push('/')
             }, 1000)

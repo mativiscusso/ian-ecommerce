@@ -6,7 +6,6 @@ import Image from 'next/image'
 import {
     AppBar,
     Toolbar,
-    Typography,
     makeStyles,
     IconButton,
     Drawer,
@@ -14,9 +13,7 @@ import {
     CircularProgress,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import LaunchIcon from '@material-ui/icons/Launch'
 
-import Link from 'components/Link'
 import ProductSearch from 'components/ProductSearch'
 import IconCart from 'components/Cart/IconCart'
 import UserItem from './UserItem'
@@ -63,9 +60,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar() {
-    const { logo, menuButton, toolbar, drawerContainer, menuItems } =
-        useStyles()
-    const [isCheckoutPage, setIsCheckoutPage] = useState(false)
+    const { logo, toolbar, drawerContainer, menuItems } = useStyles()
+    const [isPrivatePage, setIsPrivatePage] = useState(false)
 
     const [state, setState] = useState({
         mobileView: false,
@@ -77,7 +73,18 @@ export default function Navbar() {
     const router = useRouter()
 
     useEffect(() => {
-        setIsCheckoutPage(router.pathname.includes('checkout'))
+        const nameUrl = router.pathname
+        if (
+            nameUrl === '/checkout' ||
+            nameUrl === '/login' ||
+            nameUrl === '/register' ||
+            nameUrl === '/users/verify' ||
+            nameUrl === '/users/password-reset'
+        ) {
+            setIsPrivatePage(true)
+        } else {
+            setIsPrivatePage(false)
+        }
     }, [router])
 
     useEffect(() => {
@@ -119,26 +126,8 @@ export default function Navbar() {
                                         size={20}
                                     />
                                 )}
-                                {user ? (
-                                    <UserItem user={user} />
-                                ) : (
-                                    <Link
-                                        href={'/login'}
-                                        color="inherit"
-                                        className={menuButton}
-                                    >
-                                        <IconButton color="inherit">
-                                            <LaunchIcon />
-                                            <Typography
-                                                variant="caption"
-                                                color="inherit"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                Ingresar
-                                            </Typography>
-                                        </IconButton>
-                                    </Link>
-                                )}
+
+                                <UserItem user={user} />
                             </Grid>
                         </Grid>
                     </Toolbar>
@@ -176,22 +165,9 @@ export default function Navbar() {
                     <ProductSearch mobileState={mobileView} />
 
                     <IconCart />
-                    {user ? (
-                        <UserItem user={user} />
-                    ) : (
-                        <Link href={'/login'} color="inherit">
-                            <IconButton color="inherit">
-                                <LaunchIcon />
-                                <Typography
-                                    variant="caption"
-                                    color="inherit"
-                                    style={{ marginLeft: 10 }}
-                                >
-                                    Ingresar
-                                </Typography>
-                            </IconButton>
-                        </Link>
-                    )}
+
+                    <UserItem user={user} />
+
                     <Drawer
                         {...{
                             anchor: 'left',
@@ -223,7 +199,7 @@ export default function Navbar() {
 
     return (
         <nav>
-            {isCheckoutPage === false ? (
+            {isPrivatePage === false ? (
                 mobileView ? (
                     displayMobile()
                 ) : (

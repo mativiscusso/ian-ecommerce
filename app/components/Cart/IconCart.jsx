@@ -1,12 +1,14 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import Cart from 'components/Cart'
-import { Button, makeStyles } from '@material-ui/core'
+import { Button, CircularProgress, makeStyles } from '@material-ui/core'
 import IconButton from '@material-ui/core/IconButton'
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 import Badge from '@material-ui/core/Badge'
 import Drawer from '@material-ui/core/Drawer'
 import { UserContext } from 'utils/userContext'
 import { useRouter } from 'next/router'
+import { useLazyQuery } from '@apollo/client'
+import { ORDER_ACTIVE } from 'graphql/queries'
 
 const useStyles = makeStyles((theme) => ({
     float: {
@@ -31,11 +33,21 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ButtonCartHome() {
     const classes = useStyles()
-    const { cartLenght } = useContext(UserContext)
+    const { cart, totalQuantity, setCart } = useContext(UserContext)
     const [show, setShow] = useState({
         right: false,
     })
     const router = useRouter()
+
+    const [activeOrder, { data: dataOrder, loading }] =
+        useLazyQuery(ORDER_ACTIVE)
+
+    useEffect(() => {
+        activeOrder()
+        if (dataOrder && dataOrder.activeOrder) {
+            setCart(dataOrder.activeOrder)
+        }
+    }, [activeOrder, dataOrder])
 
     const toggleDrawer = (anchor, open) => (event) => {
         if (
@@ -48,7 +60,7 @@ export default function ButtonCartHome() {
     }
 
     const cartHome = (anchor) => {
-        const isEmpty = cartLenght === 0
+        const isEmpty = totalQuantity(cart) === 0
 
         const handleClick = async () => {
             await router.push('/checkout')
@@ -56,6 +68,7 @@ export default function ButtonCartHome() {
         }
         return (
             <>
+                {loading && <CircularProgress />}
                 <div
                     role="presentation"
                     onKeyDown={toggleDrawer(anchor, false)}
@@ -86,7 +99,7 @@ export default function ButtonCartHome() {
                 onClick={toggleDrawer('right', true)}
                 color="inherit"
             >
-                <Badge badgeContent={cartLenght} color="secondary">
+                <Badge badgeContent={totalQuantity(cart)} color="secondary">
                     <ShoppingCartIcon />
                 </Badge>
             </IconButton>

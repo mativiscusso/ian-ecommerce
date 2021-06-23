@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { CircularProgress, Container, Grid } from '@material-ui/core'
+import { Container, Grid } from '@material-ui/core'
 
 import ProductsList from 'components/ProductList'
 import ProductFilters from 'components/ProductsFilter'
