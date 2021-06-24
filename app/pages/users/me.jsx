@@ -9,13 +9,20 @@ import { ACTIVE_CUSTOMER } from 'graphql/queries'
 import { useQuery } from '@apollo/client'
 import { UserContext } from 'utils/userContext'
 
-import UserTabs from 'components/UserProfile'
+import UserProfile from 'components/UserProfile'
 import UserOrders from 'components/UserOrders'
+import { useRouter } from 'next/router'
 
-export default function UserProfile() {
+export default function Profile() {
     const { user } = useContext(UserContext)
     const { data, loading, error } = useQuery(ACTIVE_CUSTOMER)
     const [customerActive, setCustomerActive] = useState(undefined)
+
+    const router = useRouter()
+
+    useEffect(() => {
+        !user && router.push('/')
+    }, [user])
 
     useEffect(() => {
         if (data && !error) {
@@ -37,7 +44,7 @@ export default function UserProfile() {
                             Hola, {user.me.identifier}
                         </Typography>
                     )}
-                    <UserTabs user={user} customerActive={customerActive} />
+                    <UserProfile user={user} customerActive={customerActive} />
                 </Grid>
                 <Grid item xs={12} lg={8}>
                     {customerActive && (
