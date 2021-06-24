@@ -6,7 +6,6 @@ _The development consists of a robust base of an online sales platform that can 
 
 _These instructions will allow you to get a copy of the project running on your local machine for development and testing purposes._
 
-
 ### Requirements 📋
 
 _To run the project you will need to have installed_
@@ -32,6 +31,8 @@ cd api && npm install
 ```
 
 ## Run the enviroments ⚙️
+
+Previously generate a .env file in api folder and then set a COOKIE_SESSION_SECRET
 
 _To start both environments, you must run the following commands_
 
@@ -119,12 +120,11 @@ _Cooming soon_
 
 _Cooming soon_
 
-## Build  🛠️
+## Build 🛠️
 
 -   [Vendure](https://www.vendure.io/) - Headless e-commerce framework
 -   [Next JS](https://nextjs.org/) - React framework
 -   [Material UI](https://material-ui.com/) - Styles library
-
 
 ## Autores ✒️
 
