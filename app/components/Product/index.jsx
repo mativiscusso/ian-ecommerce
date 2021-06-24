@@ -24,7 +24,9 @@ const useStyles = makeStyles((theme) => ({
             zIndex: 1000,
             height: '100%',
         },
-
+        [theme.breakpoints.down('md')]: {
+            height: '100%',
+        },
         marginBottom: '1rem',
     },
     media: {
@@ -32,9 +34,11 @@ const useStyles = makeStyles((theme) => ({
         height: 200,
     },
     productName: {
-        height: 35,
+        height: 30,
         textTransform: 'uppercase',
-        fontWeight: 'bold',
+        [theme.breakpoints.down('md')]: {
+            fontSize: 12,
+        },
     },
     productPrice: {
         position: 'relative',

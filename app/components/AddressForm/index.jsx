@@ -100,7 +100,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Nombre"
                         fullWidth
                         onChange={handleNames}
-                        autoComplete="given-name"
                         value={customerState.firstName}
                         disabled={!!customerState.firstName}
                     />
@@ -113,7 +112,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Apellido"
                         fullWidth
                         onChange={handleNames}
-                        autoComplete="family-name"
                         value={customerState.lastName}
                         disabled={!!customerState.lastName}
                     />
@@ -126,7 +124,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Dirección de email"
                         fullWidth
                         onChange={handleNames}
-                        autoComplete="email-name"
                         value={customerState.emailAddress}
                         disabled={!!customerState.emailAddress}
                     />
@@ -139,7 +136,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Direccion 1"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping address-line1"
                         value={addresses.streetLine1}
                     />
                 </Grid>
@@ -150,7 +146,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Direccion 2"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping address-line2"
                         value={addresses.streetLine2}
                     />
                 </Grid>
@@ -186,7 +181,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Direccion de envío"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping address-line1"
                         disabled={addresses.defaultShippingAddress}
                         value={
                             addresses.defaultShippingAddress
@@ -202,7 +196,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Direccion de facturación"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping address-line2"
                         disabled={addresses.defaultBillingAddress}
                         value={
                             addresses.defaultBillingAddress
@@ -219,7 +212,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Ciudad"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping address-level2"
                         value={addresses.city}
                     />
                 </Grid>
@@ -242,7 +234,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Código Postal"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping postal-code"
                         value={addresses.postalCode}
                     />
                 </Grid>
@@ -254,7 +245,6 @@ export default function AddressForm({ customer, orderActive, handleNext }) {
                         label="Telefono"
                         fullWidth
                         onChange={handleChange}
-                        autoComplete="shipping phoneNumber"
                         value={addresses.phoneNumber}
                     />
                 </Grid>

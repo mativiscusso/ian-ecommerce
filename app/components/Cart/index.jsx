@@ -15,7 +15,7 @@ import { Container, Grid } from '@material-ui/core'
 
 import { UserContext } from 'utils/userContext'
 import { formatURLImage, toThousand } from 'utils/helpers'
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 
 import {
     CHANGE_QTY_ITEM_CART,
@@ -98,7 +98,6 @@ export default function Cart({ isEmpty }) {
     const handleRemoveAll = async () => {
         await removeAll()
     }
-    console.log(cart)
     return (
         <Container maxWidth="md" disableGutters>
             <TableContainer>

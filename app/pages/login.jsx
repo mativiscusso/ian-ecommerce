@@ -1,28 +1,28 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import Link from 'next/link'
 import Grid from '@material-ui/core/Grid'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 
 import Alert from 'components/Alert'
+import ForgotPassword from 'components/ForgotPassword'
 
 import { USER_LOGIN, USER_REQUEST_RESET_PASSWORD } from 'graphql/mutations'
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 
-import { UserContext } from 'utils/userContext'
+import { USER_ACTIVE } from 'graphql/queries'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(12),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -46,22 +46,12 @@ export default function Login() {
     const [password, setPassword] = useState(null)
     const [rememberMe, setRememberMe] = useState(false)
     const [statusLogin, setStatusLogin] = useState(false)
-    const [errorExist, setErrorExist] = useState(false)
-
-    const { login, statusRequest } = useContext(UserContext)
+    const [errorsExist, setErrorsExist] = useState(false)
 
     const router = useRouter()
 
-    const [forgotPassword] = useMutation(USER_REQUEST_RESET_PASSWORD)
-
-    useEffect(() => {
-        if (statusRequest) {
-            setStatusLogin(statusRequest)
-            if (statusRequest.status) {
-                router.push('/')
-            }
-        }
-    }, [statusRequest])
+    const [currentUser] = useLazyQuery(USER_ACTIVE)
+    const [login] = useMutation(USER_LOGIN)
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -72,29 +62,8 @@ export default function Login() {
     const handleRememberMe = (e) => {
         setRememberMe(e.target.checked)
     }
-    const handleForgotPassword = async () => {
-        if (email) {
-            setErrorExist({
-                status: false,
-                msg: '',
-            })
-            const result = await forgotPassword({ variables: { email: email } })
-            if (result) {
-                setStatusLogin({
-                    status: true,
-                    msg: 'Hemos enviado un link a su correo para restablecer la contraseña.',
-                    several: 'success',
-                })
-            }
-        } else {
-            setErrorExist({
-                status: true,
-                msg: 'El campo email debe estar completo',
-            })
-        }
-    }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const user = {
             user: email,
@@ -102,15 +71,37 @@ export default function Login() {
             rememberMe: rememberMe,
         }
         if (user.user && user.password) {
-            login(USER_LOGIN, user)
+            const { data } = await login({ variables: user })
+            switch (data.login.__typename) {
+                case 'InvalidCredentialsError':
+                    setStatusLogin({
+                        status: true,
+                        msg: 'Las credenciales son equivocadas',
+                    })
+                    break
+                case 'NotVerifiedError':
+                    setStatusLogin({
+                        status: true,
+                        msg: 'El usuario no esta validado',
+                    })
+                    break
+                case 'CurrentUser':
+                    currentUser()
+                    router.replace('/')
+                    break
+            }
         } else {
-            setStatusLogin({
-                status: false,
-                msg: 'Los campos USUARIO y CONTRASEÑA son requeridos',
+            setErrorsExist({
+                status: true,
+                msg: 'Los campos son requeridos',
             })
+            setTimeout(() => {
+                setErrorsExist({
+                    status: false,
+                })
+            }, 5000)
         }
     }
-    console.log(statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -133,8 +124,8 @@ export default function Login() {
                         autoComplete="email"
                         autoFocus
                         onChange={handleEmail}
-                        error={errorExist.status}
-                        helperText={errorExist.msg}
+                        error={errorsExist.status}
+                        helperText={errorsExist.msg}
                     />
                     <TextField
                         variant="outlined"
@@ -147,6 +138,8 @@ export default function Login() {
                         id="password"
                         autoComplete="current-password"
                         onChange={handlePassword}
+                        error={errorsExist.status}
+                        helperText={errorsExist.msg}
                     />
                     <FormControlLabel
                         control={<Checkbox color="primary" />}
@@ -164,12 +157,7 @@ export default function Login() {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Button
-                                onClick={handleForgotPassword}
-                                color="inherit"
-                            >
-                                ¿Olvidó su contraseña?
-                            </Button>
+                            <ForgotPassword />
                         </Grid>
                         <Grid item>
                             <Link href="/register">

@@ -16,6 +16,7 @@ import ShippingsForm from 'components/ShippingForm'
 
 import { useQuery } from '@apollo/client'
 import { CUSTOMER_ACTIVE, ORDER_ACTIVE } from 'graphql/queries'
+import { toThousand } from 'utils/helpers'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -60,6 +61,7 @@ export default function Checkout() {
 
     useEffect(() => {
         if (dataOrder && !errorOrder) {
+            console.log(dataOrder)
             setOrderActive(dataOrder.activeOrder)
         }
     }, [dataOrder, errorOrder])
@@ -168,10 +170,17 @@ export default function Checkout() {
                                                                 .productVariant
                                                                 .name
                                                         }
-                                                        secondary={`$ ${product.productVariant.price} x ${product.quantity}`}
+                                                        secondary={`$ ${toThousand(
+                                                            product.unitPrice
+                                                        )} x ${
+                                                            product.quantity
+                                                        }`}
                                                     />
                                                     <Typography variant="body2">
-                                                        ${product.linePrice}
+                                                        $
+                                                        {toThousand(
+                                                            product.unitPrice
+                                                        )}
                                                     </Typography>
                                                 </ListItem>
                                             ))}
@@ -184,7 +193,9 @@ export default function Checkout() {
                                             >
                                                 ${' '}
                                                 {orderActive &&
-                                                    orderActive.total}
+                                                    toThousand(
+                                                        orderActive.total
+                                                    )}
                                             </Typography>
                                         </ListItem>
                                     </List>

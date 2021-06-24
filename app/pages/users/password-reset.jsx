@@ -9,6 +9,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core'
+import { useMutation } from '@apollo/client'
 
 export default function paswordResetPage() {
     const [loading, setLoading] = useState(false)
@@ -16,7 +17,7 @@ export default function paswordResetPage() {
     const router = useRouter()
     const { token } = router.query
 
-    const { resetPassword } = useContext(UserContext)
+    const [resetPassword] = useMutation(USER_RESET_PASSWORD)
 
     const handlePassword = (e) => {
         setPassword(e.target.value)
@@ -24,7 +25,7 @@ export default function paswordResetPage() {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (token && password) {
-            resetPassword(USER_RESET_PASSWORD, token, password)
+            resetPassword({ variables: { token: token, password: password } })
             setLoading(true)
             setTimeout(() => {
                 router.push('/')

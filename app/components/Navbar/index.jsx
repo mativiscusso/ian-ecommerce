@@ -1,10 +1,11 @@
 import { useState, useEffect, useContext } from 'react'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 import {
     AppBar,
     Toolbar,
-    Typography,
     makeStyles,
     IconButton,
     Drawer,
@@ -13,16 +14,12 @@ import {
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 
-import Link from 'components/Link'
 import ProductSearch from 'components/ProductSearch'
 import IconCart from 'components/Cart/IconCart'
 import UserItem from './UserItem'
-import { useRouter } from 'next/router'
-
-import { UserContext } from 'utils/userContext'
-import { AccountCircle } from '@material-ui/icons'
 import CategoriesDesktop from 'components/CategoryList/Desktop'
 import CategoriesMobile from 'components/CategoryList/Mobile'
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -32,9 +29,8 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     logo: {
-        fontWeight: 600,
-        color: '#FFFEFE',
-        textAlign: 'left',
+        position: 'absolute',
+        top: 0,
     },
     menuButton: {
         textTransform: 'uppercase',
@@ -64,9 +60,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Navbar() {
-    const { logo, menuButton, toolbar, drawerContainer, menuItems } =
-        useStyles()
-    const [isCheckoutPage, setIsCheckoutPage] = useState(false)
+    const { logo, toolbar, drawerContainer, menuItems } = useStyles()
+    const [isPrivatePage, setIsPrivatePage] = useState(false)
 
     const [state, setState] = useState({
         mobileView: false,
@@ -76,9 +71,20 @@ export default function Navbar() {
     const { user, userLoading } = useContext(UserContext)
 
     const router = useRouter()
-    
+
     useEffect(() => {
-        setIsCheckoutPage(router.pathname.includes('checkout'))
+        const nameUrl = router.pathname
+        if (
+            nameUrl === '/checkout' ||
+            nameUrl === '/login' ||
+            nameUrl === '/register' ||
+            nameUrl === '/users/verify' ||
+            nameUrl === '/users/password-reset'
+        ) {
+            setIsPrivatePage(true)
+        } else {
+            setIsPrivatePage(false)
+        }
     }, [router])
 
     useEffect(() => {
@@ -120,26 +126,8 @@ export default function Navbar() {
                                         size={20}
                                     />
                                 )}
-                                {user ? (
-                                    <UserItem user={user} />
-                                ) : (
-                                    <Link
-                                        href={'/login'}
-                                        color="inherit"
-                                        className={menuButton}
-                                    >
-                                        <IconButton color="inherit">
-                                            <AccountCircle />
-                                            <Typography
-                                                variant="caption"
-                                                color="inherit"
-                                                style={{ marginLeft: 10 }}
-                                            >
-                                                Ingresar
-                                            </Typography>
-                                        </IconButton>
-                                    </Link>
-                                )}
+
+                                <UserItem user={user} />
                             </Grid>
                         </Grid>
                     </Toolbar>
@@ -177,22 +165,9 @@ export default function Navbar() {
                     <ProductSearch mobileState={mobileView} />
 
                     <IconCart />
-                    {user ? (
-                        <UserItem user={user} />
-                    ) : (
-                        <Link href={'/login'} color="inherit">
-                            <IconButton color="inherit">
-                                <AccountCircle />
-                                <Typography
-                                    variant="caption"
-                                    color="inherit"
-                                    style={{ marginLeft: 10 }}
-                                >
-                                    Ingresar
-                                </Typography>
-                            </IconButton>
-                        </Link>
-                    )}
+
+                    <UserItem user={user} />
+
                     <Drawer
                         {...{
                             anchor: 'left',
@@ -211,20 +186,29 @@ export default function Navbar() {
 
     const Logo = (
         <NextLink href="/">
-            <a className={logo}>Ecommerce</a>
+            <a className={logo}>
+                <Image
+                    src="/assets/logo.png"
+                    alt="Logo Cocot"
+                    width={100}
+                    height={100}
+                />
+            </a>
         </NextLink>
     )
 
     return (
         <nav>
-            {isCheckoutPage === false ? (
+            {isPrivatePage === false ? (
                 mobileView ? (
                     displayMobile()
                 ) : (
                     displayDesktop()
                 )
             ) : (
-                <Toolbar>{Logo}</Toolbar>
+                <AppBar>
+                    <Toolbar>{Logo}</Toolbar>
+                </AppBar>
             )}
         </nav>
     )

@@ -7,6 +7,7 @@ const { defaultEmailHandlers, EmailPlugin } = require("@vendure/email-plugin");
 const { AssetServerPlugin } = require("@vendure/asset-server-plugin");
 const { AdminUiPlugin } = require("@vendure/admin-ui-plugin");
 const path = require("path");
+require('dotenv').config()
 
 const config = {
     apiOptions: {
@@ -31,7 +32,10 @@ const config = {
             identifier: "superadmin",
             password: "superadmin",
         },
-        tokenMethod: "bearer",
+        tokenMethod: 'cookie',
+        cookieOptions: {
+          secret: process.env.COOKIE_SESSION_SECRET
+        },
         requireVerification: true,
     },
     dbConnectionOptions: {

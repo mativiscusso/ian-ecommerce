@@ -45,8 +45,8 @@ export default function ShippingsForm({
         }
     }, [dataPayments, errorPayments])
 
-    if (loading) return <CircularProgress/>
-    if (loadingPayments) return <CircularProgress/
+    if (loading) return <CircularProgress />
+    if (loadingPayments) return <CircularProgress />
 
     const handleClickNext = async () => {
         await handleNext()

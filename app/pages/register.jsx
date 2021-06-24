@@ -2,11 +2,9 @@ import { useState, useContext, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Grid from '@material-ui/core/Grid'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
@@ -16,10 +14,11 @@ import Alert from 'components/Alert'
 import { USER_REGISTER } from 'graphql/mutations'
 
 import { UserContext } from 'utils/userContext'
+import { useMutation } from '@apollo/client'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(12),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -43,15 +42,16 @@ export default function Register() {
     const [lastName, setLastName] = useState(null)
     const [email, setEmail] = useState(null)
     const [password, setPassword] = useState(null)
-    const [statusLogin, setStatusLogin] = useState(false)
+    const [errorsExist, setErrorsExist] = useState(false)
+    const [statusRegister, setStatusRegister] = useState({
+        status: false,
+        msg: '',
+        disabled: false,
+    })
 
-    const { register, statusRequest, alertOpen } = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
 
-    useEffect(() => {
-        if (statusRequest) {
-            setStatusLogin(statusRequest)
-        }
-    }, [statusRequest])
+    const [register] = useMutation(USER_REGISTER)
 
     const router = useRouter()
 
@@ -67,7 +67,7 @@ export default function Register() {
     const handlePassword = (e) => {
         setPassword(e.target.value)
     }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         const user = {
             emailAddress: email,
@@ -81,21 +81,36 @@ export default function Register() {
             user.lastName &&
             user.password
         ) {
-            const result = register(USER_REGISTER, user)
-            console.log(result)
-            if (statusLogin.status) {
-                setTimeout(() => {
-                    router.push('/')
-                }, 2500)
+            const { data } = await register({ variables: { data: user } })
+            switch (data.registerCustomerAccount.__typename) {
+                case 'MissingPasswordError':
+                    setStatusRegister({
+                        status: true,
+                        msg: 'No se ha enviado contraseña',
+                        disabled: false,
+                    })
+                    break
+                case 'Success':
+                    setStatusRegister({
+                        status: 'ok',
+                        msg: 'Registro exitoso. Hemos enviado un email para confirmación.',
+                        disabled: true,
+                    })
+
+                    break
             }
         } else {
-            setStatusLogin({
-                status: false,
-                msg: 'Todos los campos son requeridos',
+            setErrorsExist({
+                status: true,
+                msg: 'Los campos son requeridos',
             })
+            setTimeout(() => {
+                setErrorsExist({
+                    status: false,
+                })
+            }, 5000)
         }
     }
-    console.log(alertOpen, statusLogin)
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
@@ -110,6 +125,8 @@ export default function Register() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error={errorsExist.status}
+                                helperText={errorsExist.msg}
                                 autoComplete="fname"
                                 name="firstName"
                                 variant="outlined"
@@ -123,6 +140,8 @@ export default function Register() {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
+                                error={errorsExist.status}
+                                helperText={errorsExist.msg}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -135,6 +154,8 @@ export default function Register() {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                error={errorsExist.status}
+                                helperText={errorsExist.msg}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -147,6 +168,8 @@ export default function Register() {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                error={errorsExist.status}
+                                helperText={errorsExist.msg}
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -159,41 +182,43 @@ export default function Register() {
                             />
                         </Grid>
                     </Grid>
-                    {alertOpen === false ? (
-                        <>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                            >
-                                Registrarme
-                            </Button>
-                            <Grid container justify="flex-end">
-                                <Grid item>
-                                    <Link href="/login">
-                                        ¿Ya tiene una cuenta? Ingrese acá
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                                {statusLogin.status === false && (
-                                    <Alert
-                                        isOpen={true}
-                                        text={statusLogin.msg}
-                                        severity="error"
-                                    />
-                                )}
-                            </Grid>
-                        </>
-                    ) : (
+                    {statusRegister.status === 'ok' && (
                         <Alert
-                            isOpen={alertOpen}
-                            text="Registro exitoso. Hemos enviado un email para confirmacion."
+                            isOpen={true}
+                            text={statusRegister.msg}
                             severity="success"
                         />
                     )}
+                    <>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            disabled={statusRegister.disabled}
+                        >
+                            Registrarme
+                        </Button>
+                        <Grid container justify="flex-end">
+                            <Grid item>
+                                {!statusRegister.disabled && (
+                                    <Link href="/login">
+                                        ¿Ya tiene una cuenta? Ingrese acá
+                                    </Link>
+                                )}
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            {statusRegister.status === true && (
+                                <Alert
+                                    isOpen={true}
+                                    text={statusRegister.msg}
+                                    severity="error"
+                                />
+                            )}
+                        </Grid>
+                    </>
                 </form>
             </div>
         </Container>
