@@ -49,11 +49,15 @@ export default function Register() {
         disabled: false,
     })
 
-    const { setUser } = useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     const [register] = useMutation(USER_REGISTER)
 
     const router = useRouter()
+
+    useEffect(() => {
+        user && router.push('/')
+    }, [user])
 
     const handleFirstName = (e) => {
         setFirstName(e.target.value)

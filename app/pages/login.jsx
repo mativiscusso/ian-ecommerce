@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useRouter } from 'next/router'
 
 import Button from '@material-ui/core/Button'
@@ -15,10 +15,12 @@ import Container from '@material-ui/core/Container'
 import Alert from 'components/Alert'
 import ForgotPassword from 'components/ForgotPassword'
 
-import { USER_LOGIN, USER_REQUEST_RESET_PASSWORD } from 'graphql/mutations'
+import { USER_LOGIN } from 'graphql/mutations'
 import { useLazyQuery, useMutation } from '@apollo/client'
 
 import { USER_ACTIVE } from 'graphql/queries'
+
+import { UserContext } from 'utils/userContext'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -47,8 +49,12 @@ export default function Login() {
     const [rememberMe, setRememberMe] = useState(false)
     const [statusLogin, setStatusLogin] = useState(false)
     const [errorsExist, setErrorsExist] = useState(false)
-
+    const { user } = useContext(UserContext)
     const router = useRouter()
+
+    useEffect(() => {
+        user && router.push('/')
+    }, [user])
 
     const [currentUser] = useLazyQuery(USER_ACTIVE)
     const [login] = useMutation(USER_LOGIN)
@@ -90,6 +96,12 @@ export default function Login() {
                     router.replace('/')
                     break
             }
+            setTimeout(() => {
+                setStatusLogin({
+                    status: false,
+                    msg: '',
+                })
+            }, 5000)
         } else {
             setErrorsExist({
                 status: true,

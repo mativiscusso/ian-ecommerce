@@ -1,15 +1,13 @@
-import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
 import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import UserDataCustomer from './UserDataCustomer'
 import UserAddresses from './UserAddresses'
-import ButtonUpdate from './ButtonUpdate'
+import UserPassword from './UserPassword'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -56,28 +54,7 @@ export default function UserProfile({ user, customerActive }) {
                     <Typography variant="button">Mi contraseña</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                    <form>
-                        <TextField
-                            id="password"
-                            label="Contraseña"
-                            type="password"
-                            fullWidth
-                            required
-                        />
-                        <TextField
-                            id="repeatPassword"
-                            label="Repetir Contraseña"
-                            type="password"
-                            fullWidth
-                            required
-                        />
-                        <ButtonUpdate
-                            dataToProcess={[]}
-                            dialogTitle="¿Desea actualizar su contraseña?"
-                            dialogContent="Si presiona SI, procedo a la actualización. Si NO quiere
-                        actualizar su constraseña, presione CANCELAR."
-                        />
-                    </form>
+                    <UserPassword />
                 </AccordionDetails>
             </Accordion>
         </div>

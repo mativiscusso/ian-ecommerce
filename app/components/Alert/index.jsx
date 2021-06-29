@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Alert from '@material-ui/lab/Alert'
 import IconButton from '@material-ui/core/IconButton'
 import Collapse from '@material-ui/core/Collapse'
-import CloseIcon from '@material-ui/icons/Close'
-import { UserContext } from 'utils/userContext'
+import LinearProgress from '@material-ui/core/LinearProgress'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -18,14 +17,24 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TransitionAlerts({ isOpen, text, severity }) {
     const classes = useStyles()
-    const [open, setOpen] = useState(isOpen)
-    const { setStatusRequest } = useContext(UserContext)
+    const [open] = useState(isOpen)
+    const [progress, setProgress] = useState(0)
 
     useEffect(() => {
-        setOpen(isOpen)
-    }, [isOpen])
+        setInterval(() => {
+            setProgress((oldProgress) => {
+                if (oldProgress === 100) {
+                    return 0
+                }
+                return Math.min(oldProgress + 2.2)
+            })
+        }, 100)
 
-    console.log('isopen' + isOpen, 'open' + open)
+        return () => {
+            clearInterval(5000)
+        }
+    }, [])
+
     return (
         <div className={classes.root}>
             <Collapse in={open}>
@@ -35,19 +44,14 @@ export default function TransitionAlerts({ isOpen, text, severity }) {
                             aria-label="close"
                             color="inherit"
                             size="small"
-                            onClick={() => {
-                                setOpen(!isOpen)
-                                setStatusRequest(undefined)
-                            }}
-                        >
-                            <CloseIcon fontSize="inherit" />
-                        </IconButton>
+                        ></IconButton>
                     }
                     severity={severity}
                 >
                     {text}
                 </Alert>
             </Collapse>
+            <LinearProgress variant="determinate" value={progress} />
         </div>
     )
 }

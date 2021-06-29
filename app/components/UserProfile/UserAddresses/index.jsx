@@ -7,7 +7,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ButtonUpdate from '../ButtonUpdate'
 
 export default function UserAdresses({ customerActive }) {
-    const [defaultAddresses, setDefaultAddresses] = useState(undefined)
     const [addresses, setAddresses] = useState({
         streetLine1: '',
         streetLine2: '',
@@ -21,7 +20,7 @@ export default function UserAdresses({ customerActive }) {
     })
 
     useEffect(() => {
-        if (customerActive && customerActive.addresses.length >= 0) {
+        if (customerActive && customerActive.addresses.length >= 1) {
             setAddresses({
                 ...addresses,
                 streetLine1: customerActive.addresses[0].streetLine1,
