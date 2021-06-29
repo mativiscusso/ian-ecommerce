@@ -13,7 +13,6 @@ import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
 import Paper from '@material-ui/core/Paper'
 import AppBar from '@material-ui/core/AppBar'
-import IconButton from '@material-ui/core/IconButton'
 import TablePagination from '@material-ui/core/TablePagination'
 
 import { toThousand, timeAgo } from 'utils/helpers'

@@ -96,6 +96,12 @@ export default function Login() {
                     router.replace('/')
                     break
             }
+            setTimeout(() => {
+                setStatusLogin({
+                    status: false,
+                    msg: '',
+                })
+            }, 5000)
         } else {
             setErrorsExist({
                 status: true,

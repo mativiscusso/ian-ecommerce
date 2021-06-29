@@ -172,3 +172,51 @@ export const SET_PAYMENT_METHOD_ORDER = gql`
         }
     }
 `
+export const CUSTOMER_UPDATE = gql`
+    mutation updateCustomer($input: UpdateCustomerInput!) {
+        updateCustomer(input: $input) {
+            id
+            firstName
+            lastName
+            phoneNumber
+            emailAddress
+        }
+    }
+`
+
+export const CUSTOMER_ADDRESS_UPDATE = gql`
+    mutation updateAddressesCustomer($input: UpdateAddressInput!) {
+        updateCustomerAddress(input: $input) {
+            id
+            streetLine1
+            streetLine2
+            city
+            province
+            postalCode
+            phoneNumber
+            defaultShippingAddress
+            defaultBillingAddress
+        }
+    }
+`
+
+export const USER_PASSWORD_UPDATE = gql`
+    mutation updateCustomerPassword(
+        $currentPassword: String!
+        $newPassword: String!
+    ) {
+        updateCustomerPassword(
+            currentPassword: $currentPassword
+            newPassword: $newPassword
+        ) {
+            __typename
+            ... on Success {
+                success
+            }
+            ... on InvalidCredentialsError {
+                authenticationError
+                message
+            }
+        }
+    }
+`

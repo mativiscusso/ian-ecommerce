@@ -71,11 +71,12 @@ const UserItem = ({ user }) => {
         return splittedName[0]
     }
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         logout()
         setUser(undefined)
         setCart([])
-        router.reload()
+        await router.push('/')
+        await router.reload()
     }
 
     return (

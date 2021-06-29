@@ -21,7 +21,6 @@ export default function UserAdresses({ customerActive }) {
         }
     }, [customerActive])
 
-    console.log(customerActive)
     return (
         <form autoComplete="off">
             <TextField

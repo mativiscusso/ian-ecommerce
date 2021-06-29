@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         if (data && !error) {
-            setUser(data.me)
+            setUser(data)
         }
     }, [data, error])
 

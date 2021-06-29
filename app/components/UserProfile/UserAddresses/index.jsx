@@ -7,7 +7,6 @@ import Checkbox from '@material-ui/core/Checkbox'
 import ButtonUpdate from '../ButtonUpdate'
 
 export default function UserAdresses({ customerActive }) {
-    console.log(customerActive)
     const [addresses, setAddresses] = useState({
         streetLine1: '',
         streetLine2: '',
