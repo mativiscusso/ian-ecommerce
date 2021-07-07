@@ -18,10 +18,10 @@ const ProductsList = ({ data, loading }) => {
                             md={3}
                             lg={3}
                             xl={2}
-                            key={index}
+                            key={Math.random() + 'grid'}
                         >
                             <Box
-                                key={index}
+                                key={Math.random() + 'box'}
                                 width={210}
                                 marginRight={0.5}
                                 my={5}
@@ -58,7 +58,7 @@ const ProductsList = ({ data, loading }) => {
                         md={3}
                         lg={3}
                         xl={2}
-                        key={product.productId}
+                        key={product.productId + 'product' + Math.random()}
                     >
                         <Product {...product} />
                     </Grid>

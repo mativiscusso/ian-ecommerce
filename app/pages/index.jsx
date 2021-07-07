@@ -37,7 +37,7 @@ export default function Blog() {
                     <MainFeatured post={mainFeaturedPost} />
 
                     <Container maxWidth={false}>
-                        <ProductSlider data={data} loading={loading} />
+                        <ProductList data={data} loading={loading} />
                     </Container>
                 </main>
             </Container>

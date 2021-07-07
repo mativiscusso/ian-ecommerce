@@ -1,10 +1,11 @@
-import React from 'react'
+import { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { Button } from '@material-ui/core'
 import { useMutation } from '@apollo/client'
 import { CHANGE_STATE_ORDER, SET_PAYMENT_METHOD_ORDER } from 'graphql/mutations'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     listItem: {
@@ -26,15 +27,24 @@ export default function Review({
     paymentElegibled,
 }) {
     const classes = useStyles()
+    const [initPoint, setInitPoint] = useState(false)
     const [addNextStateOrder] = useMutation(CHANGE_STATE_ORDER)
     const [addPaymentMethod] = useMutation(SET_PAYMENT_METHOD_ORDER)
 
+    const router = useRouter()
+
     const handleFinishOrder = async () => {
         await addNextStateOrder({ variables: { state: 'ArrangingPayment' } })
-        await addPaymentMethod({
+        const { data } = await addPaymentMethod({
             variables: { input: { method: paymentElegibled, metadata: [{}] } },
         })
-        await handleNext()
+        const { payments } = data.addPaymentToOrder
+        if (payments[0].metadata?.public) {
+            setInitPoint(true)
+            router.push(payments[0].metadata.public.init_point)
+        } else {
+            await handleNext()
+        }
     }
 
     return (
@@ -85,9 +95,7 @@ export default function Review({
                     <Grid container>
                         {orderActive &&
                             orderActive.shippingLines.map((payment) => (
-                                <React.Fragment
-                                    key={payment.shippingMethod.code}
-                                >
+                                <div key={payment.shippingMethod.code}>
                                     <Grid item xs={12}>
                                         <Typography
                                             variant="body2"
@@ -108,7 +116,7 @@ export default function Review({
                                             }
                                         </Typography>
                                     </Grid>
-                                </React.Fragment>
+                                </div>
                             ))}
                     </Grid>
                 </Grid>
@@ -120,8 +128,9 @@ export default function Review({
                     <Button style={{ marginRight: 12 }} onClick={handleBack}>
                         ANTERIOR
                     </Button>
+
                     <Button variant="contained" onClick={handleFinishOrder}>
-                        FINALIZAR
+                        FINALIZAR {initPoint && 'y PAGAR'}
                     </Button>
                 </Grid>
             </Grid>
